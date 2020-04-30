@@ -1,0 +1,52 @@
+{
+  "name": "ex-patterns",
+  "version": "0.0.2",
+  "description": "Elixir-style pattern matching and control flow structures",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test:watch": "npx jest --coverage --watchAll",
+    "test": "npx jest --coverage",
+    "build:watch": "tsc --watch",
+    "build": "tsc",
+    "prepublish": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/moritzploss/ex-patterns.git"
+  },
+  "keywords": [
+    "pattern",
+    "matching",
+    "elixir",
+    "functional",
+    "programming"
+  ],
+  "author": "Moritz Ploss",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/moritzploss/ex-patterns/issues"
+  },
+  "homepage": "https://github.com/moritzploss/ex-patterns#readme",
+  "devDependencies": {
+    "@babel/types": "^7.6.3",
+    "@types/jest": "^24.0.19",
+    "@types/node": "^12.11.1",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "ramda": "^0.27.0"
+  }
+}
