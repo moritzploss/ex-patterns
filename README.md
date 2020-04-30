@@ -139,7 +139,7 @@ more placeholders as needed, all the way from `A` to `L`. Then use them the same
 way you used `_` before:
 
 ```javascript
-const result = match([1, A, 3, B, 5], [1, 2, 3, 4, 5]);   // match
+match([1, A, 3, B, 5], [1, 2, 3, 4, 5]);   // match
 > [true, { A: 2, B: 4 }]
 ```
 
