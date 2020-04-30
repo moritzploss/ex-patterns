@@ -167,6 +167,7 @@ mind that only matches against named placeholders are returned:
 const pattern = [_, B, B, { foo: C }];
 const value   = [1, 2, 2, { foo: 'k' }];
 match(pattern, value);
+
 > [true, { B: 2, C: 'k' }]
 ```
 
