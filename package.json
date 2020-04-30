@@ -1,19 +1,19 @@
 {
   "name": "ex-patterns",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "Elixir-style pattern matching and control flow structures",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test:watch": "npx jest --coverage --watchAll",
-    "test": "npx jest --coverage",
     "build:watch": "tsc --watch",
     "build": "tsc",
-    "prepublish": "tsc"
+    "test:watch": "npx jest --coverage --watchAll",
+    "test": "npx jest --coverage",
+    "prepare": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/moritzploss/ex-patterns.git"
+    "url": "https://github.com/moritzploss/ex-patterns"
   },
   "keywords": [
     "pattern",
