@@ -310,15 +310,15 @@ This becomes very powerful when combined with object destructuring in the
 callback function:
 
 ```javascript
-const value = { bar: 5 };
+const value = { foo: { bar: [5, 9] }, baz: [1, 2, 3] };
 const callback = ({ A: theOnlyThingIcareAbout }) => theOnlyThingIcareAbout;
 when(value)
-    (1, () => 'foo')        // no match
-    ({ bar: A }, callback)  // matches '5' against 'A', then invokes callback with match result
+    (1, () => 'foo')                        // no match
+    ({ foo: { bar: [_, A] }}, callback)     // match
     (_, () => 'baz')
 (end);
 
-> 5
+> 9
 ```
 
 That's it!
