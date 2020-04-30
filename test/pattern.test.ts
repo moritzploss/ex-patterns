@@ -355,7 +355,7 @@ describe('the match function: user errors', () => {
     expect(() => match(1, _)).to.throw(Error);
   });
 
-  it('should throw an error if object keys are placeholders', () => {
-    expect(() => match({ _: 1 }, { a: 1 })).to.throw(Error);
+  it('should not throw an error if object keys are underscores', () => {
+    expect(() => match({ _: 1 }, { a: 1 })).to.not.throw(Error);
   });
 });

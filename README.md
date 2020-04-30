@@ -143,16 +143,19 @@ const result = match([1, A, 3, B, 5], [1, 2, 3, 4, 5]);   // match
 > [true, { A: 2, B: 4 }]
 ```
 
-If the match is successful, the second value in the return tuple now contains
-the values that the named placeholders were matched against!
-
-Note that you can use the same **named** placeholder several times in a pattern
-**as long as it is always matched against the same value**:
+If the match is successful, the second value in the return tuple contains
+the values that the named placeholders were matched against! Note that you can
+use the same **named** placeholder several times in a pattern
+**as long as it is always matched against the same value**.
 
 ```javascript
 match([A, A, A], [2, 2, 2]);   // match     >>  { A: 2 }
 match([A, A, A], [1, 2, 3]);   // no match  >>  { }
+```
 
+Compare that to the *unnamed placeholder*:
+
+```javascript
 match([_, _, _], [2, 2, 2]);   // match     >>  { }
 match([_, _, _], [1, 2, 3]);   // match     >>  { }
 ```
@@ -161,15 +164,15 @@ You can combine unnamed and named placeholders as needed, but keep in
 mind that only matches against named placeholders are returned:
 
 ```javascript
-const pattern = [A, B, B, { foo: C }];
+const pattern = [_, B, B, { foo: C }];
 const value   = [1, 2, 2, { foo: 'k' }];
 match(pattern, value);
-> { A: 1, B: 2, C: 'k' }
+> { B: 2, C: 'k' }
 ```
 
 ### Matching on JavaScript Objects and Arrays
 
-As mentioned, the simplest form of a pattern match is a equality comparison
+As mentioned, the simplest form of a pattern match is an equality comparison
 by value. However, in the case of JavaScript objects (Hash Maps), a match
 also counts as successful if the pattern (left) is a subset of the value (righ):
 
@@ -184,14 +187,14 @@ relevant, instead of all keys. Note that the same is **not** true for arrays:
 match([1, 2], [1, 2, 3]);   // no match
 ```
 
-Finally, named and unnamed placeholders can only be used to match against object
-values, not keys. While this wouldn't be possible to begin with since JavaScript
-object keys are just simple strings, it's also by design and is consisten with
-pattern matching in Elixir:
+Moreover, named and unnamed placeholders can only be used to match against object
+values, not keys. While this wouldn't be possible to begin with (since JavaScript
+object keys are just strings), it's also by design and consistent with pattern
+matching in Elixir:
 
 ```javascript
-match({ _: 1 }, { foo: 1 });   // no match
-match({ A: 1 }, { foo: 1 });   // no match
+match({ _: 1 }, { foo: 1 });   // no match. '_' is just a string here!
+match({ A: 1 }, { foo: 1 });   // no match. 'A' is just a string here!
 ```
 
 ## The `when` Control Flow Structure

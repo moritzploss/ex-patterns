@@ -24,9 +24,6 @@ const _matchArray = (pattern: Pattern, array: [], matchFunc: Function, match: Ma
 const _matchObject = (pattern: Pattern, object: Object, matchFunc: Function, match: Match) => {
   const keyVal = Object.entries(pattern);
   const reducer = ([isMatch, acc]: MatchTuple, [key, val]: [string, Pattern]) => {
-    if (key === '_' || isPlaceHolder(key)) {
-      throw Error('Object keys cannot be placeholders.');
-    }
     if (hasKey(object, key)) {
       // eslint-disable-next-line no-param-reassign
       [isMatch, acc] = matchFunc(val, object[key], acc);
