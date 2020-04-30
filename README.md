@@ -178,6 +178,7 @@ also counts as successful if the pattern (left) is a subset of the value (righ):
 
 ```javascript
 match({ a: 1 }, { a: 1, b: 2 });    // match
+match({}, { a: 1, b: 2 });          // match
 ```
 
 This means that it's possible to match only against the object keys that are

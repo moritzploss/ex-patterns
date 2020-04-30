@@ -162,6 +162,11 @@ describe('the match function: objects', () => {
     expect(status).to.be.false;
   });
 
+  it('should match empty object against any object', () => {
+    const [status, matches] = match({}, { a: 1 });
+    expect(status).to.be.true;
+  });
+
   it('should not match two objects if left hand side is subset of righthand side', () => {
     const [status, matches] = match({ a: 1 }, { a: 1, b: 2 });
     expect(status).to.be.true;
