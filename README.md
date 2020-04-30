@@ -271,7 +271,7 @@ when(value)
 (end);
 ```
 
-If no clause matches, an error will be thrown. Thus, it's advisable to make
+**If no clause matches, an error will be thrown.** Thus, it's advisable to make
 use of the unnamed placeholder `_` in the final clause:
 
 ```javascript
