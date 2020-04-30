@@ -279,7 +279,7 @@ const value = 5;
 when(value)
     (1, () => 'foo')    // no match
     (2, () => 'bar')    // no match
-    (_, () => 'baz')    // always matches, , callback returns 'baz'
+    (_, () => 'baz')    // always matches, callback returns 'baz'
 (end);
 ```
 
@@ -287,19 +287,19 @@ when(value)
 
 When invoked, the callback functions in the match clauses are passed three arguments:
 
-*  the match result (type `object`)
+*  the match result (type `Object`)
 *  the `value` that was matched against (type `any`)
-*  the pattern that was used for the match
+*  the pattern that was used for the match (type `Pattern`)
 
-At this point it makes sense to start defining the callback functions outside
-of the when function for readability. For example:
+For readability, it can make sense to define the callback functions outside
+of the `when` structure. For example:
 
 ```javascript
 const value = { bar: 5 };
 const callback = (matches, val, pattern) => [matches, val, pattern];
 when(value)
     (1, () => 'foo')        // no match
-    ({ bar: A }, callback)  // match
+    ({ bar: A }, callback)  // match, invoke callback with matches, val, pattern
     (_, () => 'baz')
 (end);
 > [{ A: 5 }, 5, { bar: A }] // matches against placeholder A, value 5, with pattern { bar: A }
