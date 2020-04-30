@@ -204,7 +204,8 @@ match({ A: 1 }, { foo: 1 });   // no match. 'A' is just a string here!
 Let's be clear -- the `when` function is just that: a function. That being said,
 it can be used much like the [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
 control flow structure in Elixir, and the syntax will probably make more sense
-if you think about it like any other control flow structure in JavaScript.
+if you think about it like any other control flow structure in JavaScript. In
+a way, it's similar to JavaScript's `switch` statement!
 
 Let's start by importing the `when` function together with the `end` keyword
 and some placeholders:
