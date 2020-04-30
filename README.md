@@ -88,7 +88,7 @@ match(1, 2)
 
 In the examples above, both the pattern and the value are regular JavaScript
 expressions. Things get more interesting when we introduce the
-*unnamed placebolder* `_`. This placeholder can be used on the **left** side
+*unnamed placeholder* `_`. This placeholder can be used on the **left** side
 (first argument) of match to stand in for any value on the right:
 
 ```javascript
@@ -100,9 +100,10 @@ match([5, _], [1, 2])       // no match
 ```
 
 Note that using placeholders on the **right side** (second argument) of the match
-will throw an error! Thus, placeholders can only be used in patterns, not in values!
+will throw an error! Thus, **placeholders can only be used in patterns, not in
+values!**
 
-In the above, the unnamed placeholder was used to stand in for a single element
+In the above example, the *unnamed placeholder* was used to stand in for a single element
 of an array. However, it can also be used as a placeholder for the entire array,
 or any other arbitrary data structure, no matter if flat or nested:
 
@@ -113,7 +114,7 @@ match(_, { a: 'b' })            // match
 match({ a: _ }, { a: 'b' })     // match
 ```
 
-It's possible to use the unnamed placeholder multiple times in a pattern:
+It's also possible to use the *unnamed placeholder* multiple times in a pattern:
 
 ```javascript
 match([1, _, 3, _, 5], [1, 2, 3, 4, 5])   // match
@@ -121,19 +122,11 @@ match([1, _, 3, _, 5], [1, 2, 3, 4, 5])   // match
 
 ### Named Placeholders
 
-If you followed the above examples, you might have seen the following return
-values from the `match` function:
-
-```javascript
-[true, {}]                // match
-[false, {}]               // no match
-```
-
-As mentioned above, the first argument indicates whether the match was
-successful; the second argument is a JavaScript object containing successful
-matches against **named placeholders**. Since we have only matched again the
-unnamed placeholder `_` so far, this object has always been empty. Let's change
-that!
+As mentioned above, the first value in the return tuple of the `match` function
+indicates whether the match was successful; the second argument is a JavaScript
+object containing successful matches against **named placeholders**. Since we
+have only matched against the *unnamed placeholder* `_` so far, this object has
+always been empty. Let's change that!
 
 To start using named placeholders, import them first:
 
