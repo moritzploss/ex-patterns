@@ -3,4 +3,16 @@
 
 # Ex Patterns
 
-Elixir-style pattern matching and control flow structures in JavaScript.
+This package brings Elixir-style pattern matching and control flow structures
+to JavaScript.
+
+## Getting Started
+
+Install the package from npm:
+
+    npm i ex-patterns
+
+Or clone the git repo:
+
+    git clone git@github.com:moritzploss/ex-patterns.git
+
