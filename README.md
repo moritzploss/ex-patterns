@@ -220,7 +220,7 @@ match clauses can be inserted inbetween:
 
 ```javascript
 const value = 1;
-when(value)             // start `when` control flow structure with value `value`
+when(value)             // start `when` control flow structure with `value`
     (1, () => 'foo')    // first match clause
     (2, () => 'bar')    // second match clause
     (3, () => 'baz')    // third match clause
@@ -237,8 +237,8 @@ match the second clause:
 ```javascript
 const value = 2;
 when(value)
-    (1, () => 'foo')    // no match
-    (2, () => 'bar')    // match 2, then invoke callback
+    (1, () => 'foo')    // no match. '1' does not macth '2'
+    (2, () => 'bar')    // '2' matches '2' => invoke callback!
     (3, () => 'baz')
 (end);
 ```
@@ -251,7 +251,7 @@ that belongs to the first matching clause!**.
 const value = 2;
 const result = when(value)
     (1, () => 'foo')    // no match
-    (2, () => 'bar')    // match 2, callback returns 'bar'
+    (2, () => 'bar')    // '2' matches '2' => callback returns 'bar'
     (3, () => 'baz')
 (end);
 
@@ -279,7 +279,7 @@ const value = 5;
 when(value)
     (1, () => 'foo')    // no match
     (2, () => 'bar')    // no match
-    (_, () => 'baz')    // always matches
+    (_, () => 'baz')    // always matches, , callback returns 'baz'
 (end);
 ```
 
