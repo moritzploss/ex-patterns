@@ -152,7 +152,7 @@ const result = match([1, A, 3, B, 5], [1, 2, 3, 4, 5]);   // match
 ```
 
 If the match is successful, the second value in the return tuple now contains
-the values that the named placeholders were matches against!
+the values that the named placeholders were matched against!
 
 Note that you can use the same **named** placeholder several times in a pattern
 **as long as it is always matched against the same value**:
@@ -201,3 +201,125 @@ pattern matching in Elixir:
 match({ _: 1 }, { foo: 1 });   // no match
 match({ A: 1 }, { foo: 1 });   // no match
 ```
+
+## The `when` Control Flow Structure
+
+### Basic Usage
+
+Let's be clear -- the `when` function is just that: a function. That being said,
+it can be used much like the `case` control flow structure in Elixir, and the
+syntax will probably make more sense if you think about it like any other
+control flow structure in JavaScript.
+
+Let's start by importing the `when` function together with the `end` keyword
+and some placeholders:
+
+```javascript
+import { when, end, _, A, B, C, D} from 'ex-patterns';
+```
+
+A call to the `when` function marks the beginning of the control flow structure,
+and calling any resulting function with `end` marks the end. Any number of
+match clauses can be inserted in between:
+
+```javascript
+const value = 1;
+when(value)             // start `when` control flow structure with value `value`
+    (1, () => 'foo')
+    (2, () => 'bar')
+    (3, () => 'baz')
+(end);                  // end `when`
+```
+
+### Pattern Matching
+
+Each match clause takes two arguments: the first is a pattern (see above) that
+will be matched against `value`, the second a callback function that will be
+invoked when the match was successful. In the following case, `value` will
+match the second clause:
+
+```javascript
+const value = 2;
+when(value)
+    (1, () => 'foo')    // no match
+    (2, () => 'bar')    // match 2, then invoke callback
+    (3, () => 'baz')
+(end);
+```
+
+Clauses that come **after** a match will not be matched against; i.e., **the
+`when` control flow structure returns the return value of the callback function
+that belongs to the first matching clause!**.
+
+```javascript
+const value = 2;
+const result = when(value)
+    (1, () => 'foo')    // no match
+    (2, () => 'bar')    // match 2, callback returns 'bar'
+    (3, () => 'baz')
+(end);
+
+console.log(result);
+> 'bar'
+```
+
+The pattern in the match clause can be arbitrarily complex and make use of the
+rules and placeholders introduced above:
+
+```javascript
+const value = [1, 2, 3];
+when(value)
+    ([1, 1, 1], () => 'foo')    // no match
+    ([_, _, B], () => 'bar')    // match, callback returns 'bar'
+    (3, () => 'baz')
+(end);
+```
+
+If no clause matches, an error will be thrown. Thus, it's advisable to make
+use of the unnamed placeholder `_` in the final clause:
+
+```javascript
+const value = 5;
+when(value)
+    (1, () => 'foo')    // no match
+    (2, () => 'bar')    // no match
+    (_, () => 'baz')    // always matches
+(end);
+```
+
+### Callback functions
+
+When invoked, the callback functions in the match clauses are passed three arguments:
+
+*  the match result (type `object`)
+*  the `value` that was matched against (type `any`)
+*  the pattern that was used for the match
+
+At this point it makes sense to start defining the callback functions outside
+of the when function for readability. For example:
+
+```javascript
+const value = { bar: 5 };
+const callback = (matches, val, pattern) => [matches, val, pattern];
+when(value)
+    (1, () => 'foo')        // no match
+    ({ bar: A }, callback)  // match
+    (_, () => 'baz')
+(end);
+> [{ A: 5 }, 5, { bar: A }] // matches against placeholder A, value 5, with pattern { bar: A }
+```
+
+This becomes very powerful when combined with object destructuring in the
+callback function:
+
+```javascript
+const value = { bar: 5 };
+const callback = ({ A: theOnlyThingIcareAbout }) => theOnlyThingIcareAbout;
+when(value)
+    (1, () => 'foo')        // no match
+    ({ bar: A }, callback)  // matches '5' against 'A', then invokes callback with match result
+    (_, () => 'baz')
+(end);
+```
+
+That's it!

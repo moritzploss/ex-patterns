@@ -154,10 +154,21 @@ describe('the when function: pattern matching', () => {
 });
 
 describe('the when function: callbacks', () => {
-  it('should pass in value as first argument to callback', () => {
+  it('should pass in named matches as first argument to callback', () => {
+    const value = [1, 2, 3];
+    const result = when(value)
+      (1, () => 1)
+      ([1, A, B], ({ A: second, B: third }) => [second, third])
+      (3, () => 3)
+    (end);
+
+    expect(result).to.deep.equal([2, 3]);
+  });
+
+  it('should pass in value as second argument to callback', () => {
     const value = 5;
     const result = when(value)
-      (_, (val) => val)
+      (_, (matches, val) => val)
       (2, () => 2)
       (3, () => 3)
     (end);
@@ -165,23 +176,12 @@ describe('the when function: callbacks', () => {
     expect(result).to.equal(5);
   });
 
-  it('should pass in named matches as second argument to callback', () => {
-    const value = [1, 2, 3];
-    const result = when(value)
-      (1, () => 1)
-      ([1, A, B], (val, { A: second, B: third }) => [second, third])
-      (3, () => 3)
-    (end);
-
-    expect(result).to.deep.equal([2, 3]);
-  });
-
   it('should pass in pattern as third argument to callback', () => {
     const value = [1, 2, 3];
     const pattern = [1, A, B];
     const result = when(value)
       (1, () => 1)
-      (pattern, (val, matches, patt) => patt)
+      (pattern, (matches, val, patt) => patt)
       (3, () => 3)
     (end);
 
