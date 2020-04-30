@@ -50,9 +50,14 @@ const b = [1, 2, 3];
 ```
 
 In contrast, **pattern matching** allows us to have data structures on both
-sides of the `=` sign, and to evaluate if both sides can be made to match each
-other. Keep this idea of `left` and `right` in mind when going through the
+sides of the `=` sign, and to evaluate if there's a way to match them. It's
+helpful to keep this idea of `left` and `right` in mind when going through the
 examples below!
+
+```javascript
+a = 1  // match
+1 = 1  // match
+```
 
 ### The `match` Function
 
