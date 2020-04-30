@@ -86,7 +86,7 @@ match(1, 1)
 > [true, {}]    // match
 
 match(1, 2)    
-> [true, {}]    // no match
+> [false, {}]   // no match
 ```
 
 ### The `_` Placeholder
