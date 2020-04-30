@@ -38,26 +38,27 @@ import { match, _ } from 'ex-patterns';
 If you're new to pattern matching, the [**Elixir Docs**](https://elixir-lang.org/getting-started/pattern-matching.html)
 contain all you need to know. In essence, pattern matching is a way of
 destructuring complex (or simple) data structures and extracting the information
-that you're interested in. This can result in a much cleaner and expressive programming style with fewer conditionals and less explicit branching logic.
+that you're interested in. This can result in a much cleaner and more expressive
+programming style with fewer conditionals and less explicit branching logic.
 
-In JavaScript, the equal sign is the assignment operator. Therefore,
-a variable on the left side can be *assigned* any value on the right side.
+In JavaScript, the equal sign is referred to as the *assignment operator*.
+A variable on the left side is *assigned* the value on the right side.
 
 ```javascript
 const a = 1;
 const b = [1, 2, 3];
 ```
 
-Note that we always have a variable name on the left side of the assignment
-operator, and a data structure on the right side. In contrast, **pattern
-matching** allows us to have data structures on both sides of the `=` sign,
-and to evaluate if both sides can be made to match each other. Keep this
-idea of `left` and `right` in mind when going through the examples below!
+In contrast, **pattern matching** allows us to have data structures on both
+sides of the `=` sign, and to evaluate if both sides can be made to match each
+other. Keep this idea of `left` and `right` in mind when going through the
+examples below!
 
 ### The `match` Function
 
 To evaluate whether a pattern (left) matches a value (right), use the `match`
-function:
+function. In it's simplest form, a pattern match is an equality check **by value**,
+comparing the first and second argument of the `match` function.
 
 ```javascript
 match(1, 1)                 // match
@@ -67,10 +68,14 @@ match([1, 2], [1, 2])       // match
 match([1, 2], [3, 4])       // no match
 ```
 
+Since checks for value equality in JavaScript aren't trivial, this package
+uses [**Ramda's**](https://ramdajs.com/docs/) `equals` function to do the heavy
+lifting.
+
 The return value of the `match` function is a two element tuple (array). The first
 element in the tuple indicates if the match was successful, the second element
 is a JavaScript object containing the match results. We'll talk more about that
-later; let's focus on successful and unsuccesful matches first!
+later!
 
 ```javascript
 match(1, 1)    
@@ -79,11 +84,6 @@ match(1, 1)
 match(1, 2)    
 > [true, {}]                // no match
 ```
-
-Thus, in it's simplest form, a pattern match is an equality check **by value**,
-comparing the first and second argument of the `match` function. Since checks
-for value equality in JavaScript aren't trivial, this package uses [**Ramda's**](https://ramdajs.com/docs/)
-`equals` function to do the heavy lifting.
 
 ### The `_` Placeholder
 
