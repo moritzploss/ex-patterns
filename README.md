@@ -216,14 +216,14 @@ import { when, end, _, A, B, C, D} from 'ex-patterns';
 
 A call to the `when` function marks the beginning of the control flow structure,
 and calling any resulting function with `end` marks the end. Any number of
-match clauses can be inserted in between:
+match clauses can be inserted inbetween:
 
 ```javascript
 const value = 1;
 when(value)             // start `when` control flow structure with value `value`
-    (1, () => 'foo')
-    (2, () => 'bar')
-    (3, () => 'baz')
+    (1, () => 'foo')    // first match clause
+    (2, () => 'bar')    // second match clause
+    (3, () => 'baz')    // third match clause
 (end);                  // end `when`
 ```
 
