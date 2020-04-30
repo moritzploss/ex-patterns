@@ -37,7 +37,7 @@ const _when = (value, done = false, result = null) => (...args: [any?, Function?
   const [pattern, callback] = args;
   const [isMatch, matches] = match(pattern, value);
   if (isMatch) {
-    return _when(value, true, callback(value, matches));
+    return _when(value, true, callback(value, matches, pattern));
   }
 
   return _when(value);

@@ -8,12 +8,12 @@
 
 import { expect } from 'chai';
 
-import { when, end, _ } from '../src';
+import { when, end, _, A, B, C, D, E, F, G } from '../src';
 
 describe('the when function: base cases', () => {
-  it('should match the first matching expression (1)', () => {
-    const expression = 1;
-    const result = when(expression)
+  it('should match the first matching value (1)', () => {
+    const value = 1;
+    const result = when(value)
       (1, () => 1)
       (2, () => 2)
       (3, () => 3)
@@ -22,9 +22,9 @@ describe('the when function: base cases', () => {
     expect(result).to.equal(1);
   });
 
-  it('should match the first matching expression (2)', () => {
-    const expression = 2;
-    const result = when(expression)
+  it('should match the first matching value (2)', () => {
+    const value = 2;
+    const result = when(value)
       (1, () => 1)
       (2, () => 2)
       (3, () => 3)
@@ -33,9 +33,9 @@ describe('the when function: base cases', () => {
     expect(result).to.equal(2);
   });
 
-  it('should match the first matching expression (3)', () => {
-    const expression = 3;
-    const result = when(expression)
+  it('should match the first matching value (3)', () => {
+    const value = 3;
+    const result = when(value)
       (1, () => 1)
       (2, () => 2)
       (3, () => 3)
@@ -45,8 +45,8 @@ describe('the when function: base cases', () => {
   });
 
   it('should match a placeholder in the first position', () => {
-    const expression = 4;
-    const result = when(expression)
+    const value = 4;
+    const result = when(value)
       (_, () => 1)
       (2, () => 2)
       (3, () => 3)
@@ -56,8 +56,8 @@ describe('the when function: base cases', () => {
   });
 
   it('should match a placeholder in the middle position', () => {
-    const expression = 4;
-    const result = when(expression)
+    const value = 4;
+    const result = when(value)
       (1, () => 1)
       (_, () => 2)
       (3, () => 3)
@@ -67,8 +67,8 @@ describe('the when function: base cases', () => {
   });
 
   it('should match a placeholder in the last position', () => {
-    const expression = 4;
-    const result = when(expression)
+    const value = 4;
+    const result = when(value)
       (1, () => 1)
       (2, () => 2)
       (_, () => 3)
@@ -80,8 +80,8 @@ describe('the when function: base cases', () => {
 
 describe('the when function: pattern matching', () => {
   it('should pattern match on arrays', () => {
-    const expression = [1, 2, 3];
-    const result = when(expression)
+    const value = [1, 2, 3];
+    const result = when(value)
       (1, () => 1)
       ([1, 2, _], () => 2)
       (3, () => 3)
@@ -91,8 +91,8 @@ describe('the when function: pattern matching', () => {
   });
 
   it('should pattern match on objects', () => {
-    const expression = { a: 1, b: 2, c: 3 };
-    const result = when(expression)
+    const value = { a: 1, b: 2, c: 3 };
+    const result = when(value)
       (1, () => 1)
       ({ a: _, b: 2 }, () => 2)
       (3, () => 3)
@@ -153,10 +153,46 @@ describe('the when function: pattern matching', () => {
   });
 });
 
+describe('the when function: callbacks', () => {
+  it('should pass in value as first argument to callback', () => {
+    const value = 5;
+    const result = when(value)
+      (_, (val) => val)
+      (2, () => 2)
+      (3, () => 3)
+    (end);
+
+    expect(result).to.equal(5);
+  });
+
+  it('should pass in named matches as second argument to callback', () => {
+    const value = [1, 2, 3];
+    const result = when(value)
+      (1, () => 1)
+      ([1, A, B], (val, { A: second, B: third }) => [second, third])
+      (3, () => 3)
+    (end);
+
+    expect(result).to.deep.equal([2, 3]);
+  });
+
+  it('should pass in pattern as third argument to callback', () => {
+    const value = [1, 2, 3];
+    const pattern = [1, A, B];
+    const result = when(value)
+      (1, () => 1)
+      (pattern, (val, matches, patt) => patt)
+      (3, () => 3)
+    (end);
+
+    expect(result).to.deep.equal(pattern);
+  });
+});
+
 describe('the when function: user errors', () => {
   it('should throw an error if no matching clause is found', () => {
-    const expression = 4;
-    const fun = () => when(expression)
+    const value = 4;
+    const fun = () => when(value)
       (1, () => 1)
       (2, () => 2)
       (3, () => 3)
@@ -166,8 +202,8 @@ describe('the when function: user errors', () => {
   });
 
   it('should throw an error if more than two arguments are supplied in clause', () => {
-    const expression = 4;
-    const fun = () => when(expression)
+    const value = 4;
+    const fun = () => when(value)
       (1, () => 1)
       (2, () => 2, 3)
       (3, () => 3)
@@ -177,8 +213,8 @@ describe('the when function: user errors', () => {
   });
 
   it('should throw an error if second argument to clause is not function', () => {
-    const expression = 4;
-    const fun = () => when(expression)
+    const value = 4;
+    const fun = () => when(value)
       (1, () => 1)
       (2, 3)
       (3, () => 3)
@@ -188,8 +224,8 @@ describe('the when function: user errors', () => {
   });
 
   it('should throw an error if last clause is called with argument that is not symbol \'end\'', () => {
-    const expression = 2;
-    const fun = () => when(expression)
+    const value = 2;
+    const fun = () => when(value)
       (1, () => 1)
       (2, () => 2)
       (3, () => 3)
@@ -199,8 +235,8 @@ describe('the when function: user errors', () => {
   });
 
   it('should throw an error if last clause is called with no arguments', () => {
-    const expression = 2;
-    const fun = () => when(expression)
+    const value = 2;
+    const fun = () => when(value)
       (1, () => 1)
       (2, () => 2)
       (3, () => 3)

@@ -1,18 +1,38 @@
 import { reduceWhile, ok, stop } from './enum';
-import { _, A, B, C, D, E, F, G, placeholders } from './symbols';
+import { _, A, B, C, D, E, F, G, H, I, J, K, L } from './symbols';
 
-type placeholder = Symbol;
+export type placeholder = Symbol;
 
-const isPlaceHolder = (pattern: any): boolean => {
-  if (!(typeof pattern === 'symbol')) {
+const namedPlaceholders = [A, B, C, D, E, F, G, H, I, J, K, L];
+
+const isUnderscore = (value: any): boolean => value === _;
+
+const isNamedPlaceHolder = (value: any): boolean => {
+  if (!(typeof value === 'symbol')) {
     return false;
   }
-  return reduceWhile(placeholders, false, (acc, placeholder: placeholder) => {
-    if (pattern === placeholder) {
+  return reduceWhile(namedPlaceholders, false, (acc, placeholder: placeholder) => {
+    if (value === placeholder) {
       return [stop, true];
     }
     return [ok, false];
   });
 };
 
-export { isPlaceHolder, _, A, B, C, D, E, F, G };
+const isPlaceHolder = (value: any): boolean => isUnderscore(value) || isNamedPlaceHolder(value);
+
+const toString = (placeHolder: Symbol): string => {
+  const matches = placeHolder
+    .toString()
+    .match(/Symbol\((.*)\)/);
+  return matches[1];
+};
+
+export {
+  isUnderscore,
+  isPlaceHolder,
+  isNamedPlaceHolder,
+  namedPlaceholders,
+  toString,
+  _, A, B, C, D, E, F, G, H, I, J, K, L,
+};

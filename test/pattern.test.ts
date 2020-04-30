@@ -194,13 +194,8 @@ describe('the match function: objects', () => {
 });
 
 describe('the match function: regular expressions', () => {
-  it('should match regular expressions on strings (1)', () => {
-    const [status, matches] = match(/ll/, 'hello');
-    expect(status).to.be.true;
-  });
-
-  it('should match regular expressions on strings (2)', () => {
-    const [status, matches] = match(/world/, 'hello');
+  it('should not match regular expressions on strings', () => {
+    const [status, matches] = match(/hello/, 'hello');
     expect(status).to.be.false;
   });
 
@@ -209,7 +204,6 @@ describe('the match function: regular expressions', () => {
     expect(status).to.be.true;
   });
 });
-
 
 describe('the match function: functions', () => {
   it('should not match anonymous functions', () => {
@@ -231,10 +225,117 @@ describe('the match function: functions', () => {
   });
 });
 
+
+describe('the match function: matches', () => {
+  it('should return an empty object for successful unnamed matches', () => {
+    const [status, matches] = match([1, _, 3], [1, 2, 3]);
+    expect(matches).to.deep.equal({});
+  });
+
+  it('should return an empty object for unsuccesful unnamed matches', () => {
+    const [status, matches] = match([1, 4, 3], [1, 2, 3]);
+    expect(matches).to.deep.equal({});
+  });
+
+  it('should return an empty object for unsuccesful named matches', () => {
+    const [status, matches] = match([1, 4, A], [1, 2, 3]);
+    expect(matches).to.deep.equal({});
+  });
+
+  it('should return an object with named matches for succesful named matches (numbers)', () => {
+    const [isMatch, matches] = match(A, 1);
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 1 });
+  });
+
+  it('should return an object with named matches for succesful named matches (strings)', () => {
+    const [isMatch, matches] = match({ a: A }, { a: 'hello' });
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 'hello' });
+  });
+
+  it('should return an object with named matches for succesful named matches (symbols)', () => {
+    const aSymbol = Symbol('hello');
+    const [isMatch, matches] = match({ a: A }, { a: aSymbol });
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: aSymbol });
+  });
+
+  it('should return an object with named matches for succesful named matches (bigInts)', () => {
+    const aBigInt = BigInt('1');
+    const [isMatch, matches] = match({ a: A }, { a: aBigInt });
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: aBigInt });
+  });
+
+  it('should return an object with named matches for succesful named matches (null)', () => {
+    const [isMatch, matches] = match({ a: A }, { a: null });
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: null });
+  });
+
+  it('should return an object with named matches for succesful named matches (undefined)', () => {
+    const [isMatch, matches] = match({ a: A }, { a: undefined });
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: undefined });
+  });
+
+  it('should return an object with named matches for succesful named matches (arrays)', () => {
+    const [isMatch, matches] = match([A], [1]);
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 1 });
+  });
+
+  it('should return an object with named matches for succesful named matches (objects)', () => {
+    const [isMatch, matches] = match({ a: A }, { a: 1 });
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 1 });
+  });
+
+  it('should return an object with named matches for several succesful named matches', () => {
+    const [isMatch, matches] = match([1, A, B], [1, 2, 3]);
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 2, B: 3 });
+  });
+
+  it('should return an empty object for partially successful named matches', () => {
+    const [isMatch, matches] = match([1, A, B, 3], [1, 2, 3, 4]);
+    expect(isMatch).to.be.false;
+    expect(matches).to.deep.equal({});
+  });
+
+  it('should perform complex named matches', () => {
+    const value = { foo: { bar: ['!', 2, { baz: 'world' }] }, bar: 'hello' };
+    const pattern = { foo: { bar: [C, 2, { baz: B }] }, bar: A };
+
+    const [isMatch, matches] = match(pattern, value);
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 'hello', B: 'world', C: '!' });
+  });
+
+  it('should not include unnamed matches if named matches are present', () => {
+    const [isMatch, matches] = match([1, A, _, 4], [1, 2, 3, 4]);
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 2 });
+  });
+
+  it('should allow for named match to occur several times as long as value is equal', () => {
+    const [isMatch, matches] = match([1, A, A, 4], [1, 2, 2, 4]);
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 2 });
+  });
+
+  it('should not allow for named match to occur several times if value is not equal', () => {
+    const [isMatch, matches] = match([1, A, A, 4], [1, 2, 3, 4]);
+    expect(isMatch).to.be.false;
+    expect(matches).to.deep.equal({});
+  });
+});
+
 describe('the match function: all together now', () => {
   it('should match complex nested patterns', () => {
     const expression = { a: [1, 2, undefined], b: { c: [null, BigInt('1'), ['baz', 'foo']] } };
-    const pattern =    { a: [1, _, _], b: { c: [null, BigInt('1'), [_, 'foo']] } };
+    const pattern = { a: [1, _, _], b: { c: [null, BigInt('1'), [_, 'foo']] } };
 
     const [status, matches] = match(pattern, expression);
     expect(status).to.be.true;
@@ -242,7 +343,7 @@ describe('the match function: all together now', () => {
 
   it('should correctly identify if complex patterns don\'t match', () => {
     const expression = { a: [1, 2, undefined], b: { c: [null, BigInt('1'), ['baz', 'foo']] } };
-    const pattern =    { a: [1, _, _], b: { c: [undefined, BigInt('1'), [_, 'foo']] } };
+    const pattern = { a: [1, _, _], b: { c: [undefined, BigInt('1'), [_, 'foo']] } };
 
     const [status, matches] = match(pattern, expression);
     expect(status).to.be.false;

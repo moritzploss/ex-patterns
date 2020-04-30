@@ -1,73 +1,70 @@
 import * as R from 'ramda';
 
 import { reduceWhile, ok, stop } from './enum';
-import { isPlaceHolder } from './placeholder';
+import { isUnderscore, isNamedPlaceHolder, isPlaceHolder } from './placeholder';
+import { updateMatch, Match } from './match';
+import { hasKey, isObject, isArray } from './util';
 
-type pattern = any;
+export type Pattern = any;
+type MatchTuple = [boolean, Match];
 
-const _hasKey = (object: Object, key: string) => (
-  Object.prototype.hasOwnProperty.call(object, key)
-);
-
-const _isArray = (value) => Array.isArray(value);
-
-const _isObject = (value) => typeof value === 'object' && value !== null;
-
-const _matchArray = (pattern, value, match) => {
-  if (pattern.length > value.length) {
+const _matchArray = (pattern: Pattern, array: [], matchFunc: Function, match: Match) => {
+  if (pattern.length > array.length) {
     return [false, {}];
   }
-  const isMatch = reduceWhile(pattern, true, (acc: boolean, element: pattern, index: number) => {
-    const [isMatch, matches] = match(element, value[index]);
-    return isMatch ? [ok, true] : [stop, false];
+  return reduceWhile(pattern, [true, match], ([isMatch, acc]: MatchTuple, elm: any, i: number) => {
+    // eslint-disable-next-line no-param-reassign
+    [isMatch, acc] = matchFunc(elm, array[i], acc);
+    return isMatch
+      ? [ok, [true, acc]]
+      : [stop, [false, {}]];
   });
-  return isMatch ? [true, {}] : [false, {}];
 };
 
-const _matchObject = (pattern, value, match) => {
-  const enumerator = Object.entries(pattern);
-  const isMatch = reduceWhile(enumerator, true, (acc: boolean, [key, val]: [string, pattern]) => {
+const _matchObject = (pattern: Pattern, object: Object, matchFunc: Function, match: Match) => {
+  const keyVal = Object.entries(pattern);
+  const reducer = ([isMatch, acc]: MatchTuple, [key, val]: [string, Pattern]) => {
     if (key === '_' || isPlaceHolder(key)) {
       throw Error('Object keys cannot be placeholders.');
     }
-    if (_hasKey(value, key)) {
-      const [isMatch, matches] = match(val, value[key]);
+    if (hasKey(object, key)) {
+      // eslint-disable-next-line no-param-reassign
+      [isMatch, acc] = matchFunc(val, object[key], acc);
       if (isMatch) {
-        return [ok, true];
+        return [ok, [true, acc]];
       }
     }
-    return [stop, false];
-  });
-  return isMatch ? [true, {}] : [false, {}];
+    return [stop, [false, {}]];
+  };
+  return reduceWhile(keyVal, [true, match], reducer);
 };
 
-const match = (pattern: pattern, value: any) => {
+const match = (pattern: Pattern, value: any, matches = {}) => {
   if (isPlaceHolder(value)) {
     throw Error('Right side of match cannot contain placeholders.');
   }
 
-  if (isPlaceHolder(pattern)) {
-    return [true, {}];
+  if (isUnderscore(pattern)) {
+    return [true, matches];
   }
 
-  if (typeof value === 'string' && pattern instanceof RegExp) {
-    const isMatch = pattern.test(value);
-    return isMatch ? [true, {}] : [false, {}];
+  if (isNamedPlaceHolder(pattern)) {
+    return updateMatch(matches, pattern, value);
   }
 
   if (R.equals(pattern, value)) {
-    return [true, {}];
+    return [true, matches];
   }
 
-  if (_isArray(pattern) && _isArray(value)) {
-    return _matchArray(pattern, value, match);
+  if (isArray(pattern) && isArray(value)) {
+    return _matchArray(pattern, value, match, matches);
   }
 
-  if (_isObject(pattern) && _isObject(value)) {
-    return _matchObject(pattern, value, match);
+  if (isObject(pattern) && isObject(value)) {
+    return _matchObject(pattern, value, match, matches);
   }
 
-  return [false, {}];
+  return [false, matches];
 };
 
 export { match };

@@ -12,7 +12,4 @@ export const J = Symbol('J');
 export const K = Symbol('K');
 export const L = Symbol('L');
 
-export const placeholders = [_, A, B, C, D, E, F, G, H, I, J, K, L];
-
 export const end = Symbol('end');
-
