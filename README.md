@@ -94,7 +94,7 @@ match(1, 2)
 In the examples above, both the pattern and the value are regular JavaScript
 expressions. Things get more interesting when we introduce the
 *unnamed placeholder* `_`. This placeholder can be used on the **left** side
-(first argument) of match to stand in for any value on the right:
+(first argument) of a match to stand in for any value on the right:
 
 ```javascript
 match([1, 2], [1, 2])       // match
@@ -104,8 +104,8 @@ match([_, _], [1, 2])       // match
 match([5, _], [1, 2])       // no match
 ```
 
-Note that using placeholders on the **right side** (second argument) of the match
-will throw an error! Thus, **placeholders can only be used in patterns, not in
+Note that using placeholders on the **right side** (second argument) of the `match`
+function will throw an error! Thus, **placeholders can only be used in patterns, not in
 values!**
 
 In the above example, the *unnamed placeholder* was used to stand in for a single element
@@ -128,7 +128,7 @@ match([1, _, 3, _, 5], [1, 2, 3, 4, 5])   // match
 ### Named Placeholders
 
 As mentioned above, the first value in the return tuple of the `match` function
-indicates whether the match was successful; the second argument is a JavaScript
+indicates whether the match was successful; the second value is a JavaScript
 object containing successful matches against **named placeholders**. Since we
 have only matched against the *unnamed placeholder* `_` so far, this object has
 always been empty. Let's change that!
@@ -176,7 +176,7 @@ match(pattern, value);
 > [true, { B: 2, C: 'k' }]
 ```
 
-### Matching on JavaScript Objects and Arrays
+### Matching against JavaScript Objects and Arrays
 
 As mentioned, the simplest form of a pattern match is an equality comparison
 by value. However, in the case of JavaScript objects (Hash Maps), a match
@@ -188,7 +188,7 @@ match({}, { a: 1, b: 2 });          // match
 ```
 
 This means that it's possible to match only against the object keys that are
-relevant, instead of all keys. Note that the same is **not** true for arrays:
+of interest. Note that the same is **not** true for arrays:
 
 ```javascript
 match([1, 2], [1, 2, 3]);   // no match
@@ -250,7 +250,7 @@ when(value)
 (end);
 ```
 
-Clauses that come **after** a match will not be matched against; i.e., **the
+Clauses that come **after** a matching clause will not be matched against; i.e., **the
 `when` control flow structure returns the return value of the callback function
 that belongs to the first matching clause!**.
 
@@ -285,7 +285,7 @@ const value = 5;
 when(value)
     (1, () => 'foo')    // no match
     (2, () => 'bar')    // no match
-    (_, () => 'baz')    // always matches, callback returns 'baz'
+    (_, () => 'baz')    // match, callback returns 'baz'
 (end);
 ```
 
@@ -303,6 +303,7 @@ of the `when` structure. For example:
 ```javascript
 const value = { bar: 5 };
 const callback = (matches, val, pattern) => [matches, val, pattern];
+
 when(value)
     (1, () => 'foo')        // no match
     ({ bar: A }, callback)  // match, invoke callback with matches, val, pattern
@@ -318,6 +319,7 @@ renaming of desctructured variables in the callback function:
 ```javascript
 const value = { foo: { bar: [5, 9] }, baz: [1, 2, 3] };
 const callback = ({ A: meaningfulName }) => meaningfulName;
+
 when(value)
     (1, () => 'foo')                        // no match
     ({ foo: { bar: [_, A] }}, callback)     // match
