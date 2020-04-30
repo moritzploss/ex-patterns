@@ -58,7 +58,10 @@ examples below!
 
 To evaluate whether a pattern (left) matches a value (right), use the `match`
 function. In it's simplest form, a pattern match is an equality check **by value**,
-comparing the first and second argument of the `match` function.
+comparing the first and second argument of the `match` function. Since checks
+for value equality in JavaScript aren't trivial, this package uses
+[**Ramda's**](https://ramdajs.com/docs/) `equals` function to do the heavy
+lifting.
 
 ```javascript
 match(1, 1)                 // match
@@ -68,10 +71,6 @@ match([1, 2], [1, 2])       // match
 match([1, 2], [3, 4])       // no match
 ```
 
-Since checks for value equality in JavaScript aren't trivial, this package
-uses [**Ramda's**](https://ramdajs.com/docs/) `equals` function to do the heavy
-lifting.
-
 The return value of the `match` function is a two element tuple (array). The first
 element in the tuple indicates if the match was successful, the second element
 is a JavaScript object containing the match results. We'll talk more about that
@@ -79,10 +78,10 @@ later!
 
 ```javascript
 match(1, 1)    
-> [true, {}]                // match
+> [true, {}]    // match
 
 match(1, 2)    
-> [true, {}]                // no match
+> [true, {}]    // no match
 ```
 
 ### The `_` Placeholder
