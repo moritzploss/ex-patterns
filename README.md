@@ -303,7 +303,7 @@ when(value)
     (_, () => 'baz')
 (end);
 
-> [{ A: 5 }, 5, { bar: A }] // matches against placeholder A, value 5, with pattern { bar: A }
+> [{ A: 5 }, 5, { bar: A }]
 ```
 
 This becomes very powerful when combined with object destructuring in the
@@ -317,6 +317,8 @@ when(value)
     ({ bar: A }, callback)  // matches '5' against 'A', then invokes callback with match result
     (_, () => 'baz')
 (end);
+
+> 5
 ```
 
 That's it!
