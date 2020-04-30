@@ -167,7 +167,7 @@ mind that only matches against named placeholders are returned:
 const pattern = [_, B, B, { foo: C }];
 const value   = [1, 2, 2, { foo: 'k' }];
 match(pattern, value);
-> { B: 2, C: 'k' }
+> [true, { B: 2, C: 'k' }]
 ```
 
 ### Matching on JavaScript Objects and Arrays
@@ -256,7 +256,6 @@ const result = when(value)
     (3, () => 'baz')
 (end);
 
-console.log(result);
 > 'bar'
 ```
 
@@ -307,12 +306,12 @@ when(value)
 > [{ A: 5 }, 5, { bar: A }]
 ```
 
-This becomes very powerful when combined with object destructuring in the
-callback function:
+This becomes very powerful when combined with object destructuring and
+renaming of desctructured variables in the callback function:
 
 ```javascript
 const value = { foo: { bar: [5, 9] }, baz: [1, 2, 3] };
-const callback = ({ A: theOnlyThingIcareAbout }) => theOnlyThingIcareAbout;
+const callback = ({ A: meaningfulName }) => meaningfulName;
 when(value)
     (1, () => 'foo')                        // no match
     ({ foo: { bar: [_, A] }}, callback)     // match
