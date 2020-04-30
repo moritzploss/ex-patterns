@@ -302,6 +302,7 @@ when(value)
     ({ bar: A }, callback)  // match, invoke callback with matches, val, pattern
     (_, () => 'baz')
 (end);
+
 > [{ A: 5 }, 5, { bar: A }] // matches against placeholder A, value 5, with pattern { bar: A }
 ```
 
