@@ -340,12 +340,14 @@ of the `when` structure. For example:
 ```javascript
 const user = { name: 'Amelie', age: 31 };
 
-const returnCallbackArgs = (matches, val, pattern) => [matches, val, pattern];
+const argsAsArray = (matches, value, pattern) => {
+    return [matches, value, pattern];
+};
 
-when(value)
-    ({ city: 'Stockholm' }, returnCallbackArgs)  // no match
-    ({ name: B, age: A }, returnCallbackArgs)    // match
-    (_, () => 'no match')
+when(user)
+    ({ city: 'Hamburg' }, argsAsArray)      // no match
+    ({ name: B, age: A }, argsAsArray)      // match
+    (_, () => 'no match!')
 (end);
 
 > [{ A: 31, B: 'Amelie' }, { name: 'Amelie', age: 31 }, { name: B, age: A }]
@@ -357,13 +359,12 @@ renaming of desctructured variables in the callback function:
 ```javascript
 const user = { name: 'Amelie', age: 31 };
 
-const returnCallbackArgs = (matches, val, pattern) => [matches, val, pattern];
-const returnNameAndAge = ({ A: age, B: name }) => [name, age];
+const nameAndAgeAsArray = ({ A: age, B: name }) => [name, age];
 
-when(value)
-    ({ city: 'Stockholm' }, returnCallbackArgs)  // no match
-    ({ name: B, age: A }, returnNameAndAge)      // match
-    (_, () => 'no match')
+when(user)
+    ({ city: 'Hamburg' }, () => 'foo')          // no match
+    ({ name: B, age: A }, nameAndAgeAsArray)    // match
+    (_, () => 'no match!')
 (end);
 
 > ['Amelie', 31]
