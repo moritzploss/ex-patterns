@@ -39,7 +39,7 @@ const value = [1, 'bar'];
 when(value)
     ([1, 1], () => 'foo')    // 1st clause: no match
     ([1, A], ({ A }) => A)   // 2nd clause: match! invoke callback!
-    (_, () => 'baz')         // 3rd clause: match all
+    (_, () => 'baz')         // 3rd clause: default case
 (end);
 
 > 'bar'
