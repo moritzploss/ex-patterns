@@ -37,7 +37,7 @@ const value = [1, 2, 3];
 when(value)
     ([1, 1, 1], () => 'foo')    // no match
     ([_, _, B], ({ B }) => B)   // match, callback returns 'B'
-    (3, () => 'baz')
+    (_, () => 'baz')
 (end);
 
 > 3
