@@ -4,13 +4,12 @@
 # Ex Patterns
 
 This package brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
-and control flow structures to JavaScript. See the **documentation below** for
-more details.
+and control flow structures to JavaScript. See the [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples) for details and examples.
 
 ## What's in the Box
 
-A powerful pattern matching algorithm (the `match` function) that performs
-pattern matching on flat or arbitrarily nested data structures:
+The package includes a powerful pattern matching algorithm (the `match` function)
+that performs pattern matching on flat or arbitrarily nested data structures:
 
 ```javascript
 const pattern = [1, 2];
@@ -27,11 +26,11 @@ match(pattern, value)       // match
 
 const pattern = [1, 2];
 const value   = [A, 2];
-match(pattern, value)       // match   >> { A: 1 }
+match(pattern, value)       // match  >>  { A: 1 }
 ```
 
-The `when` control flow structure that uses the `match` function to give you
-a `switch` statement on steroids:
+The `when` control flow structure uses the `match` function to give you a `switch`
+statement on steroids:
 
 ```javascript
 const value = [1, 2];
@@ -49,7 +48,8 @@ when(value)
 > 'the second clause matched!'
 ```
 
-See below for a lot more details, **documentation** and examples!
+See below for a lot more details, [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples)
+and examples!
 
 ## Getting Started
 
