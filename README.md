@@ -36,7 +36,7 @@ match clauses in the format `(pattern, callback)` that are matched against `valu
 ```javascript
 const value = 'bar';
 when(value)
-    (1, () => 'foo')      // no match. '1' does not match 'foo'
+    (1, () => 'foo')      // no match. '1' does not match 'bar'!
     (A, ({ A }) => A)     // placeholder 'A' matches 'bar' => invoke callback!
     (_, () => 'baz')      // placeholder '_' can be used as fallback
 (end);
