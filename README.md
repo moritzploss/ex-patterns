@@ -33,21 +33,14 @@ The `when` control flow structure uses the `match` function to give you a `switc
 statement on steroids:
 
 ```javascript
-// the value to match against
-const value = [1, 2];
-
-// callback functions that are invoked when pattern matches 'value'
-const callback1 = (matches, value, pattern) => 'first clause matched!';
-const callback2 = (matches, value, pattern) => 'second clause matched!';
-
-// match 'value' against different patterns
+const value = { hello: 'world' };
 when(value)
-    ([2, 2], callback1)     // [2, 2] does not match value [1, 2]
-    ([_, 2], callback2)     // [_, 2] matches value [1, 2] => invoke callback!
-    (_, () => 'no match!')
+    ({ hello: 'there' }, () => 'hello there!')    // no match
+    ({ hello: A }, ({ A }) => `hello ${A}!`)      // match! => invoke callback!
+    (_, () => 'hello!')
 (end);
 
-> 'second clause matched!'
+> 'hello world!'
 ```
 
 See below for a lot more details, [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples)
