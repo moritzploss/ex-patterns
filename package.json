@@ -9,7 +9,10 @@
     "build": "tsc",
     "test:watch": "npx jest --coverage --watchAll",
     "test": "npx jest --coverage",
-    "prepare": "tsc"
+    "prepare": "npm run build",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
