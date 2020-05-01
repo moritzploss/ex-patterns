@@ -345,32 +345,35 @@ For readability, it can make sense to define the callback functions outside
 of the `when` structure. For example:
 
 ```javascript
-const value = { foo: 1, bar: 5 };
-const callback = (matches, val, pattern) => [matches, val, pattern];
+const user = { name: 'Amelie', age: 31 };
+
+const returnCallbackArgs = (matches, val, pattern) => [matches, val, pattern];
 
 when(value)
-    (1, () => 'foo')        // no match
-    ({ bar: A }, callback)  // match, invoke callback with (matches, val, pattern)
-    (_, () => 'baz')
+    ({ city: 'Stockholm' }, returnCallbackArgs)  // no match
+    ({ name: B, age: A }, returnCallbackArgs)    // match
+    (_, () => 'no match')
 (end);
 
-> [{ A: 5 }, { foo: 1, bar: 5 }, { bar: A }]
+> [{ A: 31, B: 'Amelie' }, { name: 'Amelie', age: 31 }, { name: B, age: A }]
 ```
 
 This becomes very powerful when combined with object destructuring and
 renaming of desctructured variables in the callback function:
 
 ```javascript
-const value = { foo: { bar: [5, 9] }, baz: [1, 2, 3] };
-const callback = ({ A: meaningfulName }) => meaningfulName;
+const user = { name: 'Amelie', age: 31 };
+
+const returnCallbackArgs = (matches, val, pattern) => [matches, val, pattern];
+const returnNameAndAge = ({ A: age, B: name }) => [name, age];
 
 when(value)
-    (1, () => 'foo')                        // no match
-    ({ foo: { bar: [_, A] }}, callback)     // match
-    (_, () => 'baz')
+    ({ city: 'Stockholm' }, returnCallbackArgs)  // no match
+    ({ name: B, age: A }, returnNameAndAge)      // match
+    (_, () => 'no match')
 (end);
 
-> 9
+> ['Amelie', 31]
 ```
 
 ### `if` vs `switch` vs `when`
@@ -389,7 +392,7 @@ const user = {
 
 const processGothenburgUser = ({ A: age }) => `user is ${age} years old!`
 const processStockholmUser = ({ B: name }) => `user name is ${name}!`
-const processSwedishUser = ({ C: city }) => `user is from ${city}!`
+const processSwedishUser = ({ C: city }) => `user lives in ${city}!`
 const processForeignUser = ({ C: country }) => `user is from ${country}!`
 
 const processUser = (user) => (
