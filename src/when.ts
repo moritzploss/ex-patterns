@@ -43,6 +43,32 @@ const _when = (value, done = false, result = null) => (...args: [any?, Function?
   return _when(value);
 };
 
-const when = (value: any): any => _when(value);
+/**
+ * Function that can be used as a `switch`-like control flow structure. It
+ * returns a function that can be invoked with `(pattern, callback)` or `end`.
+ * When the returned function is invoked with `end`, the result of the matching
+ * `callback` is returned. Throws an error if no matching clause is found.
+ *
+ * @param value: A data structure or function
+ *
+ * @returns Function that can be invoked with `(pattern, callback)` or `end`
+ *
+ * ## Examples
+ * Use `when` to pattern match against `value`. The callback function that belongs
+ * to the first matching pattern is invoked and the result is returned.
+ * ```
+ *     const value = [1, 'bar'];
+ *     when(value)
+ *        ([1, 1], () => 'foo')    // no match [1, 1] ≠ [1, 'bar']
+ *        ([1, A], ({ A }) => A)   // match!   [1, A] = [1, 'bar'] => invoke callback!
+ *        (_, () => 'baz')         // fallback      _ = [1, 'bar']
+ *     (end);
+ *
+ *     > 'bar'
+ * ```
+ */
+function when(value: any): any {
+  return _when(value);
+}
 
 export { when, _, end };
