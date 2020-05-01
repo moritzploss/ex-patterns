@@ -404,6 +404,6 @@ processUser(user);
 > 'user name is David!'
 ```
 
-It takes a while to get used to this style of programming, but once you have,
+It can take a while to get used to this style of programming, but once you have,
 you may end up asking yourself why you'll ever want to use `if` or `switch`
 anyway!
