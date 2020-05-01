@@ -22,7 +22,7 @@ match(pattern, value)       // match
 
 const pattern = [A, 2];
 const value   = [1, 2];
-match(pattern, value)       // match  >>  A: 1
+match(pattern, value)       // match against placeholder A  >>  A: 1
 
 const pattern = [1, _];
 const value   = [3, 4];
@@ -34,11 +34,11 @@ based on pattern matching. It's very similar to Elixir's [`case`](https://elixir
 match clauses in the format `(pattern, callback)` that are matched against `value`.
 
 ```javascript
-const value = [1, 'bar'];
+const value = 'bar';
 when(value)
-    ([1, 1], () => 'foo')    // no match [1, 1] ≠ [1, 'bar']
-    ([1, A], ({ A }) => A)   // match!   [1, A] = [1, 'bar'] => invoke callback!
-    (_, () => 'baz')         // fallback      _ = [1, 'bar']
+    (1, () => 'foo')      // no match. '1' does not match 'foo'
+    (A, ({ A }) => A)     // placeholder 'A' matches 'bar' => invoke callback!
+    (_, () => 'baz')      // placeholder '_' can be used as fallback
 (end);
 
 > 'bar'
