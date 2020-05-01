@@ -33,14 +33,14 @@ The `when` control flow structure uses the `match` function to give you a `switc
 statement on steroids:
 
 ```javascript
-const value = { hello: 'world' };
-when(value)
-    ({ hello: 'there' }, () => 'hello there!')    // no match
-    ({ hello: A }, ({ A }) => `hello ${A}!`)      // match! => invoke callback!
+const user = { name: 'David', nr: 5 };
+when(user)
+    ({ name: 'Amelie' }, () => 'Hi Amelie!')      // no match
+    ({ name: A, nr: _ }, ({ A }) => `Hi ${A}!`)   // match! invoke callback!
     (_, () => 'hello!')
 (end);
 
-> 'hello world!'
+> 'Hi David!'
 ```
 
 See below for a lot more details, [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples)
