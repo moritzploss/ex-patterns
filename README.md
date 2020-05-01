@@ -34,18 +34,15 @@ The `when` control flow structure that uses the `match` function to give you
 a `switch` statement on steroids:
 
 ```javascript
-const pattern1 = { foo: 5, bar: 5 }
-const pattern2 = { foo: _ }
-const value =    { foo: 1, bar: 5 };
+const value = [1, 2];
+const callback1 = (matches, val, pattern) => 'first clause matched!';
+const callback2 = (matches, val, pattern) => 'second clause matched!';
 
-const callback1 = (matches, val, pattern) => 'the first clause matched!';
-const callback2 = (matches, val, pattern) => 'the second clause matched!';
-
-// match pattern against 'value', invoke callback of first matching clause
-// with (matches, val, pattern) as arguments
+// match 'value' against different patterns. invoke callback of
+// first matching pattern with (matches, value, pattern) as arguments
 when(value)
-    (pattern1, callback1)  // 'pattern1' does not match 'value' => no match!
-    (pattern2, callback2)  // 'pattern2' matches 'value' => invoke callback!
+    ([2, 2], callback1)  // [2, 2] does not match value [1, 2]
+    ([_, 2], callback2)  // [_, 2] matches value [1, 2] => invoke callback!
     (_, () => 'the third clause matched!')
 (end);
 
