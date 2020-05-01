@@ -379,35 +379,30 @@ of the invoked callback allows for clean and expressive code when it's
 wrapped in a lamda function with implicit return:
 
 ```javascript
-// user data to be processed
 const user = {
     name: 'David',
-    age: 31,
-    city: 'Stockholm',
-    country: 'Sweden',
+    city: 'Gothenburg',
 };
 
-// callback functions
-const processGothenburgUser = ({ A: age }) => `user is ${age} years old!`;
-const processStockholmUser = ({ B: name }) => `user name is ${name}!`;
-const processSwedishUser = ({ C: city }) => `user lives in ${city}!`;
-const processForeignUser = ({ C: country }) => `user is from ${country}!`;
+const logMissingCity = ({ A: name}) => console.log(`no city for user ${name}`);
+const logNotAUser = ({}, data) => console.log('not a valid user', data);
 
-// function returns the return value of `when`
-const processUser = (user) => (
+const moveTo = (user, city) => (
     when(user)
-        ({ city: 'Gothenburg', age: A }, processGothenburgUser)
-        ({ city: 'Stockholm', name: B }, processStockholmUser)
-        ({ country: 'Sweden', city: C }, processSwedishUser)
-        ({ country: C }, processForeignUser)
+        ({ name: _, city: city }, () => user)
+        ({ name: _, city: _ }, () => ({ ...user, city }))
+        ({ name: A }, logMissingCity)
+        (_, logNotAUser)
     (end)
 );
 
-// call `processUser` with `user`
-processUser(user);
-> 'user name is David!'
+when(moveTo(user, 'Stockholm'))
+    ({ city: C }, ({ C: city}) => `moved user from ${user.city} to ${city}!`)
+    (_, () => 'something went wrong! check the logs!')
+(end)
+
+> 'moved user from Gothenburg to Stockholm!'
 ```
 
 It can take a while to get used to this style of programming, but once you have,
-you may end up asking yourself why you'll ever want to use `if` or `switch`
-anyway!
+you may end up never using `if` or `switch` again!
