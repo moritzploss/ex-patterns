@@ -22,26 +22,27 @@ match(pattern, value)       // match
 
 const pattern = [A, 2];
 const value   = [1, 2];
-match(pattern, value)       // match  >>  { A: 1 }
+match(pattern, value)       // match  >>  A: 1
 
 const pattern = [1, _];
 const value   = [3, 4];
 match(pattern, value)       // no match
 ```
 
-The `when` function uses pattern matching and gives you a `switch` statement on
-steroids, very similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
-control flow structure:
+The `when` function can be described as a `switch` statement based on pattern
+matching. It's very similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
+control flow structure and accepts any number of match clauses in the format
+`(pattern, callback)` that are matched against `value`.
 
 ```javascript
-const value = [1, 2];
+const value = [1, 'bar'];
 when(value)
-    ([1, 1], () => 'foo')    // no match
-    ([_, B], ({ B }) => B)   // match, callback returns 'B'
-    (_, () => 'baz')
+    ([1, 1], () => 'foo')    // 1st clause: no match
+    ([1, A], ({ A }) => A)   // 2nd clause: match! invoke callback!
+    (_, () => 'baz')         // 3rd clause: match all
 (end);
 
-> 2
+> 'bar'
 ```
 
 See below for a lot more details, [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples)
