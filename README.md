@@ -16,10 +16,6 @@ const pattern = [1, 2];
 const value   = [1, 2];
 match(pattern, value)       // match
 
-const pattern = [1, 2];
-const value   = [3, 4];
-match(pattern, value)       // no match
-
 const pattern = [_, 2];
 const value   = [1, 2];
 match(pattern, value)       // match
@@ -27,6 +23,10 @@ match(pattern, value)       // match
 const pattern = [A, 2];
 const value   = [1, 2];
 match(pattern, value)       // match  >>  { A: 1 }
+
+const pattern = [1, _];
+const value   = [3, 4];
+match(pattern, value)       // no match
 ```
 
 The `when` control flow structure uses the `match` function to give you a `switch`
@@ -40,9 +40,9 @@ const callback2 = (matches, val, pattern) => 'second clause matched!';
 // match 'value' against different patterns. invoke callback of
 // first matching pattern with (matches, value, pattern) as arguments
 when(value)
-    ([2, 2], callback1)  // [2, 2] does not match value [1, 2]
-    ([_, 2], callback2)  // [_, 2] matches value [1, 2] => invoke callback!
-    (_, () => 'the third clause matched!')
+    ([2, 2], callback1)     // [2, 2] does not match value [1, 2]
+    ([_, 2], callback2)     // [_, 2] matches value [1, 2] => invoke callback!
+    (_, () => 'no match!')
 (end);
 
 > 'the second clause matched!'
