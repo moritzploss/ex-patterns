@@ -373,7 +373,7 @@ when(value)
 > 9
 ```
 
-## `if` vs `switch` vs `when`
+### `if` vs `switch` vs `when`
 
 The fact that the `when` control flow structure returns the return value
 of the invoked callback allows for clean and expressive code when combined
@@ -390,14 +390,14 @@ const user = {
 const processGothenburgUser = ({ A: age }) => `user is ${age} years old!`
 const processStockholmUser = ({ B: name }) => `user name is ${name}!`
 const processSwedishUser = ({ C: city }) => `user is from ${city}!`
-const processOtherUser = ({ C: country }) => `user is from ${country}!`
+const processForeignUser = ({ C: country }) => `user is from ${country}!`
 
 const processUser = (user) => (
     when(user)
         ({ city: 'Gothenburg', age: A }, processGothenburgUser)
-        ({ city: 'Stockholm', name: B }, processStockholmUser)      // match
+        ({ city: 'Stockholm', name: B }, processStockholmUser)
         ({ country: 'Sweden', city: C }, processSwedishUser)
-        ({ country: C }, processOtherUser)
+        ({ country: C }, processForeignUser)
     (end)
 );
 
