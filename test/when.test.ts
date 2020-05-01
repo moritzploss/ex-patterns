@@ -44,6 +44,15 @@ describe('the when function: base cases', () => {
     expect(result).to.equal(3);
   });
 
+  it('should work with only one match clause', () => {
+    const value = 3;
+    const result = when(value)
+      (3, () => 3)
+    (end);
+
+    expect(result).to.equal(3);
+  });
+
   it('should match a placeholder in the first position', () => {
     const value = 4;
     const result = when(value)
@@ -187,9 +196,30 @@ describe('the when function: callbacks', () => {
 
     expect(result).to.deep.equal(pattern);
   });
+
+  it('should work as expected', () => {
+    const value = { foo: 1, bar: 5 };
+    const callback = (matches, val, pattern) => [matches, val, pattern];
+
+    const result = when(value)
+        (1, () => 'foo')
+        ({ bar: A }, callback)
+        (_, () => 'baz')
+    (end);
+
+    expect(result).to.deep.equal([{ A: 5 }, { foo: 1, bar: 5 }, { bar: A }]);
+  });
 });
 
 describe('the when function: user errors', () => {
+  it('should throw an error if no match clause is provided', () => {
+    const value = 4;
+    const fun = () => when(value)
+    (end);
+
+    expect(fun).to.throw(Error);
+  });
+
   it('should throw an error if no matching clause is found', () => {
     const value = 4;
     const fun = () => when(value)

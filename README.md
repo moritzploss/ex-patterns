@@ -4,13 +4,55 @@
 # Ex Patterns
 
 This package brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
-and control flow structures to JavaScript.
+and control flow structures to JavaScript. See the **documentation below** for
+more details.
 
 ## What's in the Box
 
-A powerful pattern matching algorithm (the `match` function) that really shines
-when used together with the `when` control flow. Start by reading the section on
-pattern matching below, then move on to the `when` function.
+A powerful pattern matching algorithm (the `match` function) that performs
+pattern matching on flat or arbitrarily nested data structures:
+
+```javascript
+const pattern = [1, 2];
+const value   = [1, 2];
+match(pattern, value)       // match
+
+const pattern = [1, 2];
+const value   = [3, 4];
+match(pattern, value)       // no match
+
+const pattern = [1, 2];
+const value   = [_, 2];
+match(pattern, value)       // match
+
+const pattern = [1, 2];
+const value   = [A, 2];
+match(pattern, value)       // match   >> { A: 1 }
+```
+
+The `when` control flow structure that uses the `match` function to give you
+a `switch` statement on steroids:
+
+```javascript
+const pattern1 = { foo: 5, bar: 5 }
+const pattern2 = { foo: _ }
+const value =    { foo: 1, bar: 5 };
+
+const callback1 = (matches, val, pattern) => 'the first clause matched!';
+const callback2 = (matches, val, pattern) => 'the second clause matched!';
+
+// match pattern against 'value', invoke callback of first matching clause
+// with (matches, val, pattern) as arguments
+when(value)
+    (pattern1, callback1)  // 'pattern1' does not match 'value' => no match!
+    (pattern2, callback2)  // 'pattern2' matches 'value' => invoke callback!
+    (_, () => 'the third clause matched!')
+(end);
+
+> 'the second clause matched!'
+```
+
+See below for a lot more details, **documentation** and examples!
 
 ## Getting Started
 
@@ -180,7 +222,7 @@ match(pattern, value);
 
 As mentioned, the simplest form of a pattern match is an equality comparison
 by value. However, in the case of JavaScript objects (Hash Maps), a match
-also counts as successful if the pattern (left) is a subset of the value (righ):
+also counts as successful if the pattern (left) is a subset of the value (right):
 
 ```javascript
 match({ a: 1 }, { a: 1, b: 2 });    // match
@@ -262,6 +304,7 @@ const result = when(value)
     (3, () => 'baz')
 (end);
 
+result
 > 'bar'
 ```
 
@@ -301,7 +344,7 @@ For readability, it can make sense to define the callback functions outside
 of the `when` structure. For example:
 
 ```javascript
-const value = { bar: 5 };
+const value = { foo: 1, bar: 5 };
 const callback = (matches, val, pattern) => [matches, val, pattern];
 
 when(value)
@@ -310,7 +353,7 @@ when(value)
     (_, () => 'baz')
 (end);
 
-> [{ A: 5 }, 5, { bar: A }]
+> [{ A: 5 }, { foo: 1, bar: 5 }, { bar: A }]
 ```
 
 This becomes very powerful when combined with object destructuring and
