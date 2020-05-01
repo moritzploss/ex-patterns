@@ -8,11 +8,11 @@ import { hasKey, isObject, isArray } from './util';
 export type Pattern = any;
 type MatchTuple = [boolean, Match];
 
-const _matchArray = (pattern: Pattern, array: [], matchFunc: Function, match: Match) => {
+const _matchArray = (pattern: Pattern, array: [], matchFunc: Function, matches: Match) => {
   if (pattern.length > array.length) {
     return [false, {}];
   }
-  return reduceWhile(pattern, [true, match], ([isMatch, acc]: MatchTuple, elm: any, i: number) => {
+  return reduceWhile(pattern, [true, matches], ([isMatch, acc]: MatchTuple, elm: any, i: number) => {
     // eslint-disable-next-line no-param-reassign
     [isMatch, acc] = matchFunc(elm, array[i], acc);
     return isMatch
@@ -21,7 +21,7 @@ const _matchArray = (pattern: Pattern, array: [], matchFunc: Function, match: Ma
   });
 };
 
-const _matchObject = (pattern: Pattern, object: Object, matchFunc: Function, match: Match) => {
+const _matchObject = (pattern: Pattern, object: Object, matchFunc: Function, matches: Match) => {
   const keyVal = Object.entries(pattern);
   const reducer = ([isMatch, acc]: MatchTuple, [key, val]: [string, Pattern]) => {
     if (hasKey(object, key)) {
@@ -33,10 +33,10 @@ const _matchObject = (pattern: Pattern, object: Object, matchFunc: Function, mat
     }
     return [stop, [false, {}]];
   };
-  return reduceWhile(keyVal, [true, match], reducer);
+  return reduceWhile(keyVal, [true, matches], reducer);
 };
 
-const match = (pattern: Pattern, value: any, matches = {}) => {
+const _match = (pattern: Pattern, value: any, matches = {}) => {
   if (isPlaceHolder(value)) {
     throw Error('Right side of match cannot contain placeholders.');
   }
@@ -54,14 +54,49 @@ const match = (pattern: Pattern, value: any, matches = {}) => {
   }
 
   if (isArray(pattern) && isArray(value)) {
-    return _matchArray(pattern, value, match, matches);
+    return _matchArray(pattern, value, _match, matches);
   }
 
   if (isObject(pattern) && isObject(value)) {
-    return _matchObject(pattern, value, match, matches);
+    return _matchObject(pattern, value, _match, matches);
   }
 
   return [false, matches];
 };
+
+/**
+ * Matches `pattern` against `value` and returns the result.
+ *
+ * @param pattern: A pattern
+ * @param value: A data structure or function
+ *
+ * @returns Two-element array [`isMatch`, `matches`]
+ *
+ * ## Examples
+ * Successful match against the unnamed placeholder `_`:
+ * ```javascript
+ * const pattern = [_, 2];
+ * const value   = [1, 2];
+ * match(pattern, value);
+ * > [true, {}]
+ * ```
+ * Unsuccessful match:
+ * ```javascript
+ * const pattern = [_, 3];
+ * const value   = [1, 2];
+ * match(pattern, value);
+ * > [false, {}]
+ * ```
+ * Successful match against the named placeholders `A`, `B`, and `C`:
+ * ```javascript
+ * const pattern = [A, 2, B, C];
+ * const value   = [1, 2, 3, 4];
+ * match(pattern, value);
+ * > [true, { A:1, B:3, C: 4 }]
+ * ```
+ */
+function match(pattern: Pattern, value: any) {
+  return _match(pattern, value);
+}
 
 export { match };
