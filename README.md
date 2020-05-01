@@ -150,6 +150,7 @@ or any other arbitrary data structure, no matter if flat or nested:
 
 ```javascript
 match(_, 1)                     // match
+match(_, 'foo')                 // match
 match(_, [1, 2])                // match
 match(_, { a: 'b' })            // match
 match({ a: _ }, { a: 'b' })     // match
@@ -374,10 +375,11 @@ when(user)
 ### `if` vs `switch` vs `when`
 
 The fact that the `when` control flow structure returns the return value
-of the invoked callback allows for clean and expressive code when combined
-with lamda functions:
+of the invoked callback allows for clean and expressive code when it's
+wrapped in a lamda function with implicit return:
 
 ```javascript
+// user data to be processed
 const user = {
     name: 'David',
     age: 31,
@@ -385,11 +387,13 @@ const user = {
     country: 'Sweden',
 };
 
+// callback functions
 const processGothenburgUser = ({ A: age }) => `user is ${age} years old!`;
 const processStockholmUser = ({ B: name }) => `user name is ${name}!`;
 const processSwedishUser = ({ C: city }) => `user lives in ${city}!`;
 const processForeignUser = ({ C: country }) => `user is from ${country}!`;
 
+// function returns the return value of `when`
 const processUser = (user) => (
     when(user)
         ({ city: 'Gothenburg', age: A }, processGothenburgUser)
@@ -399,6 +403,7 @@ const processUser = (user) => (
     (end)
 );
 
+// call `processUser` with `user`
 processUser(user);
 > 'user name is David!'
 ```
