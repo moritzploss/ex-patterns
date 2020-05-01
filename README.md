@@ -36,9 +36,9 @@ match clauses in the format `(pattern, callback)` that are matched against `valu
 ```javascript
 const value = [1, 'bar'];
 when(value)
-    ([1, 1], () => 'foo')    // 1st clause: no match
-    ([1, A], ({ A }) => A)   // 2nd clause: match! invoke callback!
-    (_, () => 'baz')         // 3rd clause: default case
+    ([1, 1], () => 'foo')    // no match [1, 1] ≠ [1, 'bar']
+    ([1, A], ({ A }) => A)   // match!   [1, A] = [1, 'bar'] => invoke callback!
+    (_, () => 'baz')         // fallback      _ = [1, 'bar']
 (end);
 
 > 'bar'
