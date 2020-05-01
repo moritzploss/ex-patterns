@@ -47,7 +47,7 @@ when(value)
     (_, () => 'no match!')
 (end);
 
-> 'the second clause matched!'
+> 'second clause matched!'
 ```
 
 See below for a lot more details, [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples)
@@ -227,6 +227,7 @@ also counts as successful if the pattern (left) is a subset of the value (right)
 ```javascript
 match({ a: 1 }, { a: 1, b: 2 });    // match
 match({}, { a: 1, b: 2 });          // match
+match({ a: 1, b: 2 }, { a: 1 });    // no match
 ```
 
 This means that it's possible to only match against the object keys that are
