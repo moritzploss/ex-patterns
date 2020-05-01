@@ -29,18 +29,19 @@ const value   = [3, 4];
 match(pattern, value)       // no match
 ```
 
-The `when` control flow structure uses the `match` function to give you a `switch`
-statement on steroids:
+The `when` function uses pattern matching and gives you a `switch` statement on
+steroids, very similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
+control flow structure:
 
 ```javascript
-const value = [1, 2, 3];
+const value = [1, 2];
 when(value)
-    ([1, 1, 1], () => 'foo')    // no match
-    ([_, _, B], ({ B }) => B)   // match, callback returns 'B'
+    ([1, 1], () => 'foo')    // no match
+    ([_, B], ({ B }) => B)   // match, callback returns 'B'
     (_, () => 'baz')
 (end);
 
-> 3
+> 2
 ```
 
 See below for a lot more details, [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples)
