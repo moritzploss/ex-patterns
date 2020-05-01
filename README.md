@@ -3,13 +3,13 @@
 
 # Ex Patterns
 
-This package brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
+This project brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
 and control flow structures to JavaScript. See the [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples) for details and examples.
 
 ## What's in the Box
 
-The package includes a powerful pattern matching algorithm (the `match` function)
-that performs pattern matching on flat or arbitrarily nested data structures:
+The package comes with a powerful pattern matching algorithm (the `match` function)
+that performs pattern matching on flat and nested data structures:
 
 ```javascript
 const pattern = [1, 2];
@@ -29,10 +29,9 @@ const value   = [3, 4];
 match(pattern, value)       // no match
 ```
 
-The `when` function can be described as a `switch` statement based on pattern
-matching. It's very similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
-control flow structure and accepts any number of match clauses in the format
-`(pattern, callback)` that are matched against `value`.
+The package also includes the `when` function, which is a `switch` statement
+based on pattern matching. It's very similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case) control flow structure and accepts any number of
+match clauses in the format `(pattern, callback)` that are matched against `value`.
 
 ```javascript
 const value = [1, 'bar'];
