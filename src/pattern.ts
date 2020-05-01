@@ -74,25 +74,25 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
  *
  * ## Examples
  * Successful match against the unnamed placeholder `_`:
- * ```javascript
- * const pattern = [_, 2];
- * const value   = [1, 2];
- * match(pattern, value);
- * > [true, {}]
+ * ```
+ *      const pattern = [_, 2];
+ *      const value   = [1, 2];
+ *      match(pattern, value);
+ *      > [true, {}]
  * ```
  * Unsuccessful match:
- * ```javascript
- * const pattern = [_, 3];
- * const value   = [1, 2];
- * match(pattern, value);
- * > [false, {}]
+ * ```
+ *      const pattern = [_, 3];
+ *      const value   = [1, 2];
+ *      match(pattern, value);
+ *      > [false, {}]
  * ```
  * Successful match against the named placeholders `A`, `B`, and `C`:
- * ```javascript
- * const pattern = [A, 2, B, C];
- * const value   = [1, 2, 3, 4];
- * match(pattern, value);
- * > [true, { A:1, B:3, C: 4 }]
+ * ```
+ *      const pattern = [A, 2, B, C];
+ *      const value   = [1, 2, 3, 4];
+ *      match(pattern, value);
+ *      > [true, { A:1, B:3, C: 4 }]
  * ```
  */
 function match(pattern: Pattern, value: any) {

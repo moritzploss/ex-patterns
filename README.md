@@ -255,7 +255,7 @@ Let's start by importing the `when` function together with the `end` keyword
 and some placeholders:
 
 ```javascript
-import { when, end, _, A, B, C, D} from 'ex-patterns';
+import { when, end, _, A, B, C, D } from 'ex-patterns';
 ```
 
 A call to the `when` function marks the beginning of the control flow structure,
@@ -323,7 +323,7 @@ const value = 5;
 when(value)
     (1, () => 'foo')    // no match
     (2, () => 'bar')    // no match
-    (_, () => 'baz')    // match, callback returns 'baz'
+    (_, () => 'baz')    // matches anything! callback returns 'baz'
 (end);
 ```
 
@@ -333,7 +333,7 @@ When invoked, the callback functions in the match clauses are passed three argum
 
 *  the match result (type `Object`)
 *  the `value` that was matched against (type `any`)
-*  the pattern that was used for the match (type `Pattern`)
+*  the pattern that was used to perform the match (type `Pattern`)
 
 For readability, it can make sense to define the callback functions outside
 of the `when` structure. For example:
@@ -385,10 +385,10 @@ const user = {
     country: 'Sweden',
 };
 
-const processGothenburgUser = ({ A: age }) => `user is ${age} years old!`
-const processStockholmUser = ({ B: name }) => `user name is ${name}!`
-const processSwedishUser = ({ C: city }) => `user lives in ${city}!`
-const processForeignUser = ({ C: country }) => `user is from ${country}!`
+const processGothenburgUser = ({ A: age }) => `user is ${age} years old!`;
+const processStockholmUser = ({ B: name }) => `user name is ${name}!`;
+const processSwedishUser = ({ C: city }) => `user lives in ${city}!`;
+const processForeignUser = ({ C: country }) => `user is from ${country}!`;
 
 const processUser = (user) => (
     when(user)
