@@ -20,12 +20,12 @@ const pattern = [1, 2];
 const value   = [3, 4];
 match(pattern, value)       // no match
 
-const pattern = [1, 2];
-const value   = [_, 2];
+const pattern = [_, 2];
+const value   = [1, 2];
 match(pattern, value)       // match
 
-const pattern = [1, 2];
-const value   = [A, 2];
+const pattern = [A, 2];
+const value   = [1, 2];
 match(pattern, value)       // match  >>  { A: 1 }
 ```
 
