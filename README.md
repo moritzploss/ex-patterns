@@ -295,7 +295,7 @@ when(value)
 ```
 
 **The `when` control flow structure returns the return value of the callback
-function that belongs to the first matching clause!**.
+function that belongs to the first matching clause!**
 
 ```javascript
 const value = 2;
