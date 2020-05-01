@@ -33,12 +33,14 @@ The `when` control flow structure uses the `match` function to give you a `switc
 statement on steroids:
 
 ```javascript
+// the value to match against
 const value = [1, 2];
-const callback1 = (matches, val, pattern) => 'first clause matched!';
-const callback2 = (matches, val, pattern) => 'second clause matched!';
 
-// match 'value' against different patterns. invoke callback of
-// first matching pattern with (matches, value, pattern) as arguments
+// callback functions that are invoked when pattern matches 'value'
+const callback1 = (matches, value, pattern) => 'first clause matched!';
+const callback2 = (matches, value, pattern) => 'second clause matched!';
+
+// match 'value' against different patterns
 when(value)
     ([2, 2], callback1)     // [2, 2] does not match value [1, 2]
     ([_, 2], callback2)     // [_, 2] matches value [1, 2] => invoke callback!
@@ -80,15 +82,15 @@ destructuring complex (or simple) data structures and extracting the information
 that you're interested in. This can result in a much cleaner and more expressive
 programming style with fewer conditionals and less explicit branching logic.
 
-In JavaScript, the equal sign is referred to as the *assignment operator*.
-A variable on the left side is *assigned* the value on the right side.
+In JavaScript, the equal sign is an *assignment operator*. A variable on the
+left side is *assigned* the value on the right side.
 
 ```javascript
 const a = 1;
 const b = [1, 2, 3];
 ```
 
-In contrast, **pattern matching** allows us to have data structures on both
+In contrast, **pattern matching** allows for having data structures on both
 sides of the `=` sign, and to evaluate if there's a way to match them. It's
 helpful to keep this idea of `left` and `right` in mind when going through the
 examples below!
@@ -96,6 +98,7 @@ examples below!
 ```javascript
 a = 1  // match
 1 = 1  // match
+1 = a  // match
 ```
 
 ### The `match` Function
@@ -193,8 +196,8 @@ use the same **named** placeholder several times in a pattern
 **as long as it is always matched against the same value**.
 
 ```javascript
-match([A, A, A], [2, 2, 2]);   // match     >>  { A: 2 }
-match([A, A, A], [1, 2, 3]);   // no match  >>  { }
+match([D, D, D], [2, 2, 2]);   // match     >>  { D: 2 }
+match([D, D, D], [1, 2, 3]);   // no match  >>  { }
 ```
 
 Compare that to the *unnamed placeholder*:
@@ -204,8 +207,8 @@ match([_, _, _], [2, 2, 2]);   // match     >>  { }
 match([_, _, _], [1, 2, 3]);   // match     >>  { }
 ```
 
-You can combine unnamed and named placeholders as needed, but keep in
-mind that only matches against named placeholders are returned:
+You can combine unnamed and named placeholders as needed, but only matches
+against named placeholders are returned:
 
 ```javascript
 const pattern = [_, B, B, { foo: C }];
@@ -226,15 +229,15 @@ match({ a: 1 }, { a: 1, b: 2 });    // match
 match({}, { a: 1, b: 2 });          // match
 ```
 
-This means that it's possible to match only against the object keys that are
+This means that it's possible to only match against the object keys that are
 of interest. Note that the same is **not** true for arrays:
 
 ```javascript
 match([1, 2], [1, 2, 3]);   // no match
 ```
 
-Moreover, named and unnamed placeholders can only be used to match against object
-values, not keys. While this wouldn't be possible to begin with (since JavaScript
+Also note that named and unnamed placeholders can only be used to **match against object
+values, not keys**. While this wouldn't be possible to begin with (since JavaScript
 object keys are just strings), it's also by design and consistent with pattern
 matching in Elixir:
 
@@ -277,21 +280,21 @@ when(value)             // start `when` control flow structure with `value`
 
 Each match clause takes two arguments: the first is a pattern (see above) that
 will be matched against `value`, the second a callback function that will be
-invoked when the match was successful. In the following case, `value` will
-match the second clause:
+invoked when the match is successful. In the following case, `value` will
+match the second clause; clauses that come **after** a matching clause will
+not be matched against:
 
 ```javascript
 const value = 2;
 when(value)
     (1, () => 'foo')    // no match. '1' does not macth '2'
     (2, () => 'bar')    // '2' matches '2' => invoke callback!
-    (3, () => 'baz')
+    (3, () => 'baz')    // will not be matched against
 (end);
 ```
 
-Clauses that come **after** a matching clause will not be matched against; i.e., **the
-`when` control flow structure returns the return value of the callback function
-that belongs to the first matching clause!**.
+**The `when` control flow structure returns the return value of the callback
+function that belongs to the first matching clause!**.
 
 ```javascript
 const value = 2;
@@ -346,7 +349,7 @@ const callback = (matches, val, pattern) => [matches, val, pattern];
 
 when(value)
     (1, () => 'foo')        // no match
-    ({ bar: A }, callback)  // match, invoke callback with matches, val, pattern
+    ({ bar: A }, callback)  // match, invoke callback with (matches, val, pattern)
     (_, () => 'baz')
 (end);
 
@@ -369,4 +372,38 @@ when(value)
 > 9
 ```
 
-That's it!
+## `if` vs `switch` vs `when`
+
+The fact that the `when` control flow structure returns the return value
+of the invoked callback allows for clean and expressive code when combined
+with lamda functions:
+
+```javascript
+const user = {
+    name: 'David',
+    age: 31,
+    city: 'Stockholm',
+    country: 'Sweden',
+};
+
+const processGothenburgUser = ({ A: age }) => `user is ${age} years old!`
+const processStockholmUser = ({ B: name }) => `user name is ${name}!`
+const processSwedishUser = ({ C: city }) => `user is from ${city}!`
+const processOtherUser = ({ C: country }) => `user is from ${country}!`
+
+const processUser = (user) => (
+    when(user)
+        ({ city: 'Gothenburg', age: A }, processGothenburgUser)
+        ({ city: 'Stockholm', name: B }, processStockholmUser)      // match
+        ({ country: 'Sweden', city: C }, processSwedishUser)
+        ({ country: C }, processOtherUser)
+    (end)
+);
+
+processUser(user);
+> 'user name is David!'
+```
+
+It takes a while to get used to this style of programming, but once you have,
+you may end up asking yourself why you'll ever want to use `if` or `switch`
+anyway!
