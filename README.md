@@ -282,7 +282,7 @@ not be matched against:
 ```javascript
 const value = 2;
 when(value)
-    (1, () => 'foo')    // no match. '1' does not macth '2'
+    (1, () => 'foo')    // no match. '1' does not match '2'
     (2, () => 'bar')    // '2' matches '2' => invoke callback!
     (3, () => 'baz')    // will not be matched against
 (end);
