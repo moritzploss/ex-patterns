@@ -1,7 +1,5 @@
-import * as R from 'ramda';
-
 import { Placeholder } from './placeholder';
-import { hasKey } from './util';
+import { hasKey, equals } from './util';
 
 export type Match = Record<string, any>;
 
@@ -11,7 +9,7 @@ const updateMatch = (match: Match, { name }: Placeholder, value: any): [boolean,
     match[name] = value;
     return [true, match];
   }
-  if (R.equals(match[name], value)) {
+  if (equals(match[name], value)) {
     return [true, match];
   }
   return [false, match];

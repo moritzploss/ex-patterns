@@ -14,8 +14,6 @@ const symbolsByName: Record<string, Symbol> = namedPlaceholders.reduce(
 
 const lookup = (name: string): Symbol | undefined => symbolsByName[name];
 
-const isUnderscore = (value: any): boolean => value === _;
-
 const isNamedPlaceholder = (value: any): boolean => {
   if (!isObject(value)) {
     return false;
@@ -26,10 +24,14 @@ const isNamedPlaceholder = (value: any): boolean => {
   return lookup(value.name) === value.symbol;
 };
 
-const isPlaceholder = (value: any): boolean => (isUnderscore(value) || isNamedPlaceholder(value));
+const isUnnamedPlaceholder = (value: any): boolean => value === _;
+
+const isPlaceholder = (value: any): boolean => (
+  isUnnamedPlaceholder(value) || isNamedPlaceholder(value)
+);
 
 export {
-  isUnderscore,
-  isPlaceholder,
   isNamedPlaceholder,
+  isPlaceholder,
+  isUnnamedPlaceholder,
 };

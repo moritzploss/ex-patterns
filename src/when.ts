@@ -1,51 +1,36 @@
 import { match, Pattern } from './pattern';
 import { Match } from './match';
-import { end } from './symbols';
+import { end, End } from './symbols';
+import { isFunction } from './util';
 
 type Callback = (matches?: Match, value?: any, pattern?: Pattern) => any;
-type Args = [] | [Symbol] | [Pattern, Callback];
+type MatchClause = (pattern: Pattern | End, callback?: Callback) => any;
 
-const throwArgError = () => {
-  throw Error('Expected 1 (end) or 2 (type pattern, type function) arguments.');
-};
-
-const _when = (value: any, done = false, result = null) => (...args: Args): any => {
-  const argsLength = args.length;
-
-  if (argsLength === 0) {
-    throwArgError();
-  }
-
-  if (argsLength === 1) {
-    if (args[0] === end && done) {
-      return result;
+const _when = (value: any, done = false, result = null): MatchClause => (
+  (pattern: Pattern | End, callback?: Callback): any => {
+    if (pattern === end) {
+      if (done) {
+        return result;
+      }
+      throw Error('No matching clause found. ');
     }
-    if (args[0] !== end) {
-      throwArgError();
+
+    if (!isFunction(callback)) {
+      throw Error('Expected 1 or 2 arguments of type (end) or (pattern, function).');
     }
-    throw Error('No matching clause found. ');
-  }
 
-  if (argsLength > 2) {
-    throwArgError();
-  }
+    if (done) {
+      return _when(value, true, result);
+    }
 
-  if (typeof args[1] !== 'function') {
-    throw Error(`Expected second argument to be a function (is ${typeof args[1]}).`);
-  }
+    const [isMatch, matches] = match(pattern, value);
+    if (isMatch) {
+      return _when(value, true, callback(matches, value, pattern));
+    }
 
-  if (done) {
-    return _when(value, true, result);
+    return _when(value);
   }
-
-  const [pattern, callback] = args;
-  const [isMatch, matches] = match(pattern, value);
-  if (isMatch) {
-    return _when(value, true, callback(matches, value, pattern));
-  }
-
-  return _when(value);
-};
+);
 
 /**
  * Function that can be used as a `switch`-like control flow structure.

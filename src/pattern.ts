@@ -1,7 +1,7 @@
-import * as R from 'ramda';
+import { equals } from 'ramda';
 
 import { reduceWhile, ok, stop } from './enum';
-import { isUnderscore, isNamedPlaceholder, isPlaceholder } from './placeholder';
+import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder } from './placeholder';
 import { updateMatch, Match } from './match';
 import { hasKey, isObject, isArray } from './util';
 
@@ -22,7 +22,6 @@ const _matchArray = (pattern: Pattern, array: [], matchFunc: Function, matches: 
 };
 
 const _matchObject = (pattern: Pattern, object: Object, matchFunc: Function, matches: Match) => {
-  const keyVal = Object.entries(pattern);
   const reducer = ([isMatch, acc]: MatchTuple, [key, val]: [string, Pattern]) => {
     if (hasKey(object, key)) {
       // eslint-disable-next-line no-param-reassign
@@ -33,7 +32,7 @@ const _matchObject = (pattern: Pattern, object: Object, matchFunc: Function, mat
     }
     return [stop, [false, {}]];
   };
-  return reduceWhile(keyVal, [true, matches], reducer);
+  return reduceWhile(Object.entries(pattern), [true, matches], reducer);
 };
 
 const _match = (pattern: Pattern, value: any, matches = {}) => {
@@ -41,7 +40,7 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
     throw Error('Right side of match cannot contain placeholders.');
   }
 
-  if (isUnderscore(pattern)) {
+  if (isUnnamedPlaceholder(pattern)) {
     return [true, matches];
   }
 
@@ -49,7 +48,7 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
     return updateMatch(matches, pattern, value);
   }
 
-  if (R.equals(pattern, value)) {
+  if (equals(pattern, value)) {
     return [true, matches];
   }
 

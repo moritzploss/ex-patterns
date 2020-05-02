@@ -28,3 +28,4 @@ export const Y = { name: 'Y', symbol: Symbol('Y') };
 export const Z = { name: 'Z', symbol: Symbol('Z') };
 
 export const end = Symbol('end');
+export type End = typeof end;
