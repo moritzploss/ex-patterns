@@ -95,7 +95,7 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
  *      > [true, { A: 1, B: 3, C: 4 }]
  * ```
  */
-function match(pattern: Pattern, value: any) {
+function match(pattern: Pattern, value: any): [boolean, Match] {
   return _match(pattern, value);
 }
 

@@ -377,7 +377,7 @@ when(user)
 
 The fact that the `when` control flow structure returns the return value
 of the invoked callback allows for clean and expressive code when it's
-wrapped in a lamda function with implicit return:
+wrapped in a lambda function with implicit return:
 
 ```javascript
 import { when, end, _, C, N } from 'ex-patterns';

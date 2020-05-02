@@ -1,11 +1,15 @@
-import { match } from './pattern';
+import { match, Pattern } from './pattern';
+import { Match } from './match';
 import { end } from './symbols';
+
+type Callback = (matches?: Match, value?: any, pattern?: Pattern) => any;
+type Args = [] | [Symbol] | [Pattern, Callback];
 
 const throwArgError = () => {
   throw Error('Expected 1 (end) or 2 (type pattern, type function) arguments.');
 };
 
-const _when = (value, done = false, result = null) => (...args: [any?, Function?]) => {
+const _when = (value: any, done = false, result = null) => (...args: Args): any => {
   const argsLength = args.length;
 
   if (argsLength === 0) {
@@ -82,7 +86,7 @@ const _when = (value, done = false, result = null) => (...args: [any?, Function?
  *      > 'bar'
  * ```
  */
-function when(value: any): Function {
+function when(value: any) {
   return _when(value);
 }
 
