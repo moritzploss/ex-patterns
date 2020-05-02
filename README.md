@@ -29,9 +29,9 @@ const value   = [1, 2];
 match(pattern, value)       // match against placeholder A  >>  A: 1
 ```
 
-The package also includes the `when` function, which is a `switch` statement
-based on pattern matching. It's very similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case) control flow structure and accepts any number of
-match clauses in the format `(pattern, callback)` that are matched against `value`.
+The package also includes the `when` function, a `switch` statement based on
+pattern matching. It's similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case) control flow structure and accepts any number of match clauses in the format
+`(pattern, callback)` that are matched against `value`.
 
 ```javascript
 import { when, end, _, A } from 'ex-patterns';
@@ -46,16 +46,19 @@ when(value)
 > 'bar'
 ```
 
-# Documentation & Examples
+# Documentation
 
-## Imports
-
-To follow along with the examples, start by importing the `match` function as
-well as `_` (underscore), the *unnamed placeholder*.
-
-```javascript
-import { match, _ } from 'ex-patterns';
-```
+* [Pattern Matching Basics](https://github.com/moritzploss/ex-patterns#pattern-matching-basics)
+* [The `match` Function](https://github.com/moritzploss/ex-patterns#the-match-function)
+    * [Basics](https://github.com/moritzploss/ex-patterns#basics)
+    * [The `_` Placeholder](https://github.com/moritzploss/ex-patterns#the-_-placeholder)
+    * [Named Placeholders](https://github.com/moritzploss/ex-patterns#named-placeholders)
+    * [Matching against Objects and Arrays](https://github.com/moritzploss/ex-patterns#matching-against-objects-and-arrays)
+* [The `when` Function](https://github.com/moritzploss/ex-patterns#the-when-control-flow-structure)
+    * [Basics](https://github.com/moritzploss/ex-patterns#basics)
+    * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
+    * [Callback Functions](https://github.com/moritzploss/ex-patterns#callback-functions)
+    * [More Examples](https://github.com/moritzploss/ex-patterns#more-examples)
 
 ## Pattern Matching Basics
 
@@ -86,8 +89,17 @@ a = 1  // match
 
 ## The `match` Function
 
-To evaluate whether a pattern (left) matches a value (right), use the `match`
-function. In it's simplest form, a pattern match is an equality check **by value**,
+### Basics
+
+To follow along with the examples, start by importing the `match` function as
+well as `_` (underscore), the *unnamed placeholder*.
+
+```javascript
+import { match, _ } from 'ex-patterns';
+```
+
+The `match` function is used to evaluate whether a pattern (left) matches a
+value (right). In it's simplest form, a pattern match is an equality check **by value**,
 comparing the first and second argument of the `match` function. Since checks
 for value equality in JavaScript aren't trivial, this package uses
 [**Ramda's**](https://ramdajs.com/docs/) `equals` function to do the heavy
@@ -202,7 +214,7 @@ match(pattern, value);
 > [true, { B: 2, C: 'k' }]
 ```
 
-### Matching against JavaScript Objects and Arrays
+### Matching against Objects and Arrays
 
 As mentioned, the simplest form of a pattern match is an equality comparison
 by value. However, in the case of JavaScript objects (Hash Maps), a match
@@ -231,9 +243,9 @@ match({ _: 1 }, { foo: 1 });   // no match. '_' is just a string here!
 match({ A: 1 }, { foo: 1 });   // no match. 'A' is just a string here!
 ```
 
-## The `when` Control Flow Structure
+## The `when` Function
 
-### Basic Usage
+### Basics
 
 Let's be clear -- the `when` function is just that: a function. That being said,
 it can be used much like the [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
