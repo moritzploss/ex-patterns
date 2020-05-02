@@ -379,25 +379,27 @@ of the invoked callback allows for clean and expressive code when it's
 wrapped in a lamda function with implicit return:
 
 ```javascript
+import { when, end, _, C, N } from 'ex-patterns';
+
 const user = {
     name: 'David',
     city: 'Gothenburg',
 };
 
-const logMissingCity = ({ A: name}) => console.log(`no city for user ${name}`);
+const logMissingCity = ({ N: name}) => console.log(`no city for user ${name}`);
 const logNotAUser = (matches, data) => console.log('not a valid user', data);
 
 const moveTo = (user, city) => (
     when(user)
         ({ name: _, city }, () => user)
         ({ name: _, city: _ }, () => ({ ...user, city }))
-        ({ name: A }, logMissingCity)
+        ({ name: N }, logMissingCity)
         (_, logNotAUser)
     (end)
 );
 
 when(moveTo(user, 'Stockholm'))
-    ({ city: C }, ({ C: city}) => `moved user from ${user.city} to ${city}!`)
+    ({ city: C }, ({ C: city }) => `moved user from ${user.city} to ${city}!`)
     (_, () => 'something went wrong! check the logs!')
 (end);
 
@@ -413,4 +415,4 @@ certain object properties exist before we access them. We simply code for the
 happy path and leave the error handling to the default cases.
 
 It can take a while to get used to this style of programming, but once you have,
-you may end up never using `if` or `switch` again!
+you may end up never using `if` again!
