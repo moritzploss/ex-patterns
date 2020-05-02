@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  release:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,7 +26,10 @@ jobs:
         npm t
       env:
         CI: true
-
+  
+  release:
+    runs-on: ubuntu-latest
+    steps:
     - name: Checkout repository
       uses: actions/checkout@master
     - name: Set up Node.js
