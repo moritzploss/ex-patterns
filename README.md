@@ -12,21 +12,19 @@ The package comes with a powerful pattern matching algorithm (the `match` functi
 that performs pattern matching on flat and nested data structures:
 
 ```javascript
-const pattern = [1, 2];
-const value   = [1, 2];
-match(pattern, value)       // match
+import { match, _, A } from 'ex-patterns';
 
 const pattern = [_, 2];
 const value   = [1, 2];
 match(pattern, value)       // match
 
-const pattern = [A, 2];
-const value   = [1, 2];
-match(pattern, value)       // match against placeholder A  >>  A: 1
-
 const pattern = [1, _];
 const value   = [3, 4];
 match(pattern, value)       // no match
+
+const pattern = [A, 2];
+const value   = [1, 2];
+match(pattern, value)       // match against placeholder A  >>  A: 1
 ```
 
 The package also includes the `when` function, which is a `switch` statement
@@ -34,6 +32,8 @@ based on pattern matching. It's very similar to Elixir's [`case`](https://elixir
 match clauses in the format `(pattern, callback)` that are matched against `value`.
 
 ```javascript
+import { when, end, _, A } from 'ex-patterns';
+
 const value = 'bar';
 when(value)
     (1, () => 'foo')      // no match. '1' does not match 'bar'!
@@ -118,11 +118,11 @@ is a JavaScript object containing the match results. We'll talk more about that
 later!
 
 ```javascript
-match(1, 1)    
-> [true, {}]    // match
+match(1, 1)     // match
+> [true, {}]
 
-match(1, 2)    
-> [false, {}]   // no match
+match(1, 2)     // no match
+> [false, {}]
 ```
 
 ### The `_` Placeholder
