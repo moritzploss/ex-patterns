@@ -92,7 +92,7 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
  *      const pattern = [A, 2, B, C];
  *      const value   = [1, 2, 3, 4];
  *      match(pattern, value);
- *      > [true, { A:1, B:3, C: 4 }]
+ *      > [true, { A: 1, B: 3, C: 4 }]
  * ```
  */
 function match(pattern: Pattern, value: any) {

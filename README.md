@@ -372,7 +372,7 @@ when(user)
 > ['Amelie', 31]
 ```
 
-### `if` vs `switch` vs `when`
+### More Examples
 
 The fact that the `when` control flow structure returns the return value
 of the invoked callback allows for clean and expressive code when it's
@@ -403,6 +403,14 @@ when(moveTo(user, 'Stockholm'))
 
 > 'moved user from Gothenburg to Stockholm!'
 ```
+
+Notice how the data and the logic that operates on it are completely decoupled!
+While this can also be achieved without pattern matching, the above approach
+encourages and visualizes this style of programming clearly.
+
+Also notice that we never have to perform any explicit checks to verify that
+certain object properties exist before we access them. We simply code for the
+happy path and leave the error handling to the default cases.
 
 It can take a while to get used to this style of programming, but once you have,
 you may end up never using `if` or `switch` again!
