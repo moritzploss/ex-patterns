@@ -275,3 +275,31 @@ describe('the when function: user errors', () => {
     expect(fun).to.throw(Error);
   });
 });
+
+describe('the when function: all together now', () => {
+  it('should work with real life example', () => {
+    const user = {
+      name: 'David',
+      city: 'Gothenburg',
+    };
+
+    const logMissingCity = ({ A: name }) => console.log(`no city for user ${name}`);
+    const logNotAUser = (matches, data) => console.log('not a valid user', data);
+
+    const moveTo = (user, city) => (
+      when(user)
+        ({ name: _, city }, () => user)
+        ({ name: _, city: _ }, () => ({ ...user, city }))
+        ({ name: A }, logMissingCity)
+        (_, logNotAUser)
+      (end)
+    );
+
+    const result = when(moveTo(user, 'Stockholm'))
+      ({ city: C }, ({ C: city }) => `moved user from ${user.city} to ${city}!`)
+      (_, () => 'something went wrong! check the logs!')
+    (end);
+
+    expect(result).to.deep.equal('moved user from Gothenburg to Stockholm!');
+  });
+});

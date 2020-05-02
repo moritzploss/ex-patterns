@@ -385,11 +385,11 @@ const user = {
 };
 
 const logMissingCity = ({ A: name}) => console.log(`no city for user ${name}`);
-const logNotAUser = ({}, data) => console.log('not a valid user', data);
+const logNotAUser = (matches, data) => console.log('not a valid user', data);
 
 const moveTo = (user, city) => (
     when(user)
-        ({ name: _, city: city }, () => user)
+        ({ name: _, city }, () => user)
         ({ name: _, city: _ }, () => ({ ...user, city }))
         ({ name: A }, logMissingCity)
         (_, logNotAUser)
@@ -399,7 +399,7 @@ const moveTo = (user, city) => (
 when(moveTo(user, 'Stockholm'))
     ({ city: C }, ({ C: city}) => `moved user from ${user.city} to ${city}!`)
     (_, () => 'something went wrong! check the logs!')
-(end)
+(end);
 
 > 'moved user from Gothenburg to Stockholm!'
 ```
