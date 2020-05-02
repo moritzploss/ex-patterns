@@ -399,7 +399,7 @@ const moveTo = (user, city) => (
 );
 
 when(moveTo(user, 'Stockholm'))
-    ({ city: C }, ({ C: city }) => `moved user from ${user.city} to ${city}!`)
+    ({ city: C }, ({ C }) => `moved user from ${user.city} to ${C}!`)
     (_, () => 'something went wrong! check the logs!')
 (end);
 
