@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 
 import { reduceWhile, ok, stop } from './enum';
-import { isUnderscore, isNamedPlaceHolder, isPlaceHolder } from './placeholder';
+import { isUnderscore, isNamedPlaceholder, isPlaceholder } from './placeholder';
 import { updateMatch, Match } from './match';
 import { hasKey, isObject, isArray } from './util';
 
@@ -37,7 +37,7 @@ const _matchObject = (pattern: Pattern, object: Object, matchFunc: Function, mat
 };
 
 const _match = (pattern: Pattern, value: any, matches = {}) => {
-  if (isPlaceHolder(value)) {
+  if (isPlaceholder(value)) {
     throw Error('Right side of match cannot contain placeholders.');
   }
 
@@ -45,7 +45,7 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
     return [true, matches];
   }
 
-  if (isNamedPlaceHolder(pattern)) {
+  if (isNamedPlaceholder(pattern)) {
     return updateMatch(matches, pattern, value);
   }
 

@@ -1,5 +1,5 @@
 import { match } from './pattern';
-import { _, end } from './symbols';
+import { end } from './symbols';
 
 const throwArgError = () => {
   throw Error('Expected 1 (end) or 2 (type pattern, type function) arguments.');
@@ -86,4 +86,4 @@ function when(value: any): Function {
   return _when(value);
 }
 
-export { when, _, end };
+export { when };

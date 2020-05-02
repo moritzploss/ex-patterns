@@ -177,7 +177,7 @@ import { match, _, A, B, C, D } from 'ex-patterns';
 ```
 
 Here we import the named placeholders `A`, `B`, `C` and `D`. You can import
-more placeholders as needed, all the way from `A` to `L`. Then use them the same
+more placeholders as needed, all the way from `A` to `Z`. Then use them the same
 way you used `_` before:
 
 ```javascript

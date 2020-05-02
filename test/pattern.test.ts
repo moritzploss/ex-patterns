@@ -7,7 +7,7 @@
 
 import { expect } from 'chai';
 
-import { match, _, A, B, C, D } from '../src';
+import { match, _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } from '../src';
 
 describe('the match function: primitives', () => {
   it('should match two numbers if they are equal', () => {
@@ -339,19 +339,62 @@ describe('the match function: matches', () => {
 
 describe('the match function: all together now', () => {
   it('should match complex nested patterns', () => {
-    const expression = { a: [1, 2, undefined], b: { c: [null, BigInt('1'), ['baz', 'foo']] } };
+    // eslint-disable-next-line no-undef
     const pattern = { a: [1, _, _], b: { c: [null, BigInt('1'), [_, 'foo']] } };
+    // eslint-disable-next-line no-multi-spaces, no-undef
+    const value   = { a: [1, 2, undefined], b: { c: [null, BigInt('1'), ['baz', 'foo']] } };
 
-    const [status, matches] = match(pattern, expression);
+    const [status, matches] = match(pattern, value);
     expect(status).to.be.true;
   });
 
   it('should correctly identify if complex patterns don\'t match', () => {
-    const expression = { a: [1, 2, undefined], b: { c: [null, BigInt('1'), ['baz', 'foo']] } };
+    // eslint-disable-next-line no-undef
     const pattern = { a: [1, _, _], b: { c: [undefined, BigInt('1'), [_, 'foo']] } };
+    // eslint-disable-next-line no-multi-spaces, no-undef
+    const value   = { a: [1, 2, undefined], b: { c: [null, BigInt('1'), ['baz', 'foo']] } };
 
-    const [status, matches] = match(pattern, expression);
+    const [status, matches] = match(pattern, value);
     expect(status).to.be.false;
+  });
+});
+
+describe('the match function: placeholders', () => {
+  it('should correctly map named placeholders', () => {
+    // eslint-disable-next-line no-multi-spaces, max-len
+    const pattern = [A, B, C, D, E, F, G, H, I,  J,  K,  L,  M,  N,  O,  P,  Q,  R,  S,  T,  U,  V,  W,  X,  Y,  Z];
+        // eslint-disable-next-line no-multi-spaces, max-len
+    const value   = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+
+    const [status, matches] = match(pattern, value);
+    expect(matches).to.deep.equal({
+      A: 1,
+      B: 2,
+      C: 3,
+      D: 4,
+      E: 5,
+      F: 6,
+      G: 7,
+      H: 8,
+      I: 9,
+      J: 10,
+      K: 11,
+      L: 12,
+      M: 13,
+      N: 14,
+      O: 15,
+      P: 16,
+      Q: 17,
+      R: 18,
+      S: 19,
+      T: 20,
+      U: 21,
+      V: 22,
+      W: 23,
+      X: 24,
+      Y: 25,
+      Z: 26,
+    });
   });
 });
 
