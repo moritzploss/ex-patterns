@@ -15,6 +15,7 @@ jobs:
         run: |
           npm ci
           npm install
+          npm set //registry.npmjs.org/:_authToken $NODE_AUTH_TOKEN
           npm publish
         env:
           CI: true
