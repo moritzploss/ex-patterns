@@ -6,6 +6,12 @@
 This project brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
 and control flow structures to JavaScript. See the [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples) for details and examples.
 
+## Setup
+
+Install the package from npm:
+
+    npm i ex-patterns
+
 ## What's in the Box
 
 The package comes with a powerful pattern matching algorithm (the `match` function)
@@ -17,10 +23,6 @@ import { match, _, A } from 'ex-patterns';
 const pattern = [_, 2];
 const value   = [1, 2];
 match(pattern, value)       // match
-
-const pattern = [1, _];
-const value   = [3, 4];
-match(pattern, value)       // no match
 
 const pattern = [A, 2];
 const value   = [1, 2];
@@ -44,22 +46,9 @@ when(value)
 > 'bar'
 ```
 
-See below for a lot more details, [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples)
-and examples!
+# Documentation & Examples
 
-## Getting Started
-
-Install the package from npm:
-
-    npm i ex-patterns
-
-Or clone the git repo:
-
-    git clone git@github.com:moritzploss/ex-patterns.git
-
-## Docs & Examples
-
-### Imports
+## Imports
 
 To follow along with the examples, start by importing the `match` function as
 well as `_` (underscore), the *unnamed placeholder*.
@@ -68,7 +57,7 @@ well as `_` (underscore), the *unnamed placeholder*.
 import { match, _ } from 'ex-patterns';
 ```
 
-### Pattern Matching Basics
+## Pattern Matching Basics
 
 If you're new to pattern matching, the [**Elixir Docs**](https://elixir-lang.org/getting-started/pattern-matching.html)
 contain all you need to know. In essence, pattern matching is a way of
@@ -95,7 +84,7 @@ a = 1  // match
 1 = a  // match
 ```
 
-### The `match` Function
+## The `match` Function
 
 To evaluate whether a pattern (left) matches a value (right), use the `match`
 function. In it's simplest form, a pattern match is an equality check **by value**,
