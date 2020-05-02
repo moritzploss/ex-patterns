@@ -12,7 +12,10 @@
     "prepare": "npm run build",
     "preversion": "npm test",
     "version": "npm run build && git add -A",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "release:patch": "npm version patch -m \"Release %s\"",
+    "release:minor": "npm version minor -m \"Release %s\"",
+    "release:major": "npm version major -m \"Release %s\""
   },
   "repository": {
     "type": "git",
