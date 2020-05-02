@@ -4,7 +4,7 @@
 # Ex Patterns
 
 This project brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
-and control flow structures to JavaScript. See the [**documentation**](https://github.com/moritzploss/ex-patterns#docs--examples) for details and examples.
+and control flow structures to JavaScript. See the [**documentation**](https://github.com/moritzploss/ex-patterns/#documentation) for details and examples.
 
 ## Setup
 
@@ -54,8 +54,8 @@ when(value)
     * [The `_` Placeholder](https://github.com/moritzploss/ex-patterns#the-_-placeholder)
     * [Named Placeholders](https://github.com/moritzploss/ex-patterns#named-placeholders)
     * [Matching against Objects and Arrays](https://github.com/moritzploss/ex-patterns#matching-against-objects-and-arrays)
-* [The `when` Function](https://github.com/moritzploss/ex-patterns#the-when-control-flow-structure)
-    * [Basics](https://github.com/moritzploss/ex-patterns#basics)
+* [The `when` Function](https://github.com/moritzploss/ex-patterns/#the-when-function)
+    * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
     * [Callback Functions](https://github.com/moritzploss/ex-patterns#callback-functions)
     * [More Examples](https://github.com/moritzploss/ex-patterns#more-examples)
@@ -329,7 +329,7 @@ when(value)
 (end);
 ```
 
-### Callback functions
+### Callback Functions
 
 When invoked, the callback functions in the match clauses are passed three arguments:
 
