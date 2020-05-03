@@ -6,6 +6,7 @@
 /* eslint-disable arrow-parens */
 
 import { expect } from 'chai';
+import { Map, List } from 'immutable';
 
 import { match, _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } from '../src';
 
@@ -151,6 +152,78 @@ describe('the match function: arrays', () => {
   });
 });
 
+describe('the match function: Immutable.js Lists', () => {
+  it('should match an array against a List if they have same elements', () => {
+    const [status, matches] = match([1, 2], List([1, 2]));
+    expect(status).to.be.true;
+  });
+
+  it('should work with List as pattern', () => {
+    const [status, matches] = match(List([1]), List([1]));
+    expect(status).to.be.true;
+  });
+
+  it('should not match an array against a List if they don\'t have same elements', () => {
+    const [status, matches] = match([1], List([2]));
+    expect(status).to.be.false;
+  });
+
+  it('should match on single placeholder in array', () => {
+    const [status, matches] = match([1, _, 3, 4], List([1, 2, 3, 4]));
+    expect(status).to.be.true;
+  });
+
+  it('should match on multiple placeholders in array', () => {
+    const [status, matches] = match([1, _, 3, _, 5], List([1, 2, 3, 4, 5]));
+    expect(status).to.be.true;
+  });
+
+  it('should not match if the pattern array is longer than the value (1)', () => {
+    const [status, matches] = match([1, _], List([1]));
+    expect(status).to.be.false;
+  });
+
+  it('should not match if the pattern array is longer than the value (2)', () => {
+    const [status, matches] = match([1, 2], List([1]));
+    expect(status).to.be.false;
+  });
+
+  it('should not match if pattern elements are in the wrong order', () => {
+    const [status, matches] = match([2, 1], List([1, 2]));
+    expect(status).to.be.false;
+  });
+
+  it('should not match if pattern elements are in the wrong order, even with placeholder', () => {
+    const [status, matches] = match([_, 1], List([1, 2]));
+    expect(status).to.be.false;
+  });
+
+  it('should match nested Lists (1)', () => {
+    const [status, matches] = match([1, [2, 3]], List([1, List([2, 3])]));
+    expect(status).to.be.true;
+  });
+
+  it('should match nested Lists (2)', () => {
+    const [status, matches] = match([[2, 3], 1], List([List([2, 3]), 1]));
+    expect(status).to.be.true;
+  });
+
+  it('should match nested Lists with placeholders (1)', () => {
+    const [status, matches] = match([[2, 3], _], List([List([2, 3]), 1]));
+    expect(status).to.be.true;
+  });
+
+  it('should match nested Lists with placeholders (2)', () => {
+    const [status, matches] = match([_, 1], List([List([2, 3]), 1]));
+    expect(status).to.be.true;
+  });
+
+  it('should match nested Lists with placeholders (3)', () => {
+    const [status, matches] = match([_, _], List([List([2, 3]), 1]));
+    expect(status).to.be.true;
+  });
+});
+
 describe('the match function: objects', () => {
   it('should match two objects if they are equal', () => {
     const [status, matches] = match({ a: 1 }, { a: 1 });
@@ -167,7 +240,7 @@ describe('the match function: objects', () => {
     expect(status).to.be.true;
   });
 
-  it('should not match two objects if left hand side is subset of righthand side', () => {
+  it('should match two objects if left hand side is subset of righthand side', () => {
     const [status, matches] = match({ a: 1 }, { a: 1, b: 2 });
     expect(status).to.be.true;
   });
@@ -195,6 +268,74 @@ describe('the match function: objects', () => {
   it('should match on nested objects with placeholders (2)', () => {
     const [status, matches] = match({ a: _, b: 3 }, { a: { c: 1 }, b: 3 });
     expect(status).to.be.true;
+  });
+});
+
+describe('the match function: Immutable.js Maps', () => {
+  it('should match object and Map if they have same properties', () => {
+    const [status, matches] = match({ a: 1 }, Map({ a: 1 }));
+    expect(status).to.be.true;
+  });
+
+  it('should work with Map as pattern', () => {
+    const [status, matches] = match(Map({ a: 1 }), Map({ a: 1 }));
+    expect(status).to.be.true;
+  });
+
+  it('should not match object and Map if they don\'t have same properties', () => {
+    const [status, matches] = match({ b: 1 }, Map({ a: 1 }));
+    expect(status).to.be.false;
+  });
+
+  it('should match empty object against any Map', () => {
+    const [status, matches] = match({}, Map({ a: 1 }));
+    expect(status).to.be.true;
+  });
+
+  it('should match two objects if left hand side is subset of righthand side', () => {
+    const [status, matches] = match({ a: 1 }, Map({ a: 1, b: 2 }));
+    expect(status).to.be.true;
+  });
+
+  it('should match on placeholders as object values', () => {
+    const [status, matches] = match({ a: _ }, Map({ a: 1 }));
+    expect(status).to.be.true;
+  });
+
+  it('should match on placeholders as object values for objects with multiple keys', () => {
+    const [status, matches] = match({ a: _, b: 3 }, Map({ a: 1, b: 3 }));
+    expect(status).to.be.true;
+  });
+
+  it('should match on nested objects', () => {
+    const [status, matches] = match({ a: { c: 1 }, b: 3 }, Map({ a: Map({ c: 1 }), b: 3 }));
+    expect(status).to.be.true;
+  });
+
+  it('should match on nested objects with placeholders (1)', () => {
+    const [status, matches] = match({ a: { c: _ }, b: 3 }, Map({ a: Map({ c: 1 }), b: 3 }));
+    expect(status).to.be.true;
+  });
+
+  it('should match on nested objects with placeholders (2)', () => {
+    const [status, matches] = match({ a: _, b: 3 }, Map({ a: Map({ c: 1 }), b: 3 }));
+    expect(status).to.be.true;
+  });
+
+  it('should match on nested objects with placeholders (2)', () => {
+    const pattern = { foo: { bar: A } };
+    const value = Map({ foo: Map({ bar: 'hello' }), baz: 'world' });
+    const [status, matches] = match(pattern, value);
+
+    expect(status).to.be.true;
+  });
+
+  it('should based on value equality if pattern is Map', () => {
+    const pattern = Map({ bar: 'hello' });
+    const value = { bar: 'hello' };
+    const [status, matches] = match(pattern, value);
+
+    expect(status).to.be.false;
   });
 });
 
@@ -229,7 +370,6 @@ describe('the match function: functions', () => {
     expect(status).to.be.false;
   });
 });
-
 
 describe('the match function: matches', () => {
   it('should return an empty object for successful unnamed matches', () => {
@@ -293,6 +433,18 @@ describe('the match function: matches', () => {
 
   it('should return an object with named matches for succesful named matches (objects)', () => {
     const [isMatch, matches] = match({ a: A }, { a: 1 });
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 1 });
+  });
+
+  it('should return an object with named matches for succesful named matches (Maps)', () => {
+    const [isMatch, matches] = match({ a: A }, Map({ a: 1 }));
+    expect(isMatch).to.be.true;
+    expect(matches).to.deep.equal({ A: 1 });
+  });
+
+  it('should return an object with named matches for succesful named matches (Lists)', () => {
+    const [isMatch, matches] = match([A], List([1]));
     expect(isMatch).to.be.true;
     expect(matches).to.deep.equal({ A: 1 });
   });

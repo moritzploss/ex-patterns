@@ -22,8 +22,8 @@
     "pattern",
     "matching",
     "elixir",
-    "functional",
-    "programming"
+    "immutable",
+    "functional"
   ],
   "author": "Moritz Ploss",
   "license": "MIT",
@@ -50,6 +50,7 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
+    "immutable": "^4.0.0-rc.12",
     "ramda": "^0.27.0"
   }
 }

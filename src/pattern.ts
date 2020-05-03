@@ -1,12 +1,19 @@
+import { Map, List } from 'immutable';
 import { equals } from 'ramda';
 
 import { reduceWhile, ok, stop } from './enum';
 import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder } from './placeholder';
 import { updateMatch, Match } from './match';
-import { hasKey, isObject, isArray } from './util';
+import { hasKey, isObject, isArray, isMap, isList } from './util';
 
 export type Pattern = any;
 type MatchTuple = [boolean, Match];
+
+const _accOrNone = (isMatch: boolean, acc: Match) => (
+  isMatch
+    ? [ok, [true, acc]]
+    : [stop, [false, {}]]
+);
 
 const _matchArray = (pattern: Pattern, array: [], matchFunc: Function, matches: Match) => {
   if (pattern.length > array.length) {
@@ -15,9 +22,18 @@ const _matchArray = (pattern: Pattern, array: [], matchFunc: Function, matches: 
   return reduceWhile(pattern, [true, matches], ([isMatch, acc]: MatchTuple, elm: any, i: number) => {
     // eslint-disable-next-line no-param-reassign
     [isMatch, acc] = matchFunc(elm, array[i], acc);
-    return isMatch
-      ? [ok, [true, acc]]
-      : [stop, [false, {}]];
+    return _accOrNone(isMatch, acc);
+  });
+};
+
+const _matchList = (pattern: Pattern, list: List<any>, matchFunc: Function, matches: Match) => {
+  if (pattern.length > list.size) {
+    return [false, {}];
+  }
+  return reduceWhile(pattern, [true, matches], ([isMatch, acc]: MatchTuple, elm: any, i: number) => {
+    // eslint-disable-next-line no-param-reassign
+    [isMatch, acc] = matchFunc(elm, list.get(i), acc);
+    return _accOrNone(isMatch, acc);
   });
 };
 
@@ -26,6 +42,20 @@ const _matchObject = (pattern: Pattern, object: Object, matchFunc: Function, mat
     if (hasKey(object, key)) {
       // eslint-disable-next-line no-param-reassign
       [isMatch, acc] = matchFunc(val, object[key], acc);
+      if (isMatch) {
+        return [ok, [true, acc]];
+      }
+    }
+    return [stop, [false, {}]];
+  };
+  return reduceWhile(Object.entries(pattern), [true, matches], reducer);
+};
+
+const _matchMap = (pattern: Pattern, map: Map<string, any>, matchFunc: Function, matches: Match) => {
+  const reducer = ([isMatch, acc]: MatchTuple, [key, val]: [string, Pattern]) => {
+    if (map.has(key)) {
+      // eslint-disable-next-line no-param-reassign
+      [isMatch, acc] = matchFunc(val, map.get(key), acc);
       if (isMatch) {
         return [ok, [true, acc]];
       }
@@ -52,12 +82,23 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
     return [true, matches];
   }
 
-  if (isArray(pattern) && isArray(value)) {
-    return _matchArray(pattern, value, _match, matches);
+  if (isArray(pattern)) {
+    if (isList(value)) {
+      return _matchList(pattern, value, _match, matches);
+    }
+    if (isArray(value)) {
+      return _matchArray(pattern, value, _match, matches);
+    }
   }
 
-  if (isObject(pattern) && isObject(value)) {
-    return _matchObject(pattern, value, _match, matches);
+  if (isObject(pattern)) {
+    // check for Map before checking for object!
+    if (isMap(value)) {
+      return _matchMap(pattern, value, _match, matches);
+    }
+    if (isObject(value)) {
+      return _matchObject(pattern, value, _match, matches);
+    }
   }
 
   return [false, matches];
