@@ -4,7 +4,10 @@
 # Ex Patterns
 
 This project brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
-and control flow structures to JavaScript. See the [**documentation**](https://github.com/moritzploss/ex-patterns/#documentation) for details and examples.
+and control flow structures to JavaScript. Pattern matching is supported for
+native JavaScript data types as well as common [`Immutable.js`](https://immutable-js.github.io/immutable-js/)
+collections. See the [**documentation**](https://github.com/moritzploss/ex-patterns/#documentation)
+for details and examples.
 
 ## Setup
 
@@ -54,6 +57,9 @@ when(value)
     * [The `_` Placeholder](https://github.com/moritzploss/ex-patterns#the-_-placeholder)
     * [Named Placeholders](https://github.com/moritzploss/ex-patterns#named-placeholders)
     * [Matching against Objects and Arrays](https://github.com/moritzploss/ex-patterns#matching-against-objects-and-arrays)
+    * [Matching against `Immutable.js` Collections](https://github.com/moritzploss/ex-patterns#matching-against-immutablejs-collections)
+        * [Immutable Maps](https://github.com/moritzploss/ex-patterns#immutable-maps)
+        * [Immutable Lists](https://github.com/moritzploss/ex-patterns#immutable-lists)
 * [The `when` Function](https://github.com/moritzploss/ex-patterns/#the-when-function)
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
@@ -241,6 +247,65 @@ matching in Elixir:
 ```javascript
 match({ _: 1 }, { foo: 1 });   // no match. '_' is just a string here!
 match({ A: 1 }, { foo: 1 });   // no match. 'A' is just a string here!
+```
+
+### Matching against `Immutable.js` Collections
+
+Pattern matching is currently supported for the following [`Immutable.js`](https://immutable-js.github.io/immutable-js/)
+collection types:
+
+* Map
+* List
+
+#### Immutable Maps
+
+To perform a pattern match against an immutable `Map`, use the same syntax as
+for matches against regular JavaScript maps (objects):
+
+```javascript
+match({ foo: _ }, Map({ foo: 'bar' }));  // match
+```
+
+As before, the match will be successful as long as the pattern is a subset of
+the value:
+
+```javascript
+const pattern = { foo: { bar: A } };
+const value   = Map({ foo: Map({ bar: 'hello'}), baz: 'world'});
+match(pattern, value);
+
+> [true, { A: 'hello']
+```
+
+When `Map` structures are used in patterns, they are matched based on value
+equality just as any other data type:
+
+```javascript
+match(Map({ foo: _ }), { foo: 'bar' });         // no match
+match(Map({ foo: _ }), Map({ foo: 'bar' }));    // match
+```
+
+#### Immutable Lists
+
+To perform a pattern match against an immutable `List`, use the same syntax as
+for matches against regular JavaScript arrays:
+
+```javascript
+match([1, 2, _], List([1, 2, 3]));  // match
+```
+
+As for arrays, it's **not** sufficient for the pattern to contain a subset of
+the `List`: 
+
+```javascript
+match([1, 2], List([1, 2, 3]));     // no match
+```
+
+As for all other data types, `List` structures are matched based on value equality if used in patterns:
+
+```javascript
+match([1, 2], List([1, 2]));     // match
+match(List([1, 2]), [1, 2]);     // no match
 ```
 
 ## The `when` Function
