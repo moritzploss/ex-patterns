@@ -360,7 +360,7 @@ the value:
 ```javascript
 const pattern = { foo: { bar: A } };
 const value   = Map({ foo: Map({ bar: 'hello'}), baz: 'world'});
-match(pattern, value);
+match(pattern, value);  // match
 
 > [true, { A: 'hello']
 ```
