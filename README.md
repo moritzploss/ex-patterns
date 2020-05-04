@@ -57,9 +57,9 @@ when(value)
     * [The `_` Placeholder](https://github.com/moritzploss/ex-patterns#the-_-placeholder)
     * [Named Placeholders](https://github.com/moritzploss/ex-patterns#named-placeholders)
     * [Matching against Arrays](https://github.com/moritzploss/ex-patterns#matching-against-arrays)
-    * [Matching against Immutable Lists](https://github.com/moritzploss/ex-patterns#matching-against-immutable-lists)
+    * [Matching against `Immutable.js` Lists](https://github.com/moritzploss/ex-patterns#matching-against-immutablejs-lists)
     * [Matching against Objects](https://github.com/moritzploss/ex-patterns#matching-against-objects)
-    * [Matching against Immutable Maps](https://github.com/moritzploss/ex-patterns#matching-against-immutable-maps)
+    * [Matching against `Immutable.js` Maps](https://github.com/moritzploss/ex-patterns#matching-against-immutablejs-maps)
 * [The `when` Function](https://github.com/moritzploss/ex-patterns/#the-when-function)
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
@@ -291,7 +291,7 @@ const value   = [1, [2, [1, 2, 1]], [3, 4, 5]]
 match(pattern, value);   // match
 ```
 
-### Matching against Immutable Lists
+### Matching against `Immutable.js` Lists
 
 To perform a pattern match against an immutable `List`, use the same syntax as
 for matches against regular JavaScript arrays:
@@ -345,7 +345,7 @@ match({ _: 1 }, { foo: 1 });   // no match. '_' is just a string here!
 match({ A: 1 }, { foo: 1 });   // no match. 'A' is just a string here!
 ```
 
-### Matching against Immutable Maps
+### Matching against `Immutable.js` Maps
 
 To perform a pattern match against an immutable `Map`, use the same syntax as
 for matches against regular JavaScript maps (objects):
