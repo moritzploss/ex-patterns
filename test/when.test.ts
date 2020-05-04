@@ -8,7 +8,7 @@
 
 import { expect } from 'chai';
 
-import { when, end, _, A, B, C, D, E, F, G } from '../src';
+import { when, end, _, A, B, C, D, E, F, G, V } from '../src';
 
 describe('the when function: base cases', () => {
   it('should match the first matching value (1)', () => {

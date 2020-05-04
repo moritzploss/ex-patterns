@@ -542,7 +542,7 @@ const processBody = (body) => (
 const processError = (body) => (
     when(body)
         ({ error: E }, ({ E: error }) => ({ error })) 
-        (_, () => { error: 'invalid error response. no error message.' })
+        (_, () => ({ error: 'invalid error response. no error message.' }))
     (end);
 );
 
