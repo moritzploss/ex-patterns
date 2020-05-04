@@ -64,7 +64,8 @@ when(value)
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
     * [Callback Functions](https://github.com/moritzploss/ex-patterns#callback-functions)
-    * [More Examples](https://github.com/moritzploss/ex-patterns#more-examples)
+* [Examples](https://github.com/moritzploss/ex-patterns#examples)
+    * [HTTP Request Processing with `fetch`](https://github.com/moritzploss/ex-patterns#http-request-processing-with-fetch)
 
 ## Pattern Matching Basics
 
@@ -519,38 +520,39 @@ when(user)
 > ['Amelie', 31]
 ```
 
-### More Examples
+## Examples
+
+### HTTP Request Processing with `fetch`
 
 The fact that the `when` control flow structure returns the return value
-of the invoked callback allows for clean and expressive code when it's
-wrapped in a lambda function with implicit return:
+of the invoked callback allows for expressive code when it's wrapped in a lambda
+function with implicit return:
 
 ```javascript
-import { when, end, _, C, N } from 'ex-patterns';
+import { when, end, _, E, N, } from 'ex-patterns';
 
-const user = {
-    name: 'David',
-    city: 'Gothenburg',
-};
-
-const logMissingCity = ({ N: name}) => console.log(`no city for user ${name}`);
-const logNotAUser = (matches, data) => console.log('not a valid user', data);
-
-const moveTo = (user, city) => (
-    when(user)
-        ({ name: _, city }, () => user)
-        ({ name: _, city: _ }, () => ({ ...user, city }))
-        ({ name: N }, logMissingCity)
-        (_, logNotAUser)
-    (end)
+const processBody = (body) => (
+    when(body)
+        ({ email: E, name: N }, ({ N, E }) => ({ email: E, name: N }))
+        ({ email: E }, ({ E }) => ({ email: E, name: 'Unknown' }))
+        (_, () => { error: 'invalid body. does not contain email.' })
+    (end);
 );
 
-when(moveTo(user, 'Stockholm'))
-    ({ city: C }, ({ C }) => `moved user from ${user.city} to ${C}!`)
-    (_, () => 'something went wrong! check the logs!')
-(end);
+const processError = (body) => (
+    when(body)
+        ({ error: E }, ({ E: error }) => ({ error })) 
+        (_, () => { error: 'invalid error response. no error message.' })
+    (end);
+);
 
-> 'moved user from Gothenburg to Stockholm!'
+const getUserData = async (url, options) => (
+    when(await fetch(url, options))
+        ({ status: 200 }, (match, { body }) => processBody(body))
+        ({ status: _ }, (match, { body }) => processError(body))
+        (_, () => ({ error: 'response has no status code' }))
+    (end);
+);
 ```
 
 Notice how the data and the logic that operates on it are completely decoupled!
