@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { reduceWhile, ok, stop } from '../src/enum';
+import { reduceWhile, ok, stop } from '../../src/util/enum';
 
 describe('the reduceWhile function', () => {
   it('should work as expected', () => {

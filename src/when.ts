@@ -1,4 +1,5 @@
-import { match, Pattern } from './pattern';
+import { match } from './pattern';
+import { Pattern } from './pattern/types';
 import { Match } from './match';
 import { end, End } from './symbols';
 import { isFunction } from './util';
