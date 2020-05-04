@@ -220,23 +220,119 @@ match(pattern, value);
 > [true, { B: 2, C: 'k' }]
 ```
 
-### Matching against Objects and Arrays
+### Matching against Arrays
+
+Above we have already seen the basic syntax for matching against JavaScript arrays.
+Arrays are matched both based on value equality as well as on length:
+
+```javascript
+match([1, 2], [1, 2]);      // match
+match([A, _], [1, 2]);      // match    >>  { A: 1 }
+match([1, 2], [1, 2, 3]);   // no match
+```
+
+To only match against the first elements of an array, use the `tail` keyword.
+The `tail` keyword can **only be used in the last position** of the array and
+will match against any number (including 0) of array elements:
+
+```javascript
+import { match, tail, _, A, B, C, D } from 'ex-patterns';
+
+match([1, 2, tail], [1, 2, 3, 4]);    // match
+```
+
+To bind the elements that are matched against the tail to a placeholder, pass
+the placeholder as an argument to the `tail` function:
+
+```javascript
+match([1, 2, tail(A)], [1, 2, 3, 4]);    // match
+> [true, { A: [3, 4] }]
+```
+
+By default, matched elements are bound to the *unnamed placeholder*. In this case
+there's no need to inspect or slice the original array since the `match` function
+doesn't need to care about the number of elements (or their value) that were
+matched against `tail`. Thus, it's **more efficient to not bind** the `tail`
+to a placeholder if you don't have to:
+
+```javascript
+const value = [1, 2, 3, 4];
+match([1, 2, tail], value);       // match  >>  no need to inpsect or slice [3, 4]
+match([1, 2, tail(_)], value);    // match  >>  no need to inspect or slice [3, 4]
+match([1, 2, tail(A)], value);    // match  >>  inspect and slice [3, 4]!
+```
+
+Similarly, you can use the `head` keyword **in the first position** to only match
+against the last elements of an array:
+
+```javascript
+import { match, head, A, B, C, D } from 'ex-patterns';
+
+match([head, 3, 4], [1, 2, 3, 4]);      // match
+match([head(B), 3, 4], [1, 2, 3, 4]);   // match  >>  { B: [1, 2] }
+```
+
+The rules and limitations are equivalent to those outlined for the `tail` keyword.
+Note that **using both `head` and `tail` in the same array will throw** an error
+since the following is ambiguous:
+
+```javascript
+// this will throw an error
+match([head, 3, 3, tail], [3, 3, 3, 3, 3]);   // what's head? what's tail?
+```
+
+Note though that **it's perfectly fine** to have multiple `head` and `tail` keywords
+**in the same pattern**. The regular rules for matching against named placeholders
+apply:
+
+```javascript
+const pattern = [head(A), [head, [1, 2, tail(A)]], [3, tail]];
+const value   = [1, [2, [1, 2, 1]], [3, 4, 5]]
+match(pattern, value);   // match
+```
+
+### Matching against Immutable Lists
+
+To perform a pattern match against an immutable `List`, use the same syntax as
+for matches against regular JavaScript arrays:
+
+```javascript
+match([1, 2, _], List([1, 2, 3]));  // match
+```
+
+You can use the `head` and `tail` keywords in the same way as with regular arrays:
+
+```javascript
+const pattern = [1, 2, tail];
+const value   = List([1, 2, 3, 4]);
+match(pattern, value));             // match
+```
+
+Note that if you bind the `head` or `tail` keyword to a named placeholder, the
+**matches will be returned as an immutable `List`** (not as an array). This means
+that the `match` function preserves `List` and `array` data types and you don't
+need to worry about inefficient slicing when using `Immutable.js` collections!
+
+```javascript
+const pattern = [1, 2, tail(A)];
+const value   = List([1, 2, 3, 4]
+match(pattern, value));             // match
+
+> [true, { A: List([3, 4]) }]       // matches are returned as immutable List!
+```
+
+### Matching against Objects
 
 As mentioned, the simplest form of a pattern match is an equality comparison
 by value. However, in the case of JavaScript objects (Hash Maps), a match
-also counts as successful if the pattern (left) is a subset of the value (right):
+also counts as successful if the pattern (left) is a subset of the value (right).
+This means that it's possible to only match against the object keys that are
+of interest:
 
 ```javascript
 match({ a: 1 }, { a: 1, b: 2 });    // match
 match({}, { a: 1, b: 2 });          // match
-match({ a: 1, b: 2 }, { a: 1 });    // no match
-```
-
-This means that it's possible to only match against the object keys that are
-of interest. Note that the same is **not** true for arrays:
-
-```javascript
-match([1, 2], [1, 2, 3]);   // no match
+match({ b: 1 }, { a: 1 });          // no match
 ```
 
 Also note that named and unnamed placeholders can only be used to **match against object
@@ -249,15 +345,7 @@ match({ _: 1 }, { foo: 1 });   // no match. '_' is just a string here!
 match({ A: 1 }, { foo: 1 });   // no match. 'A' is just a string here!
 ```
 
-### Matching against `Immutable.js` Collections
-
-Pattern matching is currently supported for the following [`Immutable.js`](https://immutable-js.github.io/immutable-js/)
-collection types:
-
-* Map
-* List
-
-#### Immutable Maps
+### Matching against Immutable Maps
 
 To perform a pattern match against an immutable `Map`, use the same syntax as
 for matches against regular JavaScript maps (objects):
@@ -266,7 +354,7 @@ for matches against regular JavaScript maps (objects):
 match({ foo: _ }, Map({ foo: 'bar' }));  // match
 ```
 
-As before, the match will be successful as long as the pattern is a subset of
+As for objects, the match will be successful as long as the pattern is a subset of
 the value:
 
 ```javascript
@@ -281,31 +369,24 @@ When `Map` structures are used in patterns, they are matched based on value
 equality just as any other data type:
 
 ```javascript
-match(Map({ foo: _ }), { foo: 'bar' });         // no match
-match(Map({ foo: _ }), Map({ foo: 'bar' }));    // match
+match(Map({ foo: _ }),          { foo: 'bar' });     // no match
+match(Map({ foo: _ }),      Map({ foo: 'bar' }));    // no match
+match(Map({ foo: 'bar' }),  Map({ foo: 'bar' }));    // match
 ```
 
-#### Immutable Lists
-
-To perform a pattern match against an immutable `List`, use the same syntax as
-for matches against regular JavaScript arrays:
+If a `Map` is matched against a named placeholder, the data type is preserved:
 
 ```javascript
-match([1, 2, _], List([1, 2, 3]));  // match
+match({ foo: A }, { foo: Map({ bar: 1 }) });     // match
+> [true, { A: Map({ bar: 1 }) }]
 ```
 
-As for arrays, it's **not** sufficient for the pattern to contain a subset of
-the `List`: 
+Data types are also preserved for regular JavaScript objects that are nested
+inside a `Map`:
 
 ```javascript
-match([1, 2], List([1, 2, 3]));     // no match
-```
-
-As for all other data types, `List` structures are matched based on value equality if used in patterns:
-
-```javascript
-match([1, 2], List([1, 2]));     // match
-match(List([1, 2]), [1, 2]);     // no match
+match({ foo: A }, Map({ foo: { bar: 1 }}));     // match
+> [true, { A: { bar: 1 }}]
 ```
 
 ## The `when` Function

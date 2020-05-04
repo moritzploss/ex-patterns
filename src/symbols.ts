@@ -1,4 +1,4 @@
-export const _ = Symbol('_');
+export const _ = { name: '_', symbol: Symbol('_') };
 
 export const A = { name: 'A', symbol: Symbol('A') };
 export const B = { name: 'B', symbol: Symbol('B') };
@@ -29,3 +29,6 @@ export const Z = { name: 'Z', symbol: Symbol('Z') };
 
 export const end = Symbol('end');
 export type End = typeof end;
+
+export const tailSymbol = Symbol('tail');
+export const headSymbol = Symbol('head');

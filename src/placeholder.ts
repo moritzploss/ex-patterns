@@ -24,7 +24,12 @@ const isNamedPlaceholder = (value: any): boolean => {
   return lookup(value.name) === value.symbol;
 };
 
-const isUnnamedPlaceholder = (value: any): boolean => value === _;
+const isUnnamedPlaceholder = (value: any): boolean => {
+  if (!isObject(value)) {
+    return false;
+  }
+  return value.symbol === _.symbol;
+};
 
 const isPlaceholder = (value: any): boolean => (
   isUnnamedPlaceholder(value) || isNamedPlaceholder(value)
