@@ -416,7 +416,7 @@ const value = 1;
 when(value)                     // start `when` control flow structure with `value`
     (1, then(() => 'foo'))      // first match clause
     (2, then(() => 'bar'))      // second match clause
-    (3, then(() => 'baz'))       // third match clause
+    (3, then(() => 'baz'))      // third match clause
 (end);                          // end `when`
 ```
 
@@ -425,7 +425,8 @@ when(value)                     // start `when` control flow structure with `val
 Each match clause takes two arguments: the first is a pattern (see above) that
 will be matched against `value`, the second a callback function that will be
 invoked when the match is successful. It's recommend to wrap the callback function
-inside `then` for readability, but it's optional.
+inside `then` for readability, but it's optional (the `then` function is just
+syntactic sugar).
 
 In the following case, `value` will match the second clause; clauses that come
 **after** a matching clause will not be matched against:
