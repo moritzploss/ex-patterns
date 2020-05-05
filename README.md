@@ -591,7 +591,7 @@ const result = cond
     (null, then('no match'))
     (undefined, then('no match'))
     (NaN, then('no match'))
-    (1, then('this one matches'))
+    (1, then('this one matches'))   // match
 (end);
 ```
 
