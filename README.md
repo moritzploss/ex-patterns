@@ -17,8 +17,10 @@ Install the package from npm:
 
 ## What's in the Box
 
-The package comes with a powerful pattern matching algorithm (the `match` function)
-that performs pattern matching on flat and nested data structures:
+#### The `match` Function
+
+A powerful pattern matching algorithm that performs pattern matching on flat and
+deeply nested data structures:
 
 ```javascript
 import { match, _, A } from 'ex-patterns';
@@ -32,9 +34,31 @@ const value   = [1, 2];
 match(pattern, value)       // match against placeholder A  >>  A: 1
 ```
 
-The package also includes the `when` function, a `switch` statement based on
-pattern matching. It's similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case) control flow structure and accepts any number of match clauses in the format
+#### The `when` Function
+
+A `switch` statement based on pattern matching similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
+control flow structure. It accepts any number of match clauses in the format
 `(pattern, callback)` that are matched against `value`.
+
+```javascript
+import { when, end, _, A } from 'ex-patterns';
+
+const value = 'bar';
+when(value)
+    (1, then(() => 'foo'))      // no match. '1' does not match 'bar'!
+    (A, then(({ A }) => A))     // placeholder 'A' matches 'bar' => invoke callback!
+    (_, then(() => 'baz'))      // placeholder '_' can be used as fallback
+(end);
+
+> 'bar'
+```
+
+#### The `cond` Function
+
+A `switch` statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
+control flow structure. It accepts any number of clauses in the format
+`(truthy?, value)` and works like a chain of `if { } else if {} else {}`
+statements.
 
 ```javascript
 import { when, end, _, A } from 'ex-patterns';

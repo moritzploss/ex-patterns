@@ -6,9 +6,8 @@
 /* eslint-disable arrow-parens */
 
 import { expect } from 'chai';
-import { Map, List } from 'immutable';
 
-import { match, _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, tail, head } from '../../src';
+import { match, _ } from '../../src';
 
 describe('the match function: primitives', () => {
   it('should match two numbers if they are equal', () => {
