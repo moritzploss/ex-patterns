@@ -19,8 +19,8 @@ Install the package from npm:
 
 #### The `match` Function
 
-A pattern matching algorithm that works with flat and nested data structures,
-including arrays, objects and `Immutable.js` collections:
+A pattern matching algorithm for flat and nested data structures, including
+arrays, objects and `Immutable.js` collections:
 
 ```javascript
 import { match, _, A } from 'ex-patterns';
@@ -36,27 +36,27 @@ match(pattern, value)       // match against placeholder A  >>  A: 1
 
 #### The `when` Function
 
-A `switch` statement based on pattern matching similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
-control flow structure. It accepts any number of match clauses in the format
-`(pattern, callback)` that are matched against `value`.
+A switch statement based on pattern matching similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case) statement. It accepts any number of
+match clauses in the format `(pattern, callback)` that are matched against `value`.
 
 ```javascript
 import { when, end, _, A } from 'ex-patterns';
 
-when('bar')
-    (1, then(() => 'foo'))      // no match. '1' does not match 'bar'!
-    (A, then(({ A }) => A))     // placeholder 'A' matches 'bar' => invoke callback!
-    (_, then(() => 'baz'))      // placeholder '_' can be used as fallback
+const value = 'world'
+when(value)
+    ('hi', then(() => 'hi'))            // no match. 'hi' does not match 'world'!
+    (A, then(({ A }) => `hello ${A}`))  // placeholder 'A' matches 'world' => invoke callback!
+    (_, then(() => 'goodbye!'))         // placeholder '_' can be used as fallback
 (end);
 
-> 'bar'
+> 'hello world'
 ```
 
 #### The `cond` Function
 
-A `switch` statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
-control flow structure. It accepts any number of clauses in the format
-`(truthy?, value)` and works like a chain of `if { } else if {} else {}`
+A switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
+statement. It accepts any number of clauses in the format
+`(truthy?, value)` and works like a chain of `if {} else if {} else {}`
 statements.
 
 ```javascript
