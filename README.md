@@ -553,6 +553,56 @@ when(user)
 > ['Amelie', 31]
 ```
 
+## The `cond` Function
+
+The `cond` function is a switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
+statement. It accepts any number of clauses in the format `(truthy?, value)`
+and works like a chain of `if {} else if {} else {}` statements:
+
+```javascript
+import { cond, end, then } from 'ex-patterns';
+
+cond
+    (false, then('no match'))
+    (false, then('still no match'))
+    (true, then('match'))
+(end);
+```
+
+The `cond` function **returns the value** enclosed in the `then` function of the
+matching clause:
+
+```javascript
+const result = cond
+    (false, then('no match'))
+    (false, then('still no match'))
+    (true, then('match'))
+(end);
+
+result
+> 'match'
+```
+
+Truthiness is evaluated **based on** JavaScript's concept of **truthy and falsy**
+values:
+
+```javascript
+const result = cond
+    (false, then('no match'))
+    (0, then('no match'))
+    (-0, then('no match'))
+    ('', then('no match'))
+    (null, then('no match'))
+    (undefined, then('no match'))
+    (NaN, then('no match'))
+    (1, then('this one matches'))
+(end);
+```
+
+As for the `when` function, the `cond` function **throws an error if no matching
+clause** is found.
+
+
 ## Examples
 
 ### HTTP Request Processing with `fetch`
