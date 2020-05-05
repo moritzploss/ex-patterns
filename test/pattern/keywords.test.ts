@@ -74,6 +74,24 @@ describe('the tail keyword: arrays', () => {
     expect(status).to.be.true;
     expect(matches).to.deep.equal({});
   });
+
+  it('should not match if two captured tails have different values', () => {
+    const [status, matches] = match([[1, 2, tail(A)], tail(A)], [[1, 2, 3], 4]);
+    expect(status).to.be.false;
+    expect(matches).to.deep.equal({});
+  });
+
+  it('should match if two captured tails have the same value', () => {
+    const [status, matches] = match([[1, 2, tail(A)], tail(A)], [[1, 2, 3], 3]);
+    expect(status).to.be.true;
+    expect(matches).to.deep.equal({ A: [3] });
+  });
+
+  it('should match if captured tail has same value as uncaptured tail', () => {
+    const [status, matches] = match([[1, 2, tail(A)], tail], [[1, 2, 3], 3]);
+    expect(status).to.be.true;
+    expect(matches).to.deep.equal({ A: [3] });
+  });
 });
 
 describe('the head keyword: arrays', () => {
@@ -139,6 +157,24 @@ describe('the head keyword: arrays', () => {
     const [status, matches] = match([head], []);
     expect(status).to.be.true;
     expect(matches).to.deep.equal({});
+  });
+
+  it('should not match if two captured heads have different values', () => {
+    const [status, matches] = match([head(A), [head(A), 2, 3]], [0, [1, 2, 3]]);
+    expect(status).to.be.false;
+    expect(matches).to.deep.equal({});
+  });
+
+  it('should match if two captured heads have the same value', () => {
+    const [status, matches] = match([head(A), [head(A), 2, 3]], [0, [0, 2, 3]]);
+    expect(status).to.be.true;
+    expect(matches).to.deep.equal({ A: [0] });
+  });
+
+  it('should match if captured head has same value as uncaptured head', () => {
+    const [status, matches] = match([head(A), [head, 2, 3]], [0, [0, 2, 3]]);
+    expect(status).to.be.true;
+    expect(matches).to.deep.equal({ A: [0] });
   });
 });
 

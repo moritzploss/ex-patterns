@@ -43,6 +43,9 @@ const throwIfMultipleHeads = (pattern: Pattern[]) => {
 const _matchNamedHead = (pattern: Pattern, array: ListLike, head: Head, lastHeadIndex: number, matchFunc: Function, matches: Match) => {
   throwIfMultipleHeads(pattern);
   const [isMatch, newMatches] = matchFunc(head.bindTo, array.slice(0, lastHeadIndex + 1), matches);
+  if (!isMatch) {
+    return [false, {}];
+  }
   return matchFunc(pattern.slice(1), array.slice(lastHeadIndex + 1), newMatches);
 };
 
