@@ -258,7 +258,7 @@ to a placeholder if you don't have to:
 
 ```javascript
 const value = [1, 2, 3, 4];
-match([1, 2, tail], value);       // match  >>  no need to inpsect or slice [3, 4]
+match([1, 2, tail], value);       // match  >>  no need to inspect or slice [3, 4]
 match([1, 2, tail(_)], value);    // match  >>  no need to inspect or slice [3, 4]
 match([1, 2, tail(A)], value);    // match  >>  inspect and slice [3, 4]!
 ```
@@ -282,8 +282,8 @@ since the following is ambiguous:
 match([head, 3, 3, tail], [3, 3, 3, 3, 3]);   // what's head? what's tail?
 ```
 
-Note though that **it's perfectly fine** to have multiple `head` and `tail` keywords
-**in the same pattern**. The regular rules for matching against named placeholders
+However, **it's perfectly fine** to have multiple `head` and `tail` keywords
+**in the same pattern**. Rules for matching against named placeholders
 apply:
 
 ```javascript
@@ -554,14 +554,3 @@ const getUserData = async (url, options) => (
     (end);
 );
 ```
-
-Notice how the data and the logic that operates on it are completely decoupled!
-While this can also be achieved without pattern matching, the above approach
-encourages and visualizes this style of programming clearly.
-
-Also notice that we never have to perform any explicit checks to verify that
-certain object properties exist before we access them. We simply code for the
-happy path and leave the error handling to the default cases.
-
-It can take a while to get used to this style of programming, but once you have,
-you may end up never using `if` again!
