@@ -98,7 +98,7 @@ function when(value: any) {
  *      > 'bar'
  * ```
  */
-function then(func: Function) {
+function then<T>(func: T): T {
   return func;
 }
 
