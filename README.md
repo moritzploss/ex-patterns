@@ -80,10 +80,12 @@ fizzBuzz(5)
     * [Basics](https://github.com/moritzploss/ex-patterns#basics)
     * [The `_` Placeholder](https://github.com/moritzploss/ex-patterns#the-_-placeholder)
     * [Named Placeholders](https://github.com/moritzploss/ex-patterns#named-placeholders)
-    * [Matching against Arrays](https://github.com/moritzploss/ex-patterns#matching-against-arrays)
-    * [Matching against `Immutable.js` Lists](https://github.com/moritzploss/ex-patterns#matching-against-immutablejs-lists)
-    * [Matching against Objects](https://github.com/moritzploss/ex-patterns#matching-against-objects)
-    * [Matching against `Immutable.js` Maps](https://github.com/moritzploss/ex-patterns#matching-against-immutablejs-maps)
+    * [Array-like Data Types](https://github.com/moritzploss/ex-patterns#matching-against-arrays)
+        * [Arrays](https://github.com/moritzploss/ex-patterns#arrays)
+        * [`Immutable.js` Lists](https://github.com/moritzploss/ex-patterns#immutablejs-lists)
+    * [Map-like Data Types](https://github.com/moritzploss/ex-patterns#map-like-data-types)
+        * [Objects](https://github.com/moritzploss/ex-patterns#objects)
+        * [`Immutable.js` Maps](https://github.com/moritzploss/ex-patterns#immutablejs-maps)
 * [The `when` Function](https://github.com/moritzploss/ex-patterns/#the-when-function)
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
@@ -245,7 +247,9 @@ match(pattern, value);
 > [true, { B: 2, C: 'k' }]
 ```
 
-### Matching against Arrays
+### Array-like Data Types
+
+#### Arrays
 
 Above we have already seen the basic syntax for matching against JavaScript arrays.
 Arrays are matched both based on value equality as well as on length:
@@ -316,7 +320,7 @@ const value   = [1, [2, [1, 2, 1]], [3, 4, 5]]
 match(pattern, value);   // match
 ```
 
-### Matching against `Immutable.js` Lists
+#### `Immutable.js` Lists
 
 To perform a pattern match against an immutable `List`, use the same syntax as
 for matches against regular JavaScript arrays:
@@ -346,7 +350,9 @@ match(pattern, value));             // match
 > [true, { A: List([3, 4]) }]       // matches are returned as immutable List!
 ```
 
-### Matching against Objects
+### Map-like Data Types
+
+#### Objects
 
 As mentioned, the simplest form of a pattern match is an equality comparison
 by value. However, in the case of JavaScript objects (Hash Maps), a match
@@ -370,7 +376,7 @@ match({ _: 1 }, { foo: 1 });   // no match. '_' is just a string here!
 match({ A: 1 }, { foo: 1 });   // no match. 'A' is just a string here!
 ```
 
-### Matching against `Immutable.js` Maps
+#### `Immutable.js` Maps
 
 To perform a pattern match against an immutable `Map`, use the same syntax as
 for matches against regular JavaScript maps (objects):
