@@ -8,15 +8,15 @@
 
 import { expect } from 'chai';
 
-import { when, end, _, A, B, C, D, E, F, G, V } from '../src';
+import { when, then, end, _, A, B, C, D, E, F, G, V } from '../src';
 
 describe('the when function: base cases', () => {
   it('should match the first matching value (1)', () => {
     const value = 1;
     const result = when(value)
-      (1, () => 1)
-      (2, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      (2, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(1);
@@ -25,9 +25,9 @@ describe('the when function: base cases', () => {
   it('should match the first matching value (2)', () => {
     const value = 2;
     const result = when(value)
-      (1, () => 1)
-      (2, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      (2, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(2);
@@ -36,9 +36,9 @@ describe('the when function: base cases', () => {
   it('should match the first matching value (3)', () => {
     const value = 3;
     const result = when(value)
-      (1, () => 1)
-      (2, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      (2, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(3);
@@ -47,7 +47,7 @@ describe('the when function: base cases', () => {
   it('should work with only one match clause', () => {
     const value = 3;
     const result = when(value)
-      (3, () => 3)
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(3);
@@ -56,9 +56,9 @@ describe('the when function: base cases', () => {
   it('should match a placeholder in the first position', () => {
     const value = 4;
     const result = when(value)
-      (_, () => 1)
-      (2, () => 2)
-      (3, () => 3)
+      (_, then(() => 1))
+      (2, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(1);
@@ -67,9 +67,9 @@ describe('the when function: base cases', () => {
   it('should match a placeholder in the middle position', () => {
     const value = 4;
     const result = when(value)
-      (1, () => 1)
-      (_, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      (_, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(2);
@@ -78,9 +78,9 @@ describe('the when function: base cases', () => {
   it('should match a placeholder in the last position', () => {
     const value = 4;
     const result = when(value)
-      (1, () => 1)
-      (2, () => 2)
-      (_, () => 3)
+      (1, then(() => 1))
+      (2, then(() => 2))
+      (_, then(() => 3))
     (end);
 
     expect(result).to.equal(3);
@@ -91,9 +91,9 @@ describe('the when function: pattern matching', () => {
   it('should pattern match on arrays', () => {
     const value = [1, 2, 3];
     const result = when(value)
-      (1, () => 1)
-      ([1, 2, _], () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      ([1, 2, _], then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(2);
@@ -102,9 +102,9 @@ describe('the when function: pattern matching', () => {
   it('should pattern match on objects', () => {
     const value = { a: 1, b: 2, c: 3 };
     const result = when(value)
-      (1, () => 1)
-      ({ a: _, b: 2 }, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      ({ a: _, b: 2 }, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(2);
@@ -115,9 +115,9 @@ describe('the when function: pattern matching', () => {
     function b() { return false; }
 
     const result = when({ a, b })
-      (1, () => 1)
-      ({ a }, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      ({ a }, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(2);
@@ -128,9 +128,9 @@ describe('the when function: pattern matching', () => {
     function b() { return false; }
 
     const result = when({ a, b })
-      (1, () => 1)
-      ({ a: _ }, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      ({ a: _ }, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(2);
@@ -140,9 +140,9 @@ describe('the when function: pattern matching', () => {
     const a = () => false;
 
     const result = when({ a })
-      (1, () => 1)
-      ({ a }, () => 2)
-      (_, () => 3)
+      (1, then(() => 1))
+      ({ a }, then(() => 2))
+      (_, then(() => 3))
     (end);
 
     expect(result).to.equal(2);
@@ -153,9 +153,9 @@ describe('the when function: pattern matching', () => {
     const b = () => false;
 
     const result = when({ a })
-      (1, () => 1)
-      ({ a: b }, () => 2)
-      (_, () => 3)
+      (1, then(() => 1))
+      ({ a: b }, then(() => 2))
+      (_, then(() => 3))
     (end);
 
     expect(result).to.equal(3);
@@ -166,9 +166,9 @@ describe('the when function: callbacks', () => {
   it('should pass in named matches as first argument to callback', () => {
     const value = [1, 2, 3];
     const result = when(value)
-      (1, () => 1)
-      ([1, A, B], ({ A: second, B: third }) => [second, third])
-      (3, () => 3)
+      (1, then(() => 1))
+      ([1, A, B], then(({ A: second, B: third }) => [second, third]))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.deep.equal([2, 3]);
@@ -177,9 +177,9 @@ describe('the when function: callbacks', () => {
   it('should pass in value as second argument to callback', () => {
     const value = 5;
     const result = when(value)
-      (_, (matches, val) => val)
-      (2, () => 2)
-      (3, () => 3)
+      (_, then((matches, val) => val))
+      (2, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.equal(5);
@@ -189,9 +189,9 @@ describe('the when function: callbacks', () => {
     const value = [1, 2, 3];
     const pattern = [1, A, B];
     const result = when(value)
-      (1, () => 1)
-      (pattern, (matches, val, patt) => patt)
-      (3, () => 3)
+      (1, then(() => 1))
+      (pattern, then((matches, val, patt) => patt))
+      (3, then(() => 3))
     (end);
 
     expect(result).to.deep.equal(pattern);
@@ -202,9 +202,9 @@ describe('the when function: callbacks', () => {
     const callback = (matches, val, pattern) => [matches, val, pattern];
 
     const result = when(value)
-        (1, () => 'foo')
-        ({ bar: A }, callback)
-        (_, () => 'baz')
+        (1, then(() => 'foo'))
+        ({ bar: A }, then(callback))
+        (_, then(() => 'baz'))
     (end);
 
     expect(result).to.deep.equal([{ A: 5 }, { foo: 1, bar: 5 }, { bar: A }]);
@@ -223,9 +223,9 @@ describe('the when function: user errors', () => {
   it('should throw an error if no matching clause is found', () => {
     const value = 4;
     const fun = () => when(value)
-      (1, () => 1)
-      (2, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      (2, then(() => 2))
+      (3, then(() => 3))
     (end);
 
     expect(fun).to.throw(Error);
@@ -234,9 +234,9 @@ describe('the when function: user errors', () => {
   it('should throw an error if more than two arguments are supplied in clause', () => {
     const value = 4;
     const fun = () => when(value)
-      (1, () => 1)
-      (2, () => 2, 3)
-      (3, () => 3)
+      (1, then(() => 1))
+      (2, then(() => 2), 3)
+      (3, then(() => 3))
     (end);
 
     expect(fun).to.throw(Error);
@@ -245,9 +245,9 @@ describe('the when function: user errors', () => {
   it('should throw an error if second argument to clause is not function', () => {
     const value = 4;
     const fun = () => when(value)
-      (1, () => 1)
+      (1, then(() => 1))
       (2, 3)
-      (3, () => 3)
+      (3, then(() => 3))
     (end);
 
     expect(fun).to.throw(Error);
@@ -256,9 +256,9 @@ describe('the when function: user errors', () => {
   it('should throw an error if last clause is called with argument that is not symbol \'end\'', () => {
     const value = 2;
     const fun = () => when(value)
-      (1, () => 1)
-      (2, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      (2, then(() => 2))
+      (3, then(() => 3))
     ('end');
 
     expect(fun).to.throw(Error);
@@ -267,9 +267,9 @@ describe('the when function: user errors', () => {
   it('should throw an error if last clause is called with no arguments', () => {
     const value = 2;
     const fun = () => when(value)
-      (1, () => 1)
-      (2, () => 2)
-      (3, () => 3)
+      (1, then(() => 1))
+      (2, then(() => 2))
+      (3, then(() => 3))
     ();
 
     expect(fun).to.throw(Error);
@@ -288,16 +288,16 @@ describe('the when function: all together now', () => {
 
     const moveTo = (user, city) => (
       when(user)
-        ({ name: _, city }, () => user)
-        ({ name: _, city: _ }, () => ({ ...user, city }))
-        ({ name: A }, logMissingCity)
-        (_, logNotAUser)
+        ({ name: _, city }, then(() => user))
+        ({ name: _, city: _ }, then(() => ({ ...user, city })))
+        ({ name: A }, then(logMissingCity))
+        (_, then(logNotAUser))
       (end)
     );
 
     const result = when(moveTo(user, 'Stockholm'))
-      ({ city: C }, ({ C: city }) => `moved user from ${user.city} to ${city}!`)
-      (_, () => 'something went wrong! check the logs!')
+      ({ city: C }, then(({ C: city }) => `moved user from ${user.city} to ${city}!`))
+      (_, then(() => 'something went wrong! check the logs!'))
     (end);
 
     expect(result).to.deep.equal('moved user from Gothenburg to Stockholm!');

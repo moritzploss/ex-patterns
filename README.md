@@ -41,9 +41,9 @@ import { when, end, _, A } from 'ex-patterns';
 
 const value = 'bar';
 when(value)
-    (1, () => 'foo')      // no match. '1' does not match 'bar'!
-    (A, ({ A }) => A)     // placeholder 'A' matches 'bar' => invoke callback!
-    (_, () => 'baz')      // placeholder '_' can be used as fallback
+    (1, then(() => 'foo'))      // no match. '1' does not match 'bar'!
+    (A, then(({ A }) => A))     // placeholder 'A' matches 'bar' => invoke callback!
+    (_, then(() => 'baz'))      // placeholder '_' can be used as fallback
 (end);
 
 > 'bar'
@@ -400,11 +400,11 @@ control flow structure in Elixir, and the syntax will probably make more sense
 if you think about it like any other control flow structure in JavaScript. In
 a way, it's similar to JavaScript's `switch` statement!
 
-Let's start by importing the `when` function together with the `end` keyword
-and some placeholders:
+Let's start by importing the `when` function together with the `then` function,
+the `end` keyword and some placeholders:
 
 ```javascript
-import { when, end, _, A, B, C, D } from 'ex-patterns';
+import { when, then, end, _, A, B, C, D } from 'ex-patterns';
 ```
 
 A call to the `when` function marks the beginning of the control flow structure,
@@ -413,27 +413,29 @@ match clauses can be inserted inbetween:
 
 ```javascript
 const value = 1;
-when(value)             // start `when` control flow structure with `value`
-    (1, () => 'foo')    // first match clause
-    (2, () => 'bar')    // second match clause
-    (3, () => 'baz')    // third match clause
-(end);                  // end `when`
+when(value)                     // start `when` control flow structure with `value`
+    (1, then(() => 'foo'))      // first match clause
+    (2, then(() => 'bar'))      // second match clause
+    (3, then(() => 'baz'))       // third match clause
+(end);                          // end `when`
 ```
 
 ### Pattern Matching
 
 Each match clause takes two arguments: the first is a pattern (see above) that
 will be matched against `value`, the second a callback function that will be
-invoked when the match is successful. In the following case, `value` will
-match the second clause; clauses that come **after** a matching clause will
-not be matched against:
+invoked when the match is successful. It's recommend to wrap the callback function
+inside `then` for readability, but it's optional.
+
+In the following case, `value` will match the second clause; clauses that come
+**after** a matching clause will not be matched against:
 
 ```javascript
 const value = 2;
 when(value)
-    (1, () => 'foo')    // no match. '1' does not match '2'
-    (2, () => 'bar')    // '2' matches '2' => invoke callback!
-    (3, () => 'baz')    // will not be matched against
+    (1, then(() => 'foo'))    // no match. '1' does not match '2'
+    (2, then(() => 'bar'))    // '2' matches '2' => invoke callback!
+    (3, then(() => 'baz'))    // will not be matched against
 (end);
 ```
 
@@ -443,9 +445,9 @@ function that belongs to the first matching clause!**
 ```javascript
 const value = 2;
 const result = when(value)
-    (1, () => 'foo')    // no match
-    (2, () => 'bar')    // '2' matches '2' => callback returns 'bar'
-    (3, () => 'baz')
+    (1, then(() => 'foo'))    // no match
+    (2, then(() => 'bar'))    // '2' matches '2' => callback returns 'bar'
+    (3, then(() => 'baz'))
 (end);
 
 result
@@ -458,9 +460,9 @@ rules and placeholders introduced above:
 ```javascript
 const value = [1, 2, 3];
 when(value)
-    ([1, 1, 1], () => 'foo')    // no match
-    ([_, _, B], () => 'bar')    // match, callback returns 'bar'
-    (3, () => 'baz')
+    ([1, 1, 1], then(() => 'foo'))    // no match
+    ([_, _, B], then(() => 'bar'))    // match, callback returns 'bar'
+    (3, then(() => 'baz'))
 (end);
 ```
 
@@ -470,9 +472,9 @@ use of the unnamed placeholder `_` in the final clause:
 ```javascript
 const value = 5;
 when(value)
-    (1, () => 'foo')    // no match
-    (2, () => 'bar')    // no match
-    (_, () => 'baz')    // matches anything! callback returns 'baz'
+    (1, then(() => 'foo'))    // no match
+    (2, then(() => 'bar'))    // no match
+    (_, then(() => 'baz'))    // matches anything! callback returns 'baz'
 (end);
 ```
 
@@ -495,9 +497,9 @@ const argsAsArray = (matches, value, pattern) => {
 };
 
 when(user)
-    ({ city: 'Hamburg' }, argsAsArray)      // no match
-    ({ name: B, age: A }, argsAsArray)      // match
-    (_, () => 'no match!')
+    ({ city: 'Hamburg' }, then(argsAsArray))      // no match
+    ({ name: B, age: A }, then(argsAsArray))      // match
+    (_, then(() => 'no match!'))
 (end);
 
 > [{ A: 31, B: 'Amelie' }, { name: 'Amelie', age: 31 }, { name: B, age: A }]
@@ -512,9 +514,9 @@ const user = { name: 'Amelie', age: 31 };
 const nameAndAgeAsArray = ({ A: age, B: name }) => [name, age];
 
 when(user)
-    ({ city: 'Hamburg' }, () => 'foo')          // no match
-    ({ name: B, age: A }, nameAndAgeAsArray)    // match
-    (_, () => 'no match!')
+    ({ city: 'Hamburg' }, then(() => 'foo'))          // no match
+    ({ name: B, age: A }, then(nameAndAgeAsArray))    // match
+    (_, then(() => 'no match!'))
 (end);
 
 > ['Amelie', 31]
@@ -529,28 +531,28 @@ of the invoked callback allows for expressive code when it's wrapped in a lambda
 function with implicit return:
 
 ```javascript
-import { when, end, _, E, N, } from 'ex-patterns';
+import { when, end, then, _, E, N, } from 'ex-patterns';
 
 const processBody = (body) => (
     when(body)
-        ({ email: E, name: N }, ({ N, E }) => ({ email: E, name: N }))
-        ({ email: E }, ({ E }) => ({ email: E, name: 'Unknown' }))
-        (_, () => { error: 'invalid body. does not contain email.' })
+        ({ email: E, name: N }, then(({ N, E }) => ({ email: E, name: N })))
+        ({ email: E }, then(({ E }) => ({ email: E, name: 'Unknown' })))
+        (_, then(() => { error: 'invalid body. does not contain email.' }))
     (end);
 );
 
 const processError = (body) => (
     when(body)
-        ({ error: E }, ({ E: error }) => ({ error })) 
-        (_, () => ({ error: 'invalid error response. no error message.' }))
+        ({ error: E }, then(({ E: error }) => ({ error }))) 
+        (_, then(() => ({ error: 'invalid error response. no error message.' })))
     (end);
 );
 
 const getUserData = async (url, options) => (
     when(await fetch(url, options))
-        ({ status: 200 }, (match, { body }) => processBody(body))
-        ({ status: _ }, (match, { body }) => processError(body))
-        (_, () => ({ error: 'response has no status code' }))
+        ({ status: 200 }, then((match, { body }) => processBody(body)))
+        ({ status: _ }, then((match, { body }) => processError(body)))
+        (_, then(() => ({ error: 'response has no status code' })))
     (end);
 );
 ```

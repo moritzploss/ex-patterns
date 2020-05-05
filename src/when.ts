@@ -65,9 +65,9 @@ const _when = (value: any, done = false, result = null): MatchClause => (
  * ```
  *      const value = [1, 'bar'];
  *      when(value)
- *         ([1, 1], () => 'foo')    // no match [1, 1] ≠ [1, 'bar']
- *         ([1, A], ({ A }) => A)   // match!   [1, A] = [1, 'bar'] => invoke callback!
- *         (_, () => 'baz')         // fallback      _ = [1, 'bar']
+ *         ([1, 1], then(() => 'foo'))    // no match [1, 1] ≠ [1, 'bar']
+ *         ([1, A], then(({ A }) => A))   // match!   [1, A] = [1, 'bar'] => invoke callback!
+ *         (_, then(() => 'baz'))         // fallback      _ = [1, 'bar']
  *      (end);
  *      > 'bar'
  * ```
@@ -76,4 +76,30 @@ function when(value: any) {
   return _when(value);
 }
 
-export { when };
+/**
+ * Wrapper for callback functions in `when` clauses. It's just syntactic
+ * sugar; the callback function can also be passed in without `then`.
+ *
+ * @param callback: A callback function
+ *
+ * @returns The `callback` function.
+ *
+ *
+ * ## Examples
+ * Use `when` to pattern match against `value`. The callback function that belongs
+ * to the first matching pattern is invoked and the result is returned.
+ * ```
+ *      const value = [1, 'bar'];
+ *      when(value)
+ *         ([1, 1], then(() => 'foo'))    // with `then`
+ *         ([1, A], () => 'bar')         // without `then`
+ *         (_, then(() => 'baz'))         // with `then`
+ *      (end);
+ *      > 'bar'
+ * ```
+ */
+function then(func: Function) {
+  return func;
+}
+
+export { when, then };
