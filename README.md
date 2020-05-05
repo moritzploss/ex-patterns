@@ -17,7 +17,7 @@ Install the package from npm:
 
 ## What's in the Box
 
-#### The `match` Function
+#### The [`match`](https://github.com/moritzploss/ex-patterns/#the-match-function) Function
 
 A pattern matching algorithm for flat and nested data structures, including
 arrays, objects and `Immutable.js` collections:
@@ -34,7 +34,7 @@ const value   = [1, 2];
 match(pattern, value)       // match against placeholder A  >>  A: 1
 ```
 
-#### The `when` Function
+#### The [`when`](https://github.com/moritzploss/ex-patterns/#the-when-function) Function
 
 A switch statement based on pattern matching similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case) statement. It accepts any number of
 match clauses in the format `(pattern, callback)` that are matched against `value`.
@@ -52,7 +52,7 @@ when(value)
 > 'hello world'
 ```
 
-#### The `cond` Function
+#### The [`cond`](https://github.com/moritzploss/ex-patterns/#the-cond-function) Function
 
 A switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
 statement. It accepts any number of clauses in the format
@@ -90,6 +90,7 @@ fizzBuzz(5)
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
     * [Callback Functions](https://github.com/moritzploss/ex-patterns#callback-functions)
+* [The `cond` Function](https://github.com/moritzploss/ex-patterns/#the-cond-function)
 * [Examples](https://github.com/moritzploss/ex-patterns#examples)
     * [HTTP Request Processing with `fetch`](https://github.com/moritzploss/ex-patterns#http-request-processing-with-fetch)
 
@@ -517,23 +518,18 @@ When invoked, the callback functions in the match clauses are passed three argum
 *  the `value` that was matched against (type `any`)
 *  the pattern that was used to perform the match (type `Pattern`)
 
-For readability, it can make sense to define the callback functions outside
-of the `when` structure. For example:
+For example:
 
 ```javascript
-const user = { name: 'Amelie', age: 31 };
-
-const argsAsArray = (matches, value, pattern) => {
-    return [matches, value, pattern];
-};
+const user = { name: 'Amelie' };
 
 when(user)
-    ({ city: 'Hamburg' }, then(argsAsArray))      // no match
-    ({ name: B, age: A }, then(argsAsArray))      // match
+    ({ city: A }, then((...args) => args))      // no match
+    ({ name: N }, then((...args) => args))      // match
     (_, then(() => 'no match!'))
 (end);
 
-> [{ A: 31, B: 'Amelie' }, { name: 'Amelie', age: 31 }, { name: B, age: A }]
+> [{ N: 'Amelie' }, { name: 'Amelie' }, { name: N }]
 ```
 
 This becomes very powerful when combined with object destructuring and
@@ -542,11 +538,11 @@ renaming of desctructured variables in the callback function:
 ```javascript
 const user = { name: 'Amelie', age: 31 };
 
-const nameAndAgeAsArray = ({ A: age, B: name }) => [name, age];
+const nameAndAgeAsArray = ({ A: age, N: name }) => [name, age];
 
 when(user)
     ({ city: 'Hamburg' }, then(() => 'foo'))          // no match
-    ({ name: B, age: A }, then(nameAndAgeAsArray))    // match
+    ({ name: N, age: A }, then(nameAndAgeAsArray))    // match
     (_, then(() => 'no match!'))
 (end);
 
