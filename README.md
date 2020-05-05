@@ -17,7 +17,7 @@ Install the package from npm:
 
 ## What's in the Box
 
-#### The [`match`](https://github.com/moritzploss/ex-patterns/#the-match-function) Function
+#### The [`match`](https://github.com/moritzploss/ex-patterns/#the-match-function-1) Function
 
 A pattern matching algorithm for flat and nested data structures, including
 arrays, objects and `Immutable.js` collections:
@@ -34,7 +34,7 @@ const value   = [1, 2];
 match(pattern, value)       // match against placeholder A  >>  A: 1
 ```
 
-#### The [`when`](https://github.com/moritzploss/ex-patterns/#the-when-function) Function
+#### The [`when`](https://github.com/moritzploss/ex-patterns/#the-when-function-1) Function
 
 A switch statement based on pattern matching similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case) statement. It accepts any number of
 match clauses in the format `(pattern, callback)` that are matched against `value`.
@@ -52,7 +52,7 @@ when(value)
 > 'hello world'
 ```
 
-#### The [`cond`](https://github.com/moritzploss/ex-patterns/#the-cond-function) Function
+#### The [`cond`](https://github.com/moritzploss/ex-patterns/#the-cond-function-1) Function
 
 A switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
 statement. It accepts any number of clauses in the format
@@ -76,7 +76,7 @@ fizzBuzz(5)
 # Documentation
 
 * [Pattern Matching Basics](https://github.com/moritzploss/ex-patterns#pattern-matching-basics)
-* [The `match` Function](https://github.com/moritzploss/ex-patterns#the-match-function)
+* [The `match` Function](https://github.com/moritzploss/ex-patterns#the-match-function-1)
     * [Basics](https://github.com/moritzploss/ex-patterns#basics)
     * [The `_` Placeholder](https://github.com/moritzploss/ex-patterns#the-_-placeholder)
     * [Named Placeholders](https://github.com/moritzploss/ex-patterns#named-placeholders)
@@ -86,11 +86,11 @@ fizzBuzz(5)
     * [Map-like Data Types](https://github.com/moritzploss/ex-patterns#map-like-data-types)
         * [Objects](https://github.com/moritzploss/ex-patterns#objects)
         * [`Immutable.js` Maps](https://github.com/moritzploss/ex-patterns#immutablejs-maps)
-* [The `when` Function](https://github.com/moritzploss/ex-patterns/#the-when-function)
+* [The `when` Function](https://github.com/moritzploss/ex-patterns/#the-when-function-1)
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
     * [Callback Functions](https://github.com/moritzploss/ex-patterns#callback-functions)
-* [The `cond` Function](https://github.com/moritzploss/ex-patterns/#the-cond-function)
+* [The `cond` Function](https://github.com/moritzploss/ex-patterns/#the-cond-function-1)
 * [Examples](https://github.com/moritzploss/ex-patterns#examples)
     * [HTTP Request Processing with `fetch`](https://github.com/moritzploss/ex-patterns#http-request-processing-with-fetch)
 
