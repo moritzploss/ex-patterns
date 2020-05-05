@@ -1,6 +1,6 @@
 {
   "name": "ex-patterns",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Elixir-style pattern matching and control flow structures",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
