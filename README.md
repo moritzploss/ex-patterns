@@ -20,7 +20,8 @@ Install the package from npm:
 #### The `match` Function
 
 A powerful pattern matching algorithm that performs pattern matching on flat and
-deeply nested data structures:
+deeply nested data structures, including arrays, objects and `Immutable.js`
+collections:
 
 ```javascript
 import { match, _, A } from 'ex-patterns';
@@ -43,8 +44,7 @@ control flow structure. It accepts any number of match clauses in the format
 ```javascript
 import { when, end, _, A } from 'ex-patterns';
 
-const value = 'bar';
-when(value)
+when('bar')
     (1, then(() => 'foo'))      // no match. '1' does not match 'bar'!
     (A, then(({ A }) => A))     // placeholder 'A' matches 'bar' => invoke callback!
     (_, then(() => 'baz'))      // placeholder '_' can be used as fallback
@@ -61,16 +61,14 @@ control flow structure. It accepts any number of clauses in the format
 statements.
 
 ```javascript
-import { when, end, _, A } from 'ex-patterns';
+import { cond, end } from 'ex-patterns';
 
-const value = 'bar';
-when(value)
-    (1, then(() => 'foo'))      // no match. '1' does not match 'bar'!
-    (A, then(({ A }) => A))     // placeholder 'A' matches 'bar' => invoke callback!
-    (_, then(() => 'baz'))      // placeholder '_' can be used as fallback
+const fizzBuzz = (number) => cond
+    (number % 15 === 0, then('fizzbuzz'))
+    (number % 3 === 0, then('fizz'))
+    (number % 5 === 0, then('buzz'))
+    (true, then(number))
 (end);
-
-> 'bar'
 ```
 
 # Documentation
