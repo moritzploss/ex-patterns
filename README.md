@@ -68,6 +68,9 @@ const fizzBuzz = (number) => cond
     (number % 5 === 0, then('buzz'))
     (true, then(number))
 (end);
+
+fizzBuzz(5)
+> 'buzz'
 ```
 
 # Documentation
