@@ -19,9 +19,8 @@ Install the package from npm:
 
 #### The `match` Function
 
-A powerful pattern matching algorithm that performs pattern matching on flat and
-deeply nested data structures, including arrays, objects and `Immutable.js`
-collections:
+A pattern matching algorithm that works with flat and nested data structures,
+including arrays, objects and `Immutable.js` collections:
 
 ```javascript
 import { match, _, A } from 'ex-patterns';
