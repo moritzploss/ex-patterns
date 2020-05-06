@@ -45,7 +45,7 @@ const value = { name: 'Amelie' };
 
 when(value)
     ({ name: 'Robert' }, then(() => 'hi Bob!'))  // no match
-    ({ name: N }, then(({ N }) => `hi ${N}!`))  // match placeholder 'N' => invoke callback!
+    ({ name: N }, then(({ N }) => `hi ${N}!`))   // match placeholder 'N' => invoke callback!
     (_, then(() => 'hi!'))
 (end);
 
@@ -114,9 +114,9 @@ helpful to keep this idea of `left` and `right` in mind when going through the
 examples below!
 
 ```javascript
-a = 1  // match
-1 = 1  // match
-1 = a  // match
+b = [1, 2, 3]  // match
+[1, 2, 3] = b  // match
+[1, _, _] = b  // match
 ```
 
 ### Why this Library?
