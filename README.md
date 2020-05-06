@@ -39,11 +39,11 @@ A switch statement based on pattern matching. It accepts any number of match
 clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
-import { when, end, _, F, L } from 'ex-patterns';
+import { when, end, _, F, U } from 'ex-patterns';
 
-const person = { userName: 'Amelie' }
+const user = { userName: 'Amelie' }
 
-when(person)
+when(user)
     ({ firstName: F }, then((match) => `Hi ${match.F}!`))
     ({ userName: U }, then((match) => `Hi ${match.U}!`))
     (_, then(() => 'Hi!'))
