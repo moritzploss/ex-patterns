@@ -161,11 +161,11 @@ when(value)
 (end);
 ```
 
-To avoid the performance issues that come with copying data, `ex-patterns`
-only creates copies when absolutely necessary. Moreover, the package comes
-with **first class support for `Immutable.js` collections**. That means any
-pattern match that works on JavaScript arrays and objects also works on
-immutable `List` and `Map` structures straight out of the box!
+To avoid the performance issues that come with copying data, copies are only
+created when necessary. Moreover, the package comes with **first class support
+for Immutable.js collections**. This means that you can simply match against
+immutable `List` and `Map` structures as if they were plain old JavaScript
+arrays and objects!
 
 ## The `match` Function
 
