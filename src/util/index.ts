@@ -7,8 +7,8 @@ export const hasKey = (object: Object, key: string) => (
   Object.prototype.hasOwnProperty.call(object, key)
 );
 
-export const isArray = (maybeArray: any) => Array.isArray(maybeArray);
+export const isArray = (maybeArray: any) => R.type(maybeArray) === 'Array';
 export const isMap = (maybeMap: any) => Map.isMap(maybeMap);
 export const isList = (maybeList: any) => List.isList(maybeList);
-export const isObject = (maybeObject: any) => typeof maybeObject === 'object' && maybeObject !== null;
+export const isObject = (maybeObject: any) => R.type(maybeObject) === 'Object';
 export const isFunction = (maybeFunction: any) => typeof maybeFunction === 'function';

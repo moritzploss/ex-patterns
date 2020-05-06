@@ -13,6 +13,12 @@ describe('the match function: arrays', () => {
     expect(matches).to.deep.equal({});
   });
 
+  it('should not match array and map', () => {
+    const [status, matches] = match([1], { 0: 1 });
+    expect(status).to.be.false;
+    expect(matches).to.deep.equal({});
+  });
+
   it('should not match two arrays if they are not equal', () => {
     const [status, matches] = match([1], [2]);
     expect(status).to.be.false;

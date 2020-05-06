@@ -17,6 +17,12 @@ describe('the match function: objects', () => {
     expect(matches).to.deep.equal({});
   });
 
+  it('should not match object and array', () => {
+    const [status, matches] = match({ 0: 1 }, [1]);
+    expect(status).to.be.false;
+    expect(matches).to.deep.equal({});
+  });
+
   it('should not match two objects if they are not equal', () => {
     const [status, matches] = match({ b: 1 }, { a: 1 });
     expect(status).to.be.false;
@@ -39,6 +45,12 @@ describe('the match function: objects', () => {
     const [status, matches] = match({ a: A }, { a: 1 });
     expect(status).to.be.true;
     expect(matches).to.deep.equal({ A: 1 });
+  });
+
+  it('should match on named placeholders as object values', () => {
+    const [status, matches] = match({ a: A, b: A }, { a: 1, b: 2 });
+    expect(status).to.be.false;
+    expect(matches).to.deep.equal({});
   });
 
   it('should match on placeholders as object values for objects with multiple keys', () => {
@@ -76,6 +88,12 @@ describe('the match function: Immutable.js Maps', () => {
   it('should work with Map as pattern', () => {
     const [status, matches] = match(Map({ a: 1 }), Map({ a: 1 }));
     expect(status).to.be.true;
+    expect(matches).to.deep.equal({});
+  });
+
+  it('should match on named placeholders as object values', () => {
+    const [status, matches] = match({ a: A, b: A }, Map({ a: 1, b: 2 }));
+    expect(status).to.be.false;
     expect(matches).to.deep.equal({});
   });
 
