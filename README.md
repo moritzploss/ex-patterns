@@ -36,19 +36,20 @@ match(pattern, value)       // match against placeholder A  >>  { A: 1 }
 #### The [`when`](https://github.com/moritzploss/ex-patterns/#the-when-function-1) Function
 
 A switch statement based on pattern matching. It accepts any number of match
-clauses in the format `(pattern, callback)` that are matched against `value`.
+clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
 import { when, end, _, N } from 'ex-patterns';
 
-const value = { name: 'Amelie' };
+const sayHi = (person) => (
+    when(person)
+        ({ name: 'James' }, then(() => 'hi Jim!'))  // no match
+        ({ name: N }, then(({ N }) => `hi ${N}!`))  // match placeholder 'N'
+        (_, then(() => 'hi!'))
+    (end);
+)
 
-when(value)
-    ({ name: 'Robert' }, then(() => 'hi Bob!'))  // no match
-    ({ name: N }, then(({ N }) => `hi ${N}!`))   // match placeholder 'N' => invoke callback!
-    (_, then(() => 'hi!'))
-(end);
-
+sayHi({ name: 'Amelie' });
 > 'hi Amelie!'
 ```
 
