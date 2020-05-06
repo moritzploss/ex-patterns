@@ -132,7 +132,7 @@ or when your code is compiled from `TypeScript`.
 
 More importantly, this also means that **it's possible to match against any
 variable in the lexical environment**. If you're coming from Elixir, this is
-equivalent to pattern matching against **pinned variables** (only you don't need
+equivalent to pattern matching against *pinned variables* (only you don't need
 the `^` here):
 
 ```javascript
@@ -140,14 +140,14 @@ const homeTown = 'Stockholm';
 const value = { city: 'Stockholm' };
 
 when(value)
-    ({ city: 'Berlin' }, then(() => 'no match! this is easy!'))
+    ({ city: 'Berlin' }, then(() => 'no match! many libraries can do this well!'))
     ({ city: homeTown }, then(() => 'match! this is tricky for some libraries!'))
     (_, then(() => 'always matches!'))
 (end);
 ```
 
-While pattern matching in JavaScript is great, there are some pitfalls that
-arise from **JavaScript's mutable data types**. For example, if you want to match
+While pattern matching in JavaScript is great, there are some **pitfalls that
+arise from JavaScript's mutable data types**. For example, if you want to match
 against the tail of an array and return the corresponding elements, there's no
 way around slicing the array and copying the data:
 
