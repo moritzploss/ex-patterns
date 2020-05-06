@@ -60,7 +60,7 @@ statement. It accepts any number of clauses in the format
 statements.
 
 ```javascript
-import { cond, end } from 'ex-patterns';
+import { cond, end, then } from 'ex-patterns';
 
 const fizzBuzz = (number) => cond
     (number % 15 === 0, then('fizzbuzz'))
