@@ -26,6 +26,31 @@ const _cond = (done = false, result = null) => (
   }
 );
 
+/**
+ * A compact switch statement that accepts any number of clauses in the format
+ * (truthy?, value). Returns the `value` that corresponds to the first case
+ * that `isTruthy`.
+ *
+ * @param isTruthy: A value that will be checked for truthyness
+ * @param value: The value to return if `isTruthy` evaluates to truthy
+ *
+ * @returns `value`
+ *
+ * ## Examples
+ * ```
+      import { cond, end, then } from 'ex-patterns';
+
+        const fizzBuzz = (number) => cond
+            (number % 15 === 0, then('fizzbuzz'))
+            (number % 3 === 0, then('fizz'))
+            (number % 5 === 0, then('buzz'))
+            (true, then(number))
+        (end);
+
+        fizzBuzz(5)
+        > 'buzz'
+ * ```
+ */
 function cond(value: any, returnValue: any) {
   return _cond()(value, returnValue);
 }

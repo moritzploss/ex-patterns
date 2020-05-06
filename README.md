@@ -44,7 +44,7 @@ import { when, end, _, N } from 'ex-patterns';
 const value = { name: 'Amelie' };
 
 when(value)
-    ({ name: 'Robert'}, then(() => 'hi Bob!'))  // no match
+    ({ name: 'Robert' }, then(() => 'hi Bob!'))  // no match
     ({ name: N }, then(({ N }) => `hi ${N}!`))  // match placeholder 'N' => invoke callback!
     (_, then(() => 'hi!'))
 (end);
