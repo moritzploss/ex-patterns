@@ -157,7 +157,7 @@ const value = [1, 2, 3, 4, 5];
 when(value)
     ([5, 4, 3, tail], then(() => 'tail not bound! no need to slice 🙂'))
     ([1, 2, tail(A)], then(({ A }) => 'tail bound to A! need to slice 🙁'))
-    (_, then(() => 'always matches, never slices!'))
+    (_, then(() => 'always matches!'))
 (end);
 ```
 
