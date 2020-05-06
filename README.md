@@ -39,18 +39,18 @@ A switch statement based on pattern matching. It accepts any number of match
 clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
-import { when, end, _, N } from 'ex-patterns';
+import { when, end, _, F, L } from 'ex-patterns';
 
-const sayHi = (person) => (
-    when(person)
-        ({ name: 'James' }, then(() => 'hi Jim!'))  // no match
-        ({ name: N }, then(({ N }) => `hi ${N}!`))  // match placeholder 'N'
-        (_, then(() => 'hi!'))
-    (end);
-)
+const person = { firstName: 'Amelie' }
 
-sayHi({ name: 'Amelie' });
-> 'hi Amelie!'
+when(person)
+    ({ firstName: F, lastName: L }, then(({ F, L }) => `Hi ${F} ${L}!`))
+    ({ firstName: F }, then(({ F }) => `Hi ${F}!`))
+    (_, then(() => 'Hi!'))
+(end);
+
+> 'Hi Amelie!'
+
 ```
 
 #### The [`cond`](https://github.com/moritzploss/ex-patterns/#the-cond-function-1) Function
