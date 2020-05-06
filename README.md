@@ -6,8 +6,7 @@
 This project brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
 and control flow structures to JavaScript. Pattern matching is supported for
 native JavaScript data types as well as common [`Immutable.js`](https://immutable-js.github.io/immutable-js/)
-collections. See the [**documentation**](https://github.com/moritzploss/ex-patterns/#documentation)
-for details and examples.
+collections. See the [**documentation**](https://github.com/moritzploss/ex-patterns/#documentation) for details and examples.
 
 ## Setup
 
@@ -19,7 +18,7 @@ Install the package from npm:
 
 #### The [`match`](https://github.com/moritzploss/ex-patterns/#the-match-function-1) Function
 
-A pattern matching algorithm for flat and nested data structures, including
+A pattern matching function for flat and nested data structures, including
 arrays, objects and `Immutable.js` collections:
 
 ```javascript
@@ -31,33 +30,32 @@ match(pattern, value)       // match
 
 const pattern = [A, 2];
 const value   = [1, 2];
-match(pattern, value)       // match against placeholder A  >>  A: 1
+match(pattern, value)       // match against placeholder A  >>  { A: 1 }
 ```
 
 #### The [`when`](https://github.com/moritzploss/ex-patterns/#the-when-function-1) Function
 
-A switch statement based on pattern matching similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case) statement. It accepts any number of
-match clauses in the format `(pattern, callback)` that are matched against `value`.
+A switch statement based on pattern matching. It accepts any number of match
+clauses in the format `(pattern, callback)` that are matched against `value`.
 
 ```javascript
-import { when, end, _, A } from 'ex-patterns';
+import { when, end, _, N } from 'ex-patterns';
 
-const value = 'world'
+const value = { name: 'Amelie' };
+
 when(value)
-    ('hi', then(() => 'hi'))            // no match. 'hi' does not match 'world'!
-    (A, then(({ A }) => `hello ${A}`))  // placeholder 'A' matches 'world' => invoke callback!
-    (_, then(() => 'goodbye!'))         // placeholder '_' can be used as fallback
+    ({ name: 'Robert'}, then(() => 'hi Bob!'))  // no match
+    ({ name: N }, then(({ N }) => `hi ${N}!`))  // match placeholder 'N' => invoke callback!
+    (_, then(() => 'hi!'))
 (end);
 
-> 'hello world'
+> 'hi Amelie!'
 ```
 
 #### The [`cond`](https://github.com/moritzploss/ex-patterns/#the-cond-function-1) Function
 
-A switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
-statement. It accepts any number of clauses in the format
-`(truthy?, value)` and works like a chain of `if {} else if {} else {}`
-statements.
+A compact switch statement that accepts any number of clauses in the format
+`(truthy?, value)`:
 
 ```javascript
 import { cond, end, then } from 'ex-patterns';
@@ -75,17 +73,15 @@ fizzBuzz(5)
 
 # Documentation
 
-* [Pattern Matching Basics](https://github.com/moritzploss/ex-patterns#pattern-matching-basics)
+* [Introduction](https://github.com/moritzploss/ex-patterns#introduction)
+    * [Pattern Matching Basics](https://github.com/moritzploss/ex-patterns#pattern-matching-basics)
+    * [Why this library?](https://github.com/moritzploss/ex-patterns#why-this-library)
 * [The `match` Function](https://github.com/moritzploss/ex-patterns#the-match-function-1)
     * [Basics](https://github.com/moritzploss/ex-patterns#basics)
     * [The `_` Placeholder](https://github.com/moritzploss/ex-patterns#the-_-placeholder)
     * [Named Placeholders](https://github.com/moritzploss/ex-patterns#named-placeholders)
     * [Array-like Data Types](https://github.com/moritzploss/ex-patterns#array-like-data-types)
-        * [Arrays](https://github.com/moritzploss/ex-patterns#arrays)
-        * [`Immutable.js` Lists](https://github.com/moritzploss/ex-patterns#immutablejs-lists)
     * [Map-like Data Types](https://github.com/moritzploss/ex-patterns#map-like-data-types)
-        * [Objects](https://github.com/moritzploss/ex-patterns#objects)
-        * [`Immutable.js` Maps](https://github.com/moritzploss/ex-patterns#immutablejs-maps)
 * [The `when` Function](https://github.com/moritzploss/ex-patterns/#the-when-function-1)
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
@@ -94,7 +90,9 @@ fizzBuzz(5)
 * [Examples](https://github.com/moritzploss/ex-patterns#examples)
     * [HTTP Request Processing with `fetch`](https://github.com/moritzploss/ex-patterns#http-request-processing-with-fetch)
 
-## Pattern Matching Basics
+## Introduction
+
+### Pattern Matching Basics
 
 If you're new to pattern matching, the [**Elixir Docs**](https://elixir-lang.org/getting-started/pattern-matching.html)
 contain all you need to know. In essence, pattern matching is a way of
@@ -120,6 +118,53 @@ a = 1  // match
 1 = 1  // match
 1 = a  // match
 ```
+
+### Why this Library?
+
+It's hardly surprising that `ex-patterns` isn't the only pattern matching library
+in the JavaScript universe; however, it can do a couple of things that others have
+problems with.
+
+Firstly, the pattern matching algorithm does not rely on function reflection. 
+This means that **it works out of the box** in `es5` environments, `strict mode`
+or when your code is compiled from `TypeScript`.
+
+More importantly, this also means that **it's possible to match against any
+variable in the lexical environment**. If you're coming from Elixir, this is
+equivalent to pattern matching against **pinned variables** (only you don't need
+the `^` here):
+
+```javascript
+const homeTown = 'Stockholm';
+const value = { city: 'Stockholm' };
+
+when(value)
+    ({ city: 'Berlin' }, then(() => 'no match! this is easy!'))
+    ({ city: homeTown }, then(() => 'match! this is tricky for some libraries!'))
+    (_, then(() => 'always matches!'))
+(end);
+```
+
+While pattern matching in JavaScript is great, there are some pitfalls that
+arise from **JavaScript's mutable data types**. For example, if you want to match
+against the tail of an array and return the corresponding elements, there's no
+way around slicing the array and copying the data:
+
+```javascript
+const value = [1, 2, 3, 4, 5];
+
+when(value)
+    ([5, 4, 3, tail], then(() => 'tail not bound! no need to slice 🙂'))
+    ([1, 2, tail(A)], then(({ A }) => 'tail bound to A! need to slice 🙁'))
+    (_, then(() => 'always matches, never slices!'))
+(end);
+```
+
+To avoid the performance issues that come with copying data, `ex-patterns`
+only creates copies when absolutely necessary. Moreover, the package comes
+with **first class support for `Immutable.js` collections**. That means any
+pattern match that works on JavaScript arrays and objects also works on
+immutable `List` and `Map` structures straight out of the box!
 
 ## The `match` Function
 
@@ -298,8 +343,9 @@ against the last elements of an array:
 ```javascript
 import { match, head, A, B, C, D } from 'ex-patterns';
 
-match([head, 3, 4], [1, 2, 3, 4]);      // match
-match([head(B), 3, 4], [1, 2, 3, 4]);   // match  >>  { B: [1, 2] }
+const value = [1, 2, 3, 4];
+match([head, 3, 4], value);      // match
+match([head(B), 3, 4], value);   // match  >>  { B: [1, 2] }
 ```
 
 The rules and limitations are equivalent to those outlined for the `tail` keyword.
@@ -317,7 +363,7 @@ apply:
 
 ```javascript
 const pattern = [head(A), [head, [1, 2, tail(A)]], [3, tail]];
-const value   = [1, [2, [1, 2, 1]], [3, 4, 5]]
+const value   = [1,       [2,    [1, 2, 1      ]], [3, 4, 5]];
 match(pattern, value);   // match
 ```
 
@@ -362,9 +408,10 @@ This means that it's possible to only match against the object keys that are
 of interest:
 
 ```javascript
-match({ a: 1 }, { a: 1, b: 2 });    // match
-match({}, { a: 1, b: 2 });          // match
-match({ b: 1 }, { a: 1 });          // no match
+const value = { a: 1, b: 2 };
+match({ a: 1 }, value);         // match
+match({}, value);               // match
+match({ b: 1 }, value);         // no match
 ```
 
 Also note that named and unnamed placeholders can only be used to **match against object
@@ -390,11 +437,11 @@ As for objects, the match will be successful as long as the pattern is a subset 
 the value:
 
 ```javascript
-const pattern = { foo: { bar: A } };
+const pattern = { foo: { bar: A }};
 const value   = Map({ foo: Map({ bar: 'hello'}), baz: 'world'});
 match(pattern, value);  // match
 
-> [true, { A: 'hello']
+> [true, { A: 'hello' }]
 ```
 
 When `Map` structures are used in patterns, they are matched based on value
@@ -443,7 +490,7 @@ and calling any resulting function with `end` marks the end. Any number of
 match clauses can be inserted inbetween:
 
 ```javascript
-const value = 1;
+const value = 2;
 when(value)                     // start `when` control flow structure with `value`
     (1, then(() => 'foo'))      // first match clause
     (2, then(() => 'bar'))      // second match clause
@@ -538,11 +585,11 @@ renaming of desctructured variables in the callback function:
 ```javascript
 const user = { name: 'Amelie', age: 31 };
 
-const nameAndAgeAsArray = ({ A: age, N: name }) => [name, age];
+const nameAndAge = ({ N: name, A: age }) => [name, age];
 
 when(user)
-    ({ city: 'Hamburg' }, then(() => 'foo'))          // no match
-    ({ name: N, age: A }, then(nameAndAgeAsArray))    // match
+    ({ city: 'Hamburg' }, then(() => 'foo'))   // no match
+    ({ name: N, age: A }, then(nameAndAge))    // match
     (_, then(() => 'no match!'))
 (end);
 
@@ -579,11 +626,11 @@ result
 > 'match'
 ```
 
-Truthiness is evaluated **based on** JavaScript's concept of **truthy and falsy**
+Clauses are evaluated **based on** JavaScript's concept of **truthy and falsy**
 values:
 
 ```javascript
-const result = cond
+cond
     (false, then('no match'))
     (0, then('no match'))
     (-0, then('no match'))
@@ -610,14 +657,6 @@ function with implicit return:
 ```javascript
 import { when, end, then, _, E, N, } from 'ex-patterns';
 
-const processBody = (body) => (
-    when(body)
-        ({ email: E, name: N }, then(({ N, E }) => ({ email: E, name: N })))
-        ({ email: E }, then(({ E }) => ({ email: E, name: 'Unknown' })))
-        (_, then(() => { error: 'invalid body. does not contain email.' }))
-    (end);
-);
-
 const processError = (body) => (
     when(body)
         ({ error: E }, then(({ E: error }) => ({ error }))) 
@@ -625,11 +664,18 @@ const processError = (body) => (
     (end);
 );
 
-const getUserData = async (url, options) => (
+const processBody = (body) => (
+    when(body)
+        ({ email: E, name: N }, then(({ E, N }) => ({ email: E, name: N })))
+        ({ email: E }, then(({ E }) => ({ email: E, name: 'Unknown' })))
+        (_, then(() => ({ error: 'no email address.' })))
+    (end);
+);
+
+const fetchUserData = async (url, options) => (
     when(await fetch(url, options))
-        ({ status: 200 }, then((match, { body }) => processBody(body)))
-        ({ status: _ }, then((match, { body }) => processError(body)))
-        (_, then(() => ({ error: 'response has no status code' })))
+        ({ status: 200 }, then(async (match, res) => processBody(await res.json())))
+        ({ status: _ }, then(async (match, res) => processError(await res.json()))
     (end);
 );
 ```
