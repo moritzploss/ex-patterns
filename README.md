@@ -41,11 +41,11 @@ clauses in the format `(pattern, callback)` that are matched against a value.
 ```javascript
 import { when, end, _, F, L } from 'ex-patterns';
 
-const person = { firstName: 'Amelie' }
+const person = { userName: 'Amelie' }
 
 when(person)
-    ({ firstName: F, lastName: L }, then(({ F, L }) => `Hi ${F} ${L}!`))
-    ({ firstName: F }, then(({ F }) => `Hi ${F}!`))
+    ({ firstName: F }, then((match) => `Hi ${match.F}!`))
+    ({ userName: U }, then((match) => `Hi ${match.U}!`))
     (_, then(() => 'Hi!'))
 (end);
 
