@@ -6,7 +6,7 @@
 
 import { expect } from 'chai';
 
-import { cond, then, end } from '../src';
+import { cond, then, end } from '../../src';
 
 describe('the when function: base cases', () => {
   it('should match the first matching value', () => {

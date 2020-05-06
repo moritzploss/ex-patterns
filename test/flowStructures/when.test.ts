@@ -8,7 +8,7 @@
 
 import { expect } from 'chai';
 
-import { when, then, end, _, A, B, C, D, E, F, G, V } from '../src';
+import { when, then, end, _, A, B, C, F, U } from '../../src';
 
 describe('the when function: base cases', () => {
   it('should match the first matching value (1)', () => {
@@ -301,5 +301,17 @@ describe('the when function: all together now', () => {
     (end);
 
     expect(result).to.deep.equal('moved user from Gothenburg to Stockholm!');
+  });
+
+  it('should work for example from README', () => {
+    const user = { userName: 'Amelie' };
+
+    const result = when(user)
+        ({ firstName: F }, then((match) => `Hi ${match.F}!`))
+        ({ userName: U }, then((match) => `Hi ${match.U}!`))
+        (_, then(() => 'Hi!'))
+    (end);
+
+    expect(result).to.deep.equal('Hi Amelie!');
   });
 });

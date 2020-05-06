@@ -1,14 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
-/* eslint-disable indent */
-/* eslint-disable func-call-spacing */
-/* eslint-disable no-spaced-func */
-/* eslint-disable arrow-parens */
 
 import { expect } from 'chai';
 import { Map, List } from 'immutable';
 
-import { match, _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, tail, head } from '../../src';
+import { match, _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } from '../../src';
 
 describe('the match function: regular expressions', () => {
   it('should not match regular expressions on strings', () => {

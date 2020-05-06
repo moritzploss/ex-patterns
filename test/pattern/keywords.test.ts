@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
-/* eslint-disable indent */
-/* eslint-disable func-call-spacing */
-/* eslint-disable no-spaced-func */
-/* eslint-disable arrow-parens */
 
 import { expect } from 'chai';
 import { List, is } from 'immutable';

@@ -8,7 +8,7 @@
 import { expect } from 'chai';
 import { Map, is } from 'immutable';
 
-import { match, _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, tail, head } from '../../src';
+import { match, _, A, B, C } from '../../src';
 
 describe('the match function: objects', () => {
   it('should match two objects if they are equal', () => {

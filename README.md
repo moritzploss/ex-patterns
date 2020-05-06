@@ -41,7 +41,7 @@ clauses in the format `(pattern, callback)` that are matched against a value.
 ```javascript
 import { when, end, _, F, U } from 'ex-patterns';
 
-const user = { userName: 'Amelie' }
+const user = { userName: 'Amelie' };
 
 when(user)
     ({ firstName: F }, then((match) => `Hi ${match.F}!`))
@@ -204,6 +204,15 @@ match(1, 1)     // match
 
 match(1, 2)     // no match
 > [false, {}]
+```
+
+If you're only interested in whether the match was successful, there's also an
+`isMatch` function that takes the same arguments as `match` and returns a
+boolean:
+
+```javascript
+isMatch(1, 1)     // match
+> true
 ```
 
 ### The `_` Placeholder
