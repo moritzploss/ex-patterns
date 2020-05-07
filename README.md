@@ -39,7 +39,7 @@ A switch statement based on pattern matching. It accepts any number of match
 clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
-import { when, end, _, A, N } from 'ex-patterns';
+import { when, end, then, _, A, N } from 'ex-patterns';
 
 const user = { name: 'Amelie' };
 
