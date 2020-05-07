@@ -60,8 +60,11 @@ const _suppose = (happy = true, matches = {}, result = null, hasResult = false):
   }
 );
 
-function suppose(pattern: Pattern, func: any): any {
-  return _suppose()(pattern, func);
+function suppose(pattern: Pattern, startValue: any): any {
+  if (isFunction(startValue)) {
+    throw Error('Start value in \'suppose\' statement cannnot be a function.');
+  }
+  return _suppose()(pattern, () => startValue);
 }
 
 export { suppose };

@@ -35,7 +35,8 @@ match(pattern, value)       // match against placeholder A  >>  { A: 1 }
 
 #### The [`when`](https://github.com/moritzploss/ex-patterns/#the-when-function-1) Function
 
-A switch statement based on pattern matching. It accepts any number of match
+A switch statement based on pattern matching, similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
+control flow structure. It accepts any number of match
 clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
@@ -53,10 +54,41 @@ when(user)
 
 ```
 
+#### The [`suppose`](https://github.com/moritzploss/ex-patterns/#the-when-function-1) Function
+
+A control flow structure to leverage the power of pattern matching while
+coding for the happy path, similar to Elixir's `with ... do ... else ... end`.
+Takes any number of clauses in the format `(pattern, function)` and checks if
+the return value of `function` matches `pattern.` If true, go to the next clause
+until you reach `then` and execute the callback in the `then` clause. If false,
+pattern match the last "happy path" result against the `otherwise` clauses and
+execute the callback that belongs to the first matching pattern.
+
+```javascript
+import { suppose, then, otherwise, end, _, A, N } from 'ex-patterns';
+
+suppose
+    (R, await fetch('api/users/123'))
+    ({ status: 200 }, matches => matches.R)
+    ({ body: { name: N, id: I }}, matches => await matches.R.json())
+    (true, matches => isValidUserName(matches.N))
+    (true, matches => isUniqueUserId(matches.I))
+(then)
+    (matches => `Welcome ${matches.N}`)
+(otherwise)
+    ({ status: S }, matches => `Got status ${matches.S}`)
+    ({ body: B }, matches => `Body has no user data: ${matches.B}`)
+    (false, () => 'Name or ID validation failed')
+    (_, () => 'Ooops! Something unexpected happened!')
+(end);
+```
+
+
 #### The [`cond`](https://github.com/moritzploss/ex-patterns/#the-cond-function-1) Function
 
 A compact switch statement that accepts any number of clauses in the format
-`(truthy?, value)`:
+`(truthy?, value)`, similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
+control flow structure:
 
 ```javascript
 import { cond, end, then } from 'ex-patterns';
