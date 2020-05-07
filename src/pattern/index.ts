@@ -119,4 +119,4 @@ function isMatch(pattern: Pattern, value: any): boolean {
   return match(pattern, value)[0];
 }
 
-export { match, isMatch };
+export { match, isMatch, _match };

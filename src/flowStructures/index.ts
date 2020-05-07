@@ -1,6 +1,6 @@
 import { cond } from './cond';
-import { given } from './given';
+import { suppose } from './suppose';
 import { then } from './then';
 import { when } from './when';
 
-export { cond, given, then, when };
+export { cond, suppose, then, when };

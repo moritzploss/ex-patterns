@@ -1,3 +1,6 @@
+import { thenSymbol } from '../symbols';
+import { hasKey } from '../util';
+
 /**
  * Wrapper for callback functions in `when` clauses. It's just syntactic
  * sugar; the callback function can also be passed in without `then`.
@@ -24,4 +27,10 @@ function then<T>(func: T): T {
   return func;
 }
 
-export { then };
+then.symbol = thenSymbol;
+
+const isThen = (maybeThen: any): boolean => (
+  hasKey(maybeThen, 'symbol') && maybeThen.symbol === thenSymbol
+);
+
+export { then, isThen };

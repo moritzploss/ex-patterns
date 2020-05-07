@@ -30,8 +30,11 @@ export const Z = { name: 'Z', symbol: Symbol('Z') };
 export const end = Symbol('end');
 export type End = typeof end;
 
-export const unless = Symbol('unless');
-export type Unless = typeof unless;
+export const otherwise = Symbol('otherwise');
+export type Otherwise = typeof otherwise;
+
+export const thenSymbol = Symbol('then');
+export type ThenSymbol = typeof thenSymbol;
 
 export const tailSymbol = Symbol('tail');
 export const headSymbol = Symbol('head');
