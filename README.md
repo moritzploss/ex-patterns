@@ -414,7 +414,7 @@ match(pattern, value));             // match
 
 Note that if you bind the `head` or `tail` keyword to a named placeholder, the
 **matches will be returned as an immutable `List`** (not as an array). This means
-that the `match` function preserves `List` and `array` data types and you don't
+that the `match` function preserves `List` and `Array` data types and you don't
 need to worry about inefficient slicing when using `Immutable.js` collections!
 
 ```javascript
