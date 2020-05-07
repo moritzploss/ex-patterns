@@ -44,8 +44,8 @@ import { when, end, _, A, N } from 'ex-patterns';
 const user = { name: 'Amelie' };
 
 when(user)
-    ({ alias: A }, then((match) => `Hi ${match.A}!`))
-    ({ name: N }, then((match) => `Hi ${match.N}!`))
+    ({ alias: A }, then(matches => `Hi ${matches.A}!`))
+    ({ name: N }, then(matches => `Hi ${matches.N}!`))
     (_, then(() => 'Hi!'))
 (end);
 
@@ -174,7 +174,7 @@ const value = [1, 2, 3, 4, 5];
 
 when(value)
     ([1, 2, 3, tail], then(() => 'tail not bound! no need to slice 🙂'))
-    ([_, _, tail(A)], then(({ A }) => 'tail bound to A! need to slice 🙁'))
+    ([_, _, tail(A)], then(matches => 'tail bound to A! need to slice 🙁'))
     (_, then(() => 'always matches!'))
 (end);
 ```
