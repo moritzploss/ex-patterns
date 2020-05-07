@@ -111,11 +111,11 @@ suppose
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
     * [Callback Functions](https://github.com/moritzploss/ex-patterns#callback-functions)
+* [The `cond` Function](https://github.com/moritzploss/ex-patterns/#the-cond-function-1)
 * [The `suppose` Function](https://github.com/moritzploss/ex-patterns/#the-suppose-function-1)
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-2)
     * [Catching Errors](https://github.com/moritzploss/ex-patterns/#catching-errors)
-    * [Callback functions](https://github.com/moritzploss/ex-patterns/#callback-functions-1)
-* [The `cond` Function](https://github.com/moritzploss/ex-patterns/#the-cond-function-1)
+    * [Callback Functions](https://github.com/moritzploss/ex-patterns/#callback-functions-1)
 * [Examples](https://github.com/moritzploss/ex-patterns#examples)
     * [HTTP Request Processing with `fetch`](https://github.com/moritzploss/ex-patterns#http-request-processing-with-fetch)
 
@@ -662,7 +662,7 @@ any amount of `suppose` clauses in the format `(pattern, function)` and proceeds
 from top to bottom as long as all matches succeed.
 
 ```javascript
-import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+import { suppose, then, end, A, B, C, D, _ } from 'ex-patterns';
 
 suppose
     (A, () => 1)    // A matches 1, go to next line
@@ -727,10 +727,10 @@ suppose
     (matches => 'all clauses matched!')
 (otherwise)
     (A, matches => `I caught it! It's ${matches.A}`)  // 'A' matches value '4'
-    (_, () => 'pfff! I would have caught it anyway!')
+    (_, () => 'pff! I would have caught it anyway!')
 (end)
 
-> 'caught it!'
+> "I caught it! It's 4"
 ```
 
 Thus, you can think of the `otherwise` clause as a `when` function that takes
