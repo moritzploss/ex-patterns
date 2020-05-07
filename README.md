@@ -39,13 +39,13 @@ A switch statement based on pattern matching. It accepts any number of match
 clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
-import { when, end, _, F, U } from 'ex-patterns';
+import { when, end, then, _, A, N } from 'ex-patterns';
 
-const user = { userName: 'Amelie' };
+const user = { name: 'Amelie' };
 
 when(user)
-    ({ firstName: F }, then((match) => `Hi ${match.F}!`))
-    ({ userName: U }, then((match) => `Hi ${match.U}!`))
+    ({ alias: A }, then(matches => `Hi ${matches.A}!`))
+    ({ name: N }, then(matches => `Hi ${matches.N}!`))
     (_, then(() => 'Hi!'))
 (end);
 
@@ -157,7 +157,7 @@ const composedPattern = { ...cityPattern, ...namePattern };
 const user = { name: 'Amelie', city: 'Stockholm' };
 
 when(value)
-    (composedPattern, then(() => 'has both name and city!'))
+    (composedPattern, then(() => 'has both city and name!'))
     (cityPattern, then(() => 'has only city!'))
     (namePattern, then(() => 'has only name!'))
     (_, then(() => 'has no city and no name!'))
@@ -174,7 +174,7 @@ const value = [1, 2, 3, 4, 5];
 
 when(value)
     ([1, 2, 3, tail], then(() => 'tail not bound! no need to slice 🙂'))
-    ([_, _, tail(A)], then(({ A }) => 'tail bound to A! need to slice 🙁'))
+    ([_, _, tail(A)], then(matches => 'tail bound to A! need to slice 🙁'))
     (_, then(() => 'always matches!'))
 (end);
 ```
@@ -182,7 +182,7 @@ when(value)
 To avoid the performance issues that come with copying data, copies are only
 created when necessary. Moreover, the package comes with **first class support
 for Immutable.js collections**. This means that you can simply match against
-immutable `List` and `Map` structures as if they were plain old JavaScript
+immutable `List` and `Map` structures as if they were regular JavaScript
 arrays and objects!
 
 ## The `match` Function
@@ -414,7 +414,7 @@ match(pattern, value));             // match
 
 Note that if you bind the `head` or `tail` keyword to a named placeholder, the
 **matches will be returned as an immutable `List`** (not as an array). This means
-that the `match` function preserves `List` and `array` data types and you don't
+that the `match` function preserves `List` and `Array` data types and you don't
 need to worry about inefficient slicing when using `Immutable.js` collections!
 
 ```javascript
