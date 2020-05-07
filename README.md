@@ -77,12 +77,11 @@ fizzBuzz(5)
 #### The [`suppose`](https://github.com/moritzploss/ex-patterns/#the-suppose-function-1) Function
 
 A control flow structure to leverage the power of pattern matching while
-coding for the happy path, similar to Elixir's `with ... do ... else ... end`.
-Takes any number of clauses in the format `(pattern, function)` and checks if
-the return value of `function` matches `pattern`. Matches are piped through the
-`suppose` clauses until the `then` callback is reached. If anything goes wrong,
-control flow is handed over to the `otherwise` clause, which works like a `when`
-function.
+coding for the happy path, similar to Elixir's `with`. Takes any number of
+clauses in the format `(pattern, function)` and checks if the return value of
+`function` matches `pattern`. Matches are piped through the `suppose` clauses
+until the `then` callback is reached. If anything goes wrong, control flow is
+handed over to the `otherwise` clause, which works like a `when` function.
 
 ```javascript
 import { suppose, then, otherwise, end, N, I, B, S, R } from 'ex-patterns';
