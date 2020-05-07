@@ -8,7 +8,7 @@
 
 import { expect } from 'chai';
 
-import { when, then, end, _, A, B, C, F, U } from '../../src';
+import { when, then, end, _, A, B, C, N } from '../../src';
 
 describe('the when function: base cases', () => {
   it('should match the first matching value (1)', () => {
@@ -304,11 +304,11 @@ describe('the when function: all together now', () => {
   });
 
   it('should work for example from README', () => {
-    const user = { userName: 'Amelie' };
+    const user = { name: 'Amelie' };
 
     const result = when(user)
-        ({ firstName: F }, then((match) => `Hi ${match.F}!`))
-        ({ userName: U }, then((match) => `Hi ${match.U}!`))
+        ({ alias: A }, then((match) => `Hi ${match.A}!`))
+        ({ name: N }, then((match) => `Hi ${match.N}!`))
         (_, then(() => 'Hi!'))
     (end);
 

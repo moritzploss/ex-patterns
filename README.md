@@ -39,13 +39,13 @@ A switch statement based on pattern matching. It accepts any number of match
 clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
-import { when, end, _, F, U } from 'ex-patterns';
+import { when, end, _, A, N } from 'ex-patterns';
 
-const user = { userName: 'Amelie' };
+const user = { name: 'Amelie' };
 
 when(user)
-    ({ firstName: F }, then((match) => `Hi ${match.F}!`))
-    ({ userName: U }, then((match) => `Hi ${match.U}!`))
+    ({ alias: A }, then((match) => `Hi ${match.A}!`))
+    ({ name: N }, then((match) => `Hi ${match.N}!`))
     (_, then(() => 'Hi!'))
 (end);
 
@@ -157,7 +157,7 @@ const composedPattern = { ...cityPattern, ...namePattern };
 const user = { name: 'Amelie', city: 'Stockholm' };
 
 when(value)
-    (composedPattern, then(() => 'has both name and city!'))
+    (composedPattern, then(() => 'has both city and name!'))
     (cityPattern, then(() => 'has only city!'))
     (namePattern, then(() => 'has only name!'))
     (_, then(() => 'has no city and no name!'))
