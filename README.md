@@ -54,21 +54,19 @@ when(user)
 
 ```
 
-#### The [`suppose`](https://github.com/moritzploss/ex-patterns/#the-when-function-1) Function
+#### The [`suppose`](https://github.com/moritzploss/ex-patterns/#the-suppose-function-1) Function
 
 A control flow structure to leverage the power of pattern matching while
 coding for the happy path, similar to Elixir's `with ... do ... else ... end`.
 Takes any number of clauses in the format `(pattern, function)` and checks if
-the return value of `function` matches `pattern.` If true, go to the next clause
-until you reach `then` and execute the callback in the `then` clause. If false,
-pattern match the last "happy path" result against the `otherwise` clauses and
-execute the callback that belongs to the first matching pattern.
+the return value of `function` matches `pattern.` If anything goes wrong,
+switch to the `otherwise` clause, which works like a `when` function.
 
 ```javascript
-import { suppose, then, otherwise, end, _, A, N } from 'ex-patterns';
+import { suppose, then, otherwise, end, N, I, B, S, R } from 'ex-patterns';
 
 suppose
-    (R, await fetch('api/users/123'))
+    (R, _ => await fetch('api/users/123'))
     ({ status: 200 }, matches => matches.R)
     ({ body: { name: N, id: I }}, matches => await matches.R.json())
     (true, matches => isValidUserName(matches.N))

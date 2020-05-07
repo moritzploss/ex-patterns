@@ -16,7 +16,7 @@ describe('the suppose function: base cases', () => {
   it('should execute the then clause if the suppose clause matches (1)', () => {
     const result =
       suppose
-        (1, 1)
+        (1, () => 1)
       (then)
         (() => 'success')
       (otherwise)
@@ -29,7 +29,7 @@ describe('the suppose function: base cases', () => {
   it('should execute the then clause if the suppose clause matches (2)', () => {
     const result =
       suppose
-        (1, 1)
+        (1, () => 1)
         (2, () => 2)
       (then)
         (() => 'success')
@@ -43,7 +43,7 @@ describe('the suppose function: base cases', () => {
   it('should execute the then clause if the suppose clause matches (3)', () => {
     const result =
       suppose
-        (1, 1)
+        (1, () => 1)
         (2, () => 2)
         (3, () => 3)
       (then)
@@ -58,7 +58,7 @@ describe('the suppose function: base cases', () => {
   it('should pipe matches through the suppose clauses (1)', () => {
     const result =
       suppose
-        (A, 1)
+        (A, () => 1)
         (1, ({ A }) => A)
         (1, ({ A }) => A)
       (then)
@@ -73,7 +73,7 @@ describe('the suppose function: base cases', () => {
   it('should pipe matches through the suppose clauses (2)', () => {
     const result =
       suppose
-        (A, 1)
+        (A, () => 1)
         (B, ({ A }) => A + 1)
         ([1, 2], ({ A, B }) => [A, B])
       (then)
@@ -88,7 +88,7 @@ describe('the suppose function: base cases', () => {
   it('should pipe matches to the then clause', () => {
     const result =
       suppose
-        (A, 1)
+        (A, () => 1)
         (B, ({ A }) => A + 1)
         ([1, 2, C], ({ A, B }) => [A, B, 3])
       (then)
@@ -103,7 +103,7 @@ describe('the suppose function: base cases', () => {
   it('should catch if suppose clause does not match', () => {
     const result =
       suppose
-        (2, 1)
+        (2, () => 1)
       (then)
         (() => 'success')
       (otherwise)
@@ -116,7 +116,7 @@ describe('the suppose function: base cases', () => {
   it('should pipe result of first non-matching suppose clause to otherwise clauses', () => {
     const result =
       suppose
-        (2, 1)
+        (2, () => 1)
       (then)
         (() => 'success')
       (otherwise)
@@ -127,25 +127,9 @@ describe('the suppose function: base cases', () => {
     expect(result).to.deep.equal('got it!');
   });
 
-  it('should throw if second argument in first suppose clause is a function', () => {
+  it('should throw if second argument in suppose clause is not a function', () => {
     const func = () => (
         suppose
-          (2, () => 'not a function')
-        (then)
-          (() => 'success')
-        (otherwise)
-          (1, () => 'got it!')
-          (_, () => 'no success!')
-        (end)
-      );
-
-    expect(func).to.throw(Error);
-  });
-
-  it('should throw if second argument in second suppose clause is not a function', () => {
-    const func = () => (
-        suppose
-          (2, 2)
           (2, 'not a function')
         (then)
           (() => 'success')
@@ -158,11 +142,10 @@ describe('the suppose function: base cases', () => {
     expect(func).to.throw(Error);
   });
 
-
   it('should throw if called with end prematurely', () => {
     const func = () => (
         suppose
-          (2, 1)
+          (2, () => 1)
         (end)
       );
 
@@ -172,7 +155,7 @@ describe('the suppose function: base cases', () => {
   it('should throw if then clause is not a function', () => {
     const func = () => (
       suppose
-        (2, 2)
+        (2, () => 2)
       (then)
         ('not a function')
       (otherwise)
