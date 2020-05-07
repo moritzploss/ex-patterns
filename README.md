@@ -652,6 +652,56 @@ when(user)
 > ['Amelie', 31]
 ```
 
+## The `cond` Function
+
+The `cond` function is a switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
+statement. It accepts any number of clauses in the format `(truthy?, value)`
+and works like a chain of `if {} else if {} else {}` statements:
+
+```javascript
+import { cond, end, then } from 'ex-patterns';
+
+cond
+    (false, then('no match'))
+    (false, then('still no match'))
+    (true, then('match'))
+(end);
+```
+
+The `cond` function **returns the value** enclosed in the `then` function of the
+matching clause:
+
+```javascript
+const result = cond
+    (false, then('no match'))
+    (false, then('still no match'))
+    (true, then('match'))
+(end);
+
+result
+> 'match'
+```
+
+Clauses are evaluated **based on** JavaScript's concept of **truthy and falsy**
+values:
+
+```javascript
+cond
+    (false, then('no match'))
+    (0, then('no match'))
+    (-0, then('no match'))
+    ('', then('no match'))
+    (null, then('no match'))
+    (undefined, then('no match'))
+    (NaN, then('no match'))
+    (1, then('this one matches'))   // match
+(end);
+```
+
+As for the `when` function, the `cond` function **throws an error if no matching
+clause** is found. Similarly, it's optional to wrap the return value in the `then`
+function, but recommended for readability.
+
 ## The `suppose` Function
 
 ### Basics
@@ -726,6 +776,7 @@ suppose
 (then)
     (matches => 'all clauses matched!')
 (otherwise)
+    (7, matches => 'I only catch 7s!')
     (A, matches => `I caught it! It's ${matches.A}`)  // 'A' matches value '4'
     (_, () => 'pff! I would have caught it anyway!')
 (end)
@@ -735,7 +786,11 @@ suppose
 
 Thus, you can think of the `otherwise` clause as a `when` function that takes
 the unexpected value as an argument (in fact, that's excatly how it is
-implemented!).
+implemented!). Note though that while this is a great way to get you back on
+track when you unexpectedly left the happy path, runtime errors will still be
+raised and the `suppose` function makes no attempt to catch them. Thus, it's
+good practice to carefully think about the error patterns that you might
+encounter and to write an `otherwise` clause for each one of them!
 
 ### Callback Functions
 
@@ -771,56 +826,6 @@ suppose
     (_, (matches, unmatchedValue, pattern)  => 'hi')    // {}, 'baz', _
 (end)
 ```
-
-## The `cond` Function
-
-The `cond` function is a switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
-statement. It accepts any number of clauses in the format `(truthy?, value)`
-and works like a chain of `if {} else if {} else {}` statements:
-
-```javascript
-import { cond, end, then } from 'ex-patterns';
-
-cond
-    (false, then('no match'))
-    (false, then('still no match'))
-    (true, then('match'))
-(end);
-```
-
-The `cond` function **returns the value** enclosed in the `then` function of the
-matching clause:
-
-```javascript
-const result = cond
-    (false, then('no match'))
-    (false, then('still no match'))
-    (true, then('match'))
-(end);
-
-result
-> 'match'
-```
-
-Clauses are evaluated **based on** JavaScript's concept of **truthy and falsy**
-values:
-
-```javascript
-cond
-    (false, then('no match'))
-    (0, then('no match'))
-    (-0, then('no match'))
-    ('', then('no match'))
-    (null, then('no match'))
-    (undefined, then('no match'))
-    (NaN, then('no match'))
-    (1, then('this one matches'))   // match
-(end);
-```
-
-As for the `when` function, the `cond` function **throws an error if no matching
-clause** is found.
-
 
 ## Examples
 
