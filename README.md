@@ -132,8 +132,7 @@ or when your code is compiled from `TypeScript`.
 
 More importantly, this also means that **it's possible to match against any
 variable in the lexical environment**. If you're coming from Elixir, this is
-equivalent to pattern matching against *pinned variables* (only you don't need
-the `^` here):
+equivalent to pattern matching against *pinned variables*:
 
 ```javascript
 const homeTown = 'Stockholm';
@@ -146,6 +145,25 @@ when(value)
 (end);
 ```
 
+In other words, *patterns* are just plain old JavaScript data structures that
+(can) contain special placeholders. It follows that **patterns are composable**,
+and you can combine, nest, modify and re-use them in whatever way you want:
+
+```javascript
+const cityPattern = { city: C };
+const namePattern = { name: N };
+const composedPattern = { ...cityPattern, ...namePattern };
+
+const user = { name: 'Amelie', city: 'Stockholm' };
+
+when(value)
+    (composedPattern, then(() => 'has both name and city!'))
+    (cityPattern, then(() => 'has only city!'))
+    (namePattern, then(() => 'has only name!'))
+    (_, then(() => 'has no city and no name!'))
+(end);
+```
+
 While pattern matching in JavaScript is great, there are some **pitfalls that
 arise from JavaScript's mutable data types**. For example, if you want to match
 against the tail of an array and return the corresponding elements, there's no
@@ -155,8 +173,8 @@ way around slicing the array and copying the data:
 const value = [1, 2, 3, 4, 5];
 
 when(value)
-    ([5, 4, 3, tail], then(() => 'tail not bound! no need to slice 🙂'))
-    ([1, 2, tail(A)], then(({ A }) => 'tail bound to A! need to slice 🙁'))
+    ([1, 2, 3, tail], then(() => 'tail not bound! no need to slice 🙂'))
+    ([_, _, tail(A)], then(({ A }) => 'tail bound to A! need to slice 🙁'))
     (_, then(() => 'always matches!'))
 (end);
 ```
