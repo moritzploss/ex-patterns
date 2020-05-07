@@ -182,7 +182,7 @@ when(value)
 To avoid the performance issues that come with copying data, copies are only
 created when necessary. Moreover, the package comes with **first class support
 for Immutable.js collections**. This means that you can simply match against
-immutable `List` and `Map` structures as if they were plain old JavaScript
+immutable `List` and `Map` structures as if they were regular JavaScript
 arrays and objects!
 
 ## The `match` Function
