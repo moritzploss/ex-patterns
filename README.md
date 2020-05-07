@@ -80,25 +80,19 @@ A control flow structure to leverage the power of pattern matching while
 coding for the happy path, similar to Elixir's `with`. Takes any number of
 clauses in the format `(pattern, function)` and checks if the return value of
 `function` matches `pattern`. Matches are piped through the `suppose` clauses
-until the `then` callback is reached. If anything goes wrong, control flow is
-handed over to the `otherwise` clause, which works like a `when` function.
+until the `then` callback is reached. Can be combined with an optional [`otherwise`](https://github.com/moritzploss/ex-patterns#catching-errors) clause.
 
 ```javascript
 import { suppose, then, otherwise, end, N, I, B, S, R } from 'ex-patterns';
 
 suppose
-    (R, _ => await fetch('api/users/123'))
+    (R, () => await fetch('api/users/123'))
     ({ status: 200 }, matches => matches.R)
     ({ body: { name: N, id: I }}, matches => await matches.R.json())
     (true, matches => isValidUserName(matches.N))
     (true, matches => isUniqueUserId(matches.I))
 (then)
     (matches => `Welcome ${matches.N}`)
-(otherwise)
-    ({ status: S }, matches => `Got status ${matches.S}`)
-    ({ body: B }, matches => `Body has no user data: ${matches.B}`)
-    (false, () => 'Name or ID validation failed')
-    (_, () => 'Ooops! Something unexpected happened!')
 (end);
 ```
 
@@ -117,6 +111,10 @@ suppose
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
     * [Callback Functions](https://github.com/moritzploss/ex-patterns#callback-functions)
+* [The `suppose` Function](https://github.com/moritzploss/ex-patterns/#the-suppose-function-1)
+    * [Catching Errors](https://github.com/moritzploss/ex-patterns/#callback-functions-1)
+    * [Catching Errors](https://github.com/moritzploss/ex-patterns/#basics-2)
+    * [Callback functions](https://github.com/moritzploss/ex-patterns/#callback-functions-1)
 * [The `cond` Function](https://github.com/moritzploss/ex-patterns/#the-cond-function-1)
 * [Examples](https://github.com/moritzploss/ex-patterns#examples)
     * [HTTP Request Processing with `fetch`](https://github.com/moritzploss/ex-patterns#http-request-processing-with-fetch)
@@ -652,6 +650,126 @@ when(user)
 (end);
 
 > ['Amelie', 31]
+```
+
+## The `suppose` Function
+
+### Basics
+
+The `suppose` function is a control flow structure that performs a series of
+pattern matches before executing the final `then` callback. The function takes
+any amount of `suppose` clauses in the format `(pattern, function)` and proceeds
+from top to bottom as long as all matches succeed.
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+suppose
+    (A, () => 1)    // A matches 1, go to next line
+    (B, () => 2)    // B matches 2, go to next line
+    (C, () => 3)    // C matches 3, execute 'then' callback
+(then)
+    (() => 'all clauses matched!'))
+(end)
+```
+
+Matches against named placeholders are piped along and can be accessed in all
+`suppose` clauses and the `then` callback:
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+suppose
+    (A, () => 1)
+    (B, matches => matches.A + 1)
+    (C, matches => matches.B + 1)
+(then)
+    (matches => [matches.A, matches.B, matches.C])
+(end)
+
+```
+
+If all clauses match, the control flow structure returns the return value of
+the `then` callback:
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+const result = suppose
+    (A, () => 1)
+    (B, matches => matches.A + 1)
+    (C, matches => matches.B + 1)
+(then)
+    (matches => [matches.A, matches.B, matches.C])
+(end)
+
+result
+> [1, 2, 3]
+```
+
+### Catching Errors
+
+If any of the `suppose` clauses returns an unexpected value that does not match
+the pattern specified in the clause, an error is thrown. To avoid
+the error, any number of `otherwise` clauses in the format `(pattern, callback)`
+can be inserted before `end`. The patterns are matched against the
+unexpected value, and the callback that belongs to the first matching pattern
+will be executed:
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+suppose
+    (1, () => 1)
+    (2, () => 2)
+    (3, () => 4)    // value '4' does not match pattern '3'
+(then)
+    (matches => 'all clauses matched!')
+(otherwise)
+    (A, matches => `I caught it! It's ${matches.A}`)  // 'A' matches value '4'
+    (_, () => 'pfff! I would have caught it anyway!')
+(end)
+
+> 'caught it!'
+```
+
+Thus, you can think of the `otherwise` clause as a `when` function that takes
+the unexpected value as an argument (in fact, that's excatly how it is
+implemented!).
+
+### Callback Functions
+
+The functions in the `suppose` clauses are passed the piped matches as their 
+only argument. The same is true for the `then` callback.
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+suppose                     // function arguments:
+    (A, () => 1)            // {}
+    (B, matches => 1)       // { A: 1 }
+    (C, matches => 1)       // { A: 1, B: 1 }
+(then)
+    (matches => 'foo')      // { A: 1, B: 1, C: 1 }
+(end)
+```
+
+The match callbacks in the `otherwise` clauses are passed the same arguments as
+the callbacks of the `when` function.
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+suppose
+    (A, () => 1)
+    (2, matches => 'baz')       // no match
+    (C, matches => 1)
+(then)
+    (matches => 'foo')
+(otherwise)                                             // function arguments:
+    (D, (matches, unmatchedValue, pattern)  => 'hi')    // { D: 'baz' }, 'baz', D
+    (_, (matches, unmatchedValue, pattern)  => 'hi')    // {}, 'baz', _
+(end)
 ```
 
 ## The `cond` Function
