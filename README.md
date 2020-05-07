@@ -54,34 +54,6 @@ when(user)
 
 ```
 
-#### The [`suppose`](https://github.com/moritzploss/ex-patterns/#the-suppose-function-1) Function
-
-A control flow structure to leverage the power of pattern matching while
-coding for the happy path, similar to Elixir's `with ... do ... else ... end`.
-Takes any number of clauses in the format `(pattern, function)` and checks if
-the return value of `function` matches `pattern.` If anything goes wrong,
-switch to the `otherwise` clause, which works like a `when` function.
-
-```javascript
-import { suppose, then, otherwise, end, N, I, B, S, R } from 'ex-patterns';
-
-suppose
-    (R, _ => await fetch('api/users/123'))
-    ({ status: 200 }, matches => matches.R)
-    ({ body: { name: N, id: I }}, matches => await matches.R.json())
-    (true, matches => isValidUserName(matches.N))
-    (true, matches => isUniqueUserId(matches.I))
-(then)
-    (matches => `Welcome ${matches.N}`)
-(otherwise)
-    ({ status: S }, matches => `Got status ${matches.S}`)
-    ({ body: B }, matches => `Body has no user data: ${matches.B}`)
-    (false, () => 'Name or ID validation failed')
-    (_, () => 'Ooops! Something unexpected happened!')
-(end);
-```
-
-
 #### The [`cond`](https://github.com/moritzploss/ex-patterns/#the-cond-function-1) Function
 
 A compact switch statement that accepts any number of clauses in the format
@@ -100,6 +72,35 @@ const fizzBuzz = (number) => cond
 
 fizzBuzz(5)
 > 'buzz'
+```
+
+#### The [`suppose`](https://github.com/moritzploss/ex-patterns/#the-suppose-function-1) Function
+
+A control flow structure to leverage the power of pattern matching while
+coding for the happy path, similar to Elixir's `with ... do ... else ... end`.
+Takes any number of clauses in the format `(pattern, function)` and checks if
+the return value of `function` matches `pattern`. Matches are piped through the
+`suppose` clauses until the `then` callback is reached. If anything goes wrong,
+control flow is handed over to the `otherwise` clause, which works like a `when`
+function.
+
+```javascript
+import { suppose, then, otherwise, end, N, I, B, S, R } from 'ex-patterns';
+
+suppose
+    (R, _ => await fetch('api/users/123'))
+    ({ status: 200 }, matches => matches.R)
+    ({ body: { name: N, id: I }}, matches => await matches.R.json())
+    (true, matches => isValidUserName(matches.N))
+    (true, matches => isUniqueUserId(matches.I))
+(then)
+    (matches => `Welcome ${matches.N}`)
+(otherwise)
+    ({ status: S }, matches => `Got status ${matches.S}`)
+    ({ body: B }, matches => `Body has no user data: ${matches.B}`)
+    (false, () => 'Name or ID validation failed')
+    (_, () => 'Ooops! Something unexpected happened!')
+(end);
 ```
 
 # Documentation
