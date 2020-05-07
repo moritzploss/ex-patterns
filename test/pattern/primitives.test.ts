@@ -21,6 +21,26 @@ describe('the match function: primitives', () => {
     expect(status).to.be.true;
   });
 
+  it('should match two booleans if they are equal', () => {
+    const [status, matches] = match(true, true);
+    expect(status).to.be.true;
+  });
+
+  it('should not match two booleans if they are not equal', () => {
+    const [status, matches] = match(true, false);
+    expect(status).to.be.false;
+  });
+
+  it('should not match falsy values with booleans', () => {
+    const [status, matches] = match(0, false);
+    expect(status).to.be.false;
+  });
+
+  it('should not match booleans with falsy values', () => {
+    const [status, matches] = match(false, 0);
+    expect(status).to.be.false;
+  });
+
   it('should match two strings if they are equal', () => {
     const [status, matches] = match('hello', 'hello');
     expect(status).to.be.true;

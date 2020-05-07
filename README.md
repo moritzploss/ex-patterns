@@ -140,8 +140,8 @@ const homeTown = 'Stockholm';
 const value = { city: 'Stockholm' };
 
 when(value)
-    ({ city: 'Berlin' }, then(() => 'no match! many libraries can do this well!'))
-    ({ city: homeTown }, then(() => 'match! this is tricky for some libraries!'))
+    ({ city: 'Berlin' }, then(() => 'many libraries do this quite well!'))
+    ({ city: homeTown }, then(() => 'this is tricky for some libraries!'))
     (_, then(() => 'always matches!'))
 (end);
 ```
