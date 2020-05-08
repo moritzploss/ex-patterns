@@ -45,8 +45,8 @@ import { when, end, then, _, A, N } from 'ex-patterns';
 const user = { name: 'Amelie' };
 
 when(user)
-    ({ alias: A }, then(matches => `Hi ${matches.A}!`))
-    ({ name: N }, then(matches => `Hi ${matches.N}!`))
+    ({ alias: A }, then(({ A }) => `Hi ${A}!`))
+    ({ name: N }, then(({ N }) => `Hi ${N}!`))
     (_, then(() => 'Hi!'))
 (end);
 
@@ -80,8 +80,7 @@ A control flow structure to leverage the power of pattern matching while
 coding for the happy path, similar to Elixir's `with`. Takes any number of
 clauses in the format `(pattern, function)` and checks if the return value of
 `function` matches `pattern`. Matches are piped through the `suppose` clauses
-until the `then` callback is reached. If anything goes wrong, control flow is
-handed over to the `otherwise` clause, which works like a `when` function.
+until the `then` callback is reached. Can be combined with an optional [`otherwise`](https://github.com/moritzploss/ex-patterns#catching-errors) clause.
 
 ```javascript
 import { suppose, then, otherwise, end, N, I, B, S, R } from 'ex-patterns';
@@ -93,11 +92,6 @@ suppose
     (true, matches => isUniqueUserId(matches.I))
 (then)
     (matches => `Welcome ${matches.N}`)
-(otherwise)
-    ({ status: S }, matches => `Got status ${matches.S}`)
-    ({ body: B }, matches => `Body has no user data: ${matches.B}`)
-    (false, () => 'Name or ID validation failed')
-    (_, () => 'Ooops! Something unexpected happened!')
 (end);
 ```
 
@@ -112,11 +106,16 @@ suppose
     * [Named Placeholders](https://github.com/moritzploss/ex-patterns#named-placeholders)
     * [Array-like Data Types](https://github.com/moritzploss/ex-patterns#array-like-data-types)
     * [Map-like Data Types](https://github.com/moritzploss/ex-patterns#map-like-data-types)
+    * [Parent Capturing](https://github.com/moritzploss/ex-patterns#parent-capturing)
 * [The `when` Function](https://github.com/moritzploss/ex-patterns/#the-when-function-1)
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-1)
     * [Pattern Matching](https://github.com/moritzploss/ex-patterns#pattern-matching)
     * [Callback Functions](https://github.com/moritzploss/ex-patterns#callback-functions)
 * [The `cond` Function](https://github.com/moritzploss/ex-patterns/#the-cond-function-1)
+* [The `suppose` Function](https://github.com/moritzploss/ex-patterns/#the-suppose-function-1)
+    * [Basics](https://github.com/moritzploss/ex-patterns/#basics-2)
+    * [Catching Errors](https://github.com/moritzploss/ex-patterns/#catching-errors)
+    * [Callback Functions](https://github.com/moritzploss/ex-patterns/#callback-functions-1)
 * [Examples](https://github.com/moritzploss/ex-patterns#examples)
     * [HTTP Request Processing with `fetch`](https://github.com/moritzploss/ex-patterns#http-request-processing-with-fetch)
 
@@ -537,7 +536,7 @@ when you're interested in specific properties *and* the entire data structure.
 For example:
 
 ```javascript
-// image this object has a lot of properties
+// imagine this object has a lot of properties
 const value = { name: 'Amelie', id: '123' }
 
 // Option 1: match against name, but loose reference to 'value' as a whole
@@ -580,7 +579,7 @@ when(await fetch('api/user/123'))
 (end);
 ```
 
-This situation can be avoided using parent capturing:
+Enter parent capturing:
 
 ```javascript
 import { when, then, S, R } from 'ex-patterns';
@@ -642,7 +641,7 @@ when(value)                     // start `when` control flow structure with `val
 Each match clause takes two arguments: the first is a pattern (see above) that
 will be matched against `value`, the second a callback function that will be
 invoked when the match is successful. It's recommend to wrap the callback function
-inside `then` for readability, but it's optional (the `then` function is just
+inside **`then` for readability, but it's optional** (the `then` function is just
 syntactic sugar).
 
 In the following case, `value` will match the second clause; clauses that come
@@ -782,8 +781,132 @@ cond
 ```
 
 As for the `when` function, the `cond` function **throws an error if no matching
-clause** is found.
+clause** is found. Similarly, it's optional to wrap the return value in the `then`
+function, but recommended for readability.
 
+## The `suppose` Function
+
+### Basics
+
+The `suppose` function is a control flow structure that **performs a series of
+pattern matches** before executing the final `then` callback. The function takes
+any amount of `suppose` clauses in the format `(pattern, function)` and **proceeds
+from top to bottom** as long as all matches succeed.
+
+```javascript
+import { suppose, then, end, A, B, C, D, _ } from 'ex-patterns';
+
+suppose
+    (A, () => 1)    // A matches 1, go to next line
+    (B, () => 2)    // B matches 2, go to next line
+    (C, () => 3)    // C matches 3, execute 'then' callback
+(then)
+    (() => 'all clauses matched!'))
+(end)
+```
+
+**Matches** against named placeholders **are piped along** and can be accessed in all
+`suppose` clauses and the `then` callback:
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+suppose
+    (A, () => 1)
+    (B, matches => matches.A + 1)
+    (C, matches => matches.B + 1)
+(then)
+    (matches => [matches.A, matches.B, matches.C])
+(end)
+
+```
+
+If all clauses match, the control flow structure **returns the return value of
+the `then` callback**:
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+const result = suppose
+    (A, () => 1)
+    (B, matches => matches.A + 1)
+    (C, matches => matches.B + 1)
+(then)
+    (matches => [matches.A, matches.B, matches.C])
+(end)
+
+result
+> [1, 2, 3]
+```
+
+### Catching Errors
+
+**If** any of the `suppose` clauses returns a **value that does not match**
+the pattern specified in the clause, an **error is thrown**. To avoid
+the error, any number of `otherwise` clauses in the format `(pattern, callback)`
+can be inserted before `end`. The **patterns are matched against the value**,
+and the callback that belongs to the first matching pattern will be executed:
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+suppose
+    (1, () => 1)
+    (2, () => 2)
+    (3, () => 4)    // value '4' does not match pattern '3'
+(then)
+    (matches => 'all clauses matched!')
+(otherwise)
+    (7, matches => 'I only catch 7s!')
+    (A, matches => `I caught it! It's ${matches.A}`)  // 'A' matches value '4'
+    (_, () => 'pff! I would have caught it anyway!')
+(end)
+
+> "I caught it! It's 4"
+```
+
+Thus, you can think of the `otherwise` clause as a `when` function that takes
+the first non-matching function return as an argument (that's exactly
+how it is implemented by the way!). While this is a great way to get your program
+back on the happy path, runtime errors will still be raised and the `suppose`
+function makes no attempt to catch them. Therefore, it's good practice to carefully
+think about the non-matching patterns that you might encounter in your `suppose`
+clauses and to write an `otherwise` clause for each one of them!
+
+### Callback Functions
+
+The functions in the `suppose` clauses are passed the piped matches as their 
+only argument. The same is true for the `then` callback.
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+suppose                     // function arguments:
+    (A, () => 1)            // {}
+    (B, matches => 1)       // { A: 1 }
+    (C, matches => 1)       // { A: 1, B: 1 }
+(then)
+    (matches => 'foo')      // { A: 1, B: 1, C: 1 }
+(end)
+```
+
+The match callbacks in the `otherwise` clauses are passed the same arguments as
+the callbacks of the `when` function.
+
+```javascript
+import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
+
+suppose
+    (A, () => 1)
+    (2, matches => 'baz')       // no match
+    (C, matches => 1)
+(then)
+    (matches => 'foo')
+(otherwise)                                             // function arguments:
+    (D, (matches, unmatchedValue, pattern)  => 'hi')    // { D: 'baz' }, 'baz', D
+    (_, (matches, unmatchedValue, pattern)  => 'hi')    // {}, 'baz', _
+(end)
+```
 
 ## Examples
 

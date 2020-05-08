@@ -7,7 +7,6 @@
 /* eslint-disable arrow-parens */
 /* eslint-disable operator-linebreak */
 
-
 import { expect } from 'chai';
 
 import { suppose, then, end, otherwise, _, A, B, C, D, E, F, G, V } from '../../src';
@@ -153,6 +152,29 @@ describe('the suppose function: base cases', () => {
         (end)
       );
 
+    expect(func).to.throw(Error);
+  });
+
+  it('should return happy path result if called with end and all clauses matched', () => {
+    const result = (
+        suppose
+          (A, () => 1)
+        (then)
+          (({ A }) => A + 1)
+        (end)
+      );
+
+    expect(result).to.deep.equal(2);
+  });
+
+  it('should throw if called with end of happy path and not all clauses matched', () => {
+    const func = () => (
+        suppose
+          (2, () => 1)
+        (then)
+          (({ A }) => A + 1)
+        (end)
+      );
     expect(func).to.throw(Error);
   });
 
