@@ -85,7 +85,7 @@ until the `then` callback is reached. Can be combined with an optional [`otherwi
 ```javascript
 import { suppose, then, otherwise, end, N, I, R } from 'ex-patterns';
 
-const response = ...
+const response = await ...
 
 suppose
     (R({ status: 200 }), () => response)
@@ -150,7 +150,7 @@ b = [1, 2, 3]  // match
 
 ### Why this Library?
 
-It's hardly surprising that `ex-patterns` isn't the only pattern matching library
+It's not surprising that `ex-patterns` isn't the only pattern matching library
 in the JavaScript universe; however, it can do a couple of things that others have
 problems with.
 
@@ -168,16 +168,16 @@ const value = { city: 'Stockholm' };
 
 when(value)
     ({ city: 'Stockholm' }, then(() => 'many libraries can do this!'))
-    ({ city: homeTown }, then(() => 'this is tricky for some libraries!'))
+    ({ city: homeTown }, then(() => 'this is not supported by some!'))
     (_, then(() => 'many libraries can do this!'))
 (end);
 ```
 
 In other words, *patterns* are just plain old JavaScript data structures that
-(can) contain special placeholders. It follows that **patterns are composable**,
-and you can combine, nest, modify and re-use them in whatever way you want (
-you can even do something called [*parent capturing*](https://github.com/moritzploss/ex-patterns#parent-capturing),
-which is prettry neat and not widely supported in other libraries):
+(can) contain special placeholders. Because of that, **patterns are composable**
+and can be combined, nested, modified and re-used in all kinds of ways (you
+can even do something called [*parent capturing*](https://github.com/moritzploss/ex-patterns#parent-capturing),
+which is pretty neat and not widely supported in other libraries):
 
 ```javascript
 const cityPattern = { city: C };
@@ -186,7 +186,7 @@ const composedPattern = { ...cityPattern, ...namePattern };
 
 const user = { name: 'Amelie', city: 'Stockholm' };
 
-when(value)
+when(user)
     (composedPattern, then(() => 'has both city and name!'))
     (cityPattern, then(() => 'has only city!'))
     (namePattern, then(() => 'has only name!'))
@@ -194,8 +194,7 @@ when(value)
 (end);
 ```
 
-While pattern matching in JavaScript is great, there are some **pitfalls that
-arise from JavaScript's mutable data types**. For example, if you want to match
+While pattern matching in JavaScript is great, there are some **problems related to JavaScript's mutable data types**. For example, if you want to match
 against the tail of an array and return the corresponding elements, there's no
 way around slicing the array and copying the data:
 
@@ -209,11 +208,12 @@ when(value)
 (end);
 ```
 
-To avoid the performance issues that come with copying data, copies are only
-created when necessary. Moreover, the package comes with **first class support
-for Immutable.js collections**. This means that you can simply match against
+To avoid the performance penalties that come with copying data, copies are only created when it's absolutely necessary. Moreover, the package comes with **first class support
+for Immutable.js collections**, which means that you can simply match against
 immutable `List` and `Map` structures as if they were regular JavaScript
 arrays and objects!
+
+Finally, `ex-patterns` does not only come with a powerful pattern matching algorithm, but a whole array of **control flow structures that can change the way you think about programming** in JavaScript. Have fun!
 
 ## The `match` Function
 
