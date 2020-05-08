@@ -83,13 +83,13 @@ clauses in the format `(pattern, function)` and checks if the return value of
 until the `then` callback is reached. Can be combined with an optional [`otherwise`](https://github.com/moritzploss/ex-patterns#catching-errors) clause.
 
 ```javascript
-import { suppose, then, otherwise, end, N, I, B, R } from 'ex-patterns';
+import { suppose, then, otherwise, end, N, I, R } from 'ex-patterns';
 
 const response = ...
 
 suppose
     (R({ status: 200 }), () => response)
-    ({ body: { name: N, id: I }}, () => response)
+    ({ body: { name: N, id: I }}, matches => matches.R)
     (true, matches => isValidUserName(matches.N))
     (true, matches => isUniqueUserId(matches.I))
 (then)
