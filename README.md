@@ -784,13 +784,12 @@ suppose
 ```
 
 Thus, you can think of the `otherwise` clause as a `when` function that takes
-the first non-matching function return as an argument. (that's excatly
-how it is implemented by the way!). Note though that while this is a great way
-to get you back on track when your program strayed away from the happy path,
-runtime errors will still be raised and the `suppose` function makes no attempt
-to catch them. Thus, it's good practice to carefully think about the non-matching
-patterns that you might encounter in your `suppose` clauses and to write an
-`otherwise` clause for each one of them!
+the first non-matching function return as an argument (that's exactly
+how it is implemented by the way!). While this is a great way to get your program
+back on the happy path, runtime errors will still be raised and the `suppose`
+function makes no attempt to catch them. Therefore, it's good practice to carefully
+think about the non-matching patterns that you might encounter in your `suppose`
+clauses and to write an `otherwise` clause for each one of them!
 
 ### Callback Functions
 
