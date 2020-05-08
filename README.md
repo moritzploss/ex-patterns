@@ -40,7 +40,7 @@ control flow structure. It accepts any number of match
 clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
-import { when, end, then, _, A, N, H } from 'ex-patterns';
+import { when, end, then, _, A, H, N } from 'ex-patterns';
 
 const sayHi = (user) => when(user)
     ({ name:    N }, then(({ N }) => `Hi ${N}!`))
@@ -82,13 +82,13 @@ clauses in the format `(pattern, function)` and checks if the return value of
 until the `then` callback is reached. Can be combined with an optional [`otherwise`](https://github.com/moritzploss/ex-patterns#catching-errors) clause.
 
 ```javascript
-import { suppose, then, otherwise, end, N, I, R } from 'ex-patterns';
+import { suppose, then, otherwise, end, I, N, R } from 'ex-patterns';
 
 const response = await ...
 
 suppose
-    (R({ status: 200 }), () => response)
-    ({ body: { name: N, id: I }}, matches => matches.R)
+    ({ status: 200 }, () => response)
+    ({ body: { name: N, id: I }}, () => response)
     (true, matches => isValidUserName(matches.N))
     (true, matches => isUniqueUserId(matches.I))
 (then)
