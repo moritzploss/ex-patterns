@@ -85,9 +85,11 @@ until the `then` callback is reached. Can be combined with an optional [`otherwi
 ```javascript
 import { suppose, then, otherwise, end, N, I, B, R } from 'ex-patterns';
 
+const response = ...
+
 suppose
-    (R({ status: 200 }), async _ => fetch('api/users/123'))
-    ({ body: { name: N, id: I }}, async matches => matches.R.json())
+    (R({ status: 200 }), () => response)
+    ({ body: { name: N, id: I }}, response)
     (true, matches => isValidUserName(matches.N))
     (true, matches => isUniqueUserId(matches.I))
 (then)
@@ -116,8 +118,6 @@ suppose
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-2)
     * [Catching Errors](https://github.com/moritzploss/ex-patterns/#catching-errors)
     * [Callback Functions](https://github.com/moritzploss/ex-patterns/#callback-functions-1)
-* [Examples](https://github.com/moritzploss/ex-patterns#examples)
-    * [HTTP Request Processing with `fetch`](https://github.com/moritzploss/ex-patterns#http-request-processing-with-fetch)
 
 ## Introduction
 
@@ -904,34 +904,4 @@ suppose
     (D, (matches, unmatchedValue, pattern)  => 'hi')    // { D: 'baz' }, 'baz', D
     (_, (matches, unmatchedValue, pattern)  => 'hi')    // {}, 'baz', _
 (end)
-```
-
-## Examples
-
-### HTTP Request Processing with `fetch`
-
-The fact that all `ex-patterns` control flow structures return a result allows
-for expressive code when they are wrapped in a lambda function with implicit
-return. For example, here is a function `processResponse` that makes a call to
-an external API and -- if all goes well -- returns a welcome message:
-
-```javascript
-import { suppose, then, end, otherwise, E, I, N, R, S, _ } from 'ex-patterns';
-
-const fetchUserData = async (url, options) => (
-    suppose
-        (R({ status: 200 }), async () => fetch(url, options))
-        ({ body: { name: N, id: I }}, async (matches) => matches.R.json())
-        (true, matches => isValidUserName(matches.N))
-        (true, matches => isUniqueUserId(matches.I))
-    (then)
-        (matches => `Welcome ${matches.N}`)
-    (otherwise)
-        ({ status: S, error: E }, ({ E, S }) => `Got status ${S} with error ${E}`)
-        ({ status: S }, ({ S }) => `Got status ${S} with no error`)
-        (false, () => 'User data validation failed')
-        (_, () => 'Something went wrong in an unexpected way')
-    (end)
-);
-
 ```

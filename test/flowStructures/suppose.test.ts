@@ -11,6 +11,7 @@ import { expect } from 'chai';
 import fetch from 'node-fetch';
 
 import { suppose, then, end, otherwise, _, R, S, A, B, C, D, E, F, G, V } from '../../src';
+import { supposeAsync } from '../../src/flowStructures/supposeAsync';
 
 describe('the suppose function: base cases', () => {
   it('should execute the then clause if the suppose clause matches (1)', () => {
