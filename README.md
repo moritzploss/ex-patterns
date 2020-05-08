@@ -40,18 +40,17 @@ control flow structure. It accepts any number of match
 clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
-import { when, end, then, _, A, N } from 'ex-patterns';
+import { when, end, then, _, A, N, H } from 'ex-patterns';
 
-const user = { name: 'Amelie' };
-
-when(user)
-    ({ alias: A }, then(({ A }) => `Hi ${A}!`))
-    ({ name: N }, then(({ N }) => `Hi ${N}!`))
+const sayHi = (user) => when(user)
+    ({ name:    N }, then(({ N }) => `Hi ${N}!`))
+    ({ alias:   A }, then(({ A }) => `Hi ${A}!`))
+    ({ handle:  H }, then(({ H }) => `Hi ${H}!`))
     (_, then(() => 'Hi!'))
 (end);
 
+sayHi({ name: 'Amelie' });
 > 'Hi Amelie!'
-
 ```
 
 #### The [`cond`](https://github.com/moritzploss/ex-patterns/#the-cond-function-1) Function
