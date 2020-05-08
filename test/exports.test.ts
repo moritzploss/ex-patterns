@@ -23,4 +23,9 @@ describe('the package', () => {
     const isValidExport = placeholders.every(isPlaceholder);
     expect(isValidExport).to.be.true;
   });
+
+  it('should export named placeholders as functions from A to Z', () => {
+    const isValidExport = placeholders.every(placeholder => isPlaceholder(placeholder()));
+    expect(isValidExport).to.be.true;
+  });
 });

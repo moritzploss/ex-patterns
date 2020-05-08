@@ -4,7 +4,7 @@ import { isKeyword, throwBindError } from './keyword';
 
 export type Head = {
   symbol: Symbol;
-  name: 'head';
+  lookupName: 'head';
   bindTo: Placeholder;
 }
 
@@ -16,7 +16,7 @@ const head = (placeholder = _): Head => {
   }
   return {
     symbol: headSymbol,
-    name: 'head',
+    lookupName: 'head',
     bindTo: placeholder,
   };
 };

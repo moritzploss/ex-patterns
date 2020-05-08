@@ -1,7 +1,8 @@
 import { _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } from './symbols';
 import { hasKey, isObject } from './util';
 
-export type Placeholder = { name: string; symbol: Symbol };
+
+export type Placeholder = { lookupName: string; symbol: Symbol };
 
 const namedPlaceholders = [
   A, B, C, D, E, F, G, H, I, J, K, L, M,
@@ -9,19 +10,19 @@ const namedPlaceholders = [
 ];
 
 const symbolsByName: Record<string, Symbol> = namedPlaceholders.reduce(
-  (acc, { symbol, name }) => ({ ...acc, [name]: symbol }), {},
+  (acc, { symbol, lookupName }) => ({ ...acc, [lookupName]: symbol }), {},
 );
 
-const lookup = (name: string): Symbol | undefined => symbolsByName[name];
+const lookup = (lookupName: string): Symbol | undefined => symbolsByName[lookupName];
 
 const isNamedPlaceholder = (value: any): boolean => {
-  if (!isObject(value)) {
+  if (value === null || value === undefined) {
     return false;
   }
-  if (!(hasKey(value, 'symbol') && hasKey(value, 'name'))) {
+  if (!(hasKey(value, 'symbol') && hasKey(value, 'lookupName'))) {
     return false;
   }
-  return lookup(value.name) === value.symbol;
+  return lookup(value.lookupName) === value.symbol;
 };
 
 const isUnnamedPlaceholder = (value: any): boolean => {

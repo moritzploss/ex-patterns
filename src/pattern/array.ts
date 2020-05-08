@@ -92,7 +92,7 @@ const matchArray = (pattern: Pattern, array: ListLike, arrayLen: number, getElem
       return [ok, [true, acc]];
     }
     if (isReservedKeyword(elm)) {
-      throw Error(`Reserved keyword ${elm.name} used in invalid position.`);
+      throw Error(`Reserved keyword ${elm.lookupName} used in invalid position.`);
     }
     const arrayElement = getElement(i + headOffset);
     [isMatch, acc] = matchFunc(elm, arrayElement, acc); // eslint-disable-line no-param-reassign

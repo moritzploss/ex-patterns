@@ -99,6 +99,20 @@ describe('the suppose function: base cases', () => {
     expect(result).to.deep.equal([1, 2, 3]);
   });
 
+  it('should work with parent capturing', () => {
+    const result =
+      suppose
+        (A({ name: 'foo' }), () => ({ name: 'foo', id: '123' }))
+        (A, ({ A }) => A)
+      (then)
+        (({ A }) => A)
+      (otherwise)
+        (_, () => 'no success')
+      (end);
+
+    expect(result).to.deep.equal({ name: 'foo', id: '123' });
+  });
+
   it('should catch if suppose clause does not match', () => {
     const result =
       suppose

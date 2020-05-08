@@ -1,31 +1,84 @@
-export const _ = { name: '_', symbol: Symbol('_') };
+export const _ = { lookupName: '_', symbol: Symbol('_') };
 
-export const A = { name: 'A', symbol: Symbol('A') };
-export const B = { name: 'B', symbol: Symbol('B') };
-export const C = { name: 'C', symbol: Symbol('C') };
-export const D = { name: 'D', symbol: Symbol('D') };
-export const E = { name: 'E', symbol: Symbol('E') };
-export const F = { name: 'F', symbol: Symbol('F') };
-export const G = { name: 'G', symbol: Symbol('G') };
-export const H = { name: 'H', symbol: Symbol('H') };
-export const I = { name: 'I', symbol: Symbol('I') };
-export const J = { name: 'J', symbol: Symbol('J') };
-export const K = { name: 'K', symbol: Symbol('K') };
-export const L = { name: 'L', symbol: Symbol('L') };
-export const M = { name: 'M', symbol: Symbol('M') };
-export const N = { name: 'N', symbol: Symbol('N') };
-export const O = { name: 'O', symbol: Symbol('O') };
-export const P = { name: 'P', symbol: Symbol('P') };
-export const Q = { name: 'Q', symbol: Symbol('Q') };
-export const R = { name: 'R', symbol: Symbol('R') };
-export const S = { name: 'S', symbol: Symbol('S') };
-export const T = { name: 'T', symbol: Symbol('T') };
-export const U = { name: 'U', symbol: Symbol('U') };
-export const V = { name: 'V', symbol: Symbol('V') };
-export const W = { name: 'W', symbol: Symbol('W') };
-export const X = { name: 'X', symbol: Symbol('X') };
-export const Y = { name: 'Y', symbol: Symbol('Y') };
-export const Z = { name: 'Z', symbol: Symbol('Z') };
+const a = { lookupName: 'A', symbol: Symbol('A') };
+const b = { lookupName: 'B', symbol: Symbol('B') };
+const c = { lookupName: 'C', symbol: Symbol('C') };
+const d = { lookupName: 'D', symbol: Symbol('D') };
+const e = { lookupName: 'E', symbol: Symbol('E') };
+const f = { lookupName: 'F', symbol: Symbol('F') };
+const g = { lookupName: 'G', symbol: Symbol('G') };
+const h = { lookupName: 'H', symbol: Symbol('H') };
+const i = { lookupName: 'I', symbol: Symbol('I') };
+const j = { lookupName: 'J', symbol: Symbol('J') };
+const k = { lookupName: 'K', symbol: Symbol('K') };
+const l = { lookupName: 'L', symbol: Symbol('L') };
+const m = { lookupName: 'M', symbol: Symbol('M') };
+const n = { lookupName: 'N', symbol: Symbol('N') };
+const o = { lookupName: 'O', symbol: Symbol('O') };
+const p = { lookupName: 'P', symbol: Symbol('P') };
+const q = { lookupName: 'Q', symbol: Symbol('Q') };
+const r = { lookupName: 'R', symbol: Symbol('R') };
+const s = { lookupName: 'S', symbol: Symbol('S') };
+const t = { lookupName: 'T', symbol: Symbol('T') };
+const u = { lookupName: 'U', symbol: Symbol('U') };
+const v = { lookupName: 'V', symbol: Symbol('V') };
+const w = { lookupName: 'W', symbol: Symbol('W') };
+const x = { lookupName: 'X', symbol: Symbol('X') };
+const y = { lookupName: 'Y', symbol: Symbol('Y') };
+const z = { lookupName: 'Z', symbol: Symbol('Z') };
+
+/* istanbul ignore next */
+export const A = Object.assign((subPattern: any = a) => ({ subPattern, ...a }), a);
+/* istanbul ignore next */
+export const B = Object.assign((subPattern: any = b) => ({ subPattern, ...b }), b);
+/* istanbul ignore next */
+export const C = Object.assign((subPattern: any = c) => ({ subPattern, ...c }), c);
+/* istanbul ignore next */
+export const D = Object.assign((subPattern: any = d) => ({ subPattern, ...d }), d);
+/* istanbul ignore next */
+export const E = Object.assign((subPattern: any = e) => ({ subPattern, ...e }), e);
+/* istanbul ignore next */
+export const F = Object.assign((subPattern: any = f) => ({ subPattern, ...f }), f);
+/* istanbul ignore next */
+export const G = Object.assign((subPattern: any = g) => ({ subPattern, ...g }), g);
+/* istanbul ignore next */
+export const H = Object.assign((subPattern: any = h) => ({ subPattern, ...h }), h);
+/* istanbul ignore next */
+export const I = Object.assign((subPattern: any = i) => ({ subPattern, ...i }), i);
+/* istanbul ignore next */
+export const J = Object.assign((subPattern: any = j) => ({ subPattern, ...j }), j);
+/* istanbul ignore next */
+export const K = Object.assign((subPattern: any = k) => ({ subPattern, ...k }), k);
+/* istanbul ignore next */
+export const L = Object.assign((subPattern: any = l) => ({ subPattern, ...l }), l);
+/* istanbul ignore next */
+export const M = Object.assign((subPattern: any = m) => ({ subPattern, ...m }), m);
+/* istanbul ignore next */
+export const N = Object.assign((subPattern: any = n) => ({ subPattern, ...n }), n);
+/* istanbul ignore next */
+export const O = Object.assign((subPattern: any = o) => ({ subPattern, ...o }), o);
+/* istanbul ignore next */
+export const P = Object.assign((subPattern: any = p) => ({ subPattern, ...p }), p);
+/* istanbul ignore next */
+export const Q = Object.assign((subPattern: any = q) => ({ subPattern, ...q }), q);
+/* istanbul ignore next */
+export const R = Object.assign((subPattern: any = r) => ({ subPattern, ...r }), r);
+/* istanbul ignore next */
+export const S = Object.assign((subPattern: any = s) => ({ subPattern, ...s }), s);
+/* istanbul ignore next */
+export const T = Object.assign((subPattern: any = t) => ({ subPattern, ...t }), t);
+/* istanbul ignore next */
+export const U = Object.assign((subPattern: any = u) => ({ subPattern, ...u }), u);
+/* istanbul ignore next */
+export const V = Object.assign((subPattern: any = v) => ({ subPattern, ...v }), v);
+/* istanbul ignore next */
+export const W = Object.assign((subPattern: any = w) => ({ subPattern, ...w }), w);
+/* istanbul ignore next */
+export const X = Object.assign((subPattern: any = x) => ({ subPattern, ...x }), x);
+/* istanbul ignore next */
+export const Y = Object.assign((subPattern: any = y) => ({ subPattern, ...y }), y);
+/* istanbul ignore next */
+export const Z = Object.assign((subPattern: any = z) => ({ subPattern, ...z }), z);
 
 export const end = Symbol('end');
 export type End = typeof end;
