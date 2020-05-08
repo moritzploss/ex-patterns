@@ -86,8 +86,8 @@ until the `then` callback is reached. Can be combined with an optional [`otherwi
 import { suppose, then, otherwise, end, N, I, B, R } from 'ex-patterns';
 
 suppose
-    (R({ status: 200 }), _ => await fetch('api/users/123'))
-    ({ body: { name: N, id: I }}, matches => await matches.R.json())
+    (R({ status: 200 }), async _ => fetch('api/users/123'))
+    ({ body: { name: N, id: I }}, async matches => matches.R.json())
     (true, matches => isValidUserName(matches.N))
     (true, matches => isUniqueUserId(matches.I))
 (then)
@@ -912,7 +912,7 @@ suppose
 
 The fact that all `ex-patterns` control flow structures return a result allows
 for expressive code when they are wrapped in a lambda function with implicit
-return. For example, here is a function `fetchUserData` that makes a call to
+return. For example, here is a function `processResponse` that makes a call to
 an external API and -- if all goes well -- returns a welcome message:
 
 ```javascript
@@ -920,8 +920,8 @@ import { suppose, then, end, otherwise, E, I, N, R, S, _ } from 'ex-patterns';
 
 const fetchUserData = async (url, options) => (
     suppose
-        (R({ status: 200 }), _ => await fetch(url, options))
-        ({ body: { name: N, id: I }}, matches => await matches.R.json())
+        (R({ status: 200 }), async () => fetch(url, options))
+        ({ body: { name: N, id: I }}, async (matches) => matches.R.json())
         (true, matches => isValidUserName(matches.N))
         (true, matches => isUniqueUserId(matches.I))
     (then)
