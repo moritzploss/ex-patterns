@@ -89,7 +89,7 @@ const response = ...
 
 suppose
     (R({ status: 200 }), () => response)
-    ({ body: { name: N, id: I }}, response)
+    ({ body: { name: N, id: I }}, () => response)
     (true, matches => isValidUserName(matches.N))
     (true, matches => isUniqueUserId(matches.I))
 (then)
