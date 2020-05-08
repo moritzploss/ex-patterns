@@ -910,32 +910,28 @@ suppose
 
 ### HTTP Request Processing with `fetch`
 
-The fact that the `when` control flow structure returns the return value
-of the invoked callback allows for expressive code when it's wrapped in a lambda
-function with implicit return:
+The fact that all `ex-patterns` control flow structures return a result allows
+for expressive code when they are wrapped in a lambda function with implicit
+return. For example, here is a function `fetchUserData` that makes a call to
+an external API and -- if all goes well -- returns a welcome message:
 
 ```javascript
-import { when, end, then, _, E, N, } from 'ex-patterns';
-
-const processError = (body) => (
-    when(body)
-        ({ error: E }, then(({ E: error }) => ({ error }))) 
-        (_, then(() => ({ error: 'invalid error response. no error message.' })))
-    (end);
-);
-
-const processBody = (body) => (
-    when(body)
-        ({ email: E, name: N }, then(({ E, N }) => ({ email: E, name: N })))
-        ({ email: E }, then(({ E }) => ({ email: E, name: 'Unknown' })))
-        (_, then(() => ({ error: 'no email address.' })))
-    (end);
-);
+import { suppose, then, end, otherwise, R, E, _ } from 'ex-patterns';
 
 const fetchUserData = async (url, options) => (
-    when(await fetch(url, options))
-        ({ status: 200 }, then(async (match, res) => processBody(await res.json())))
-        ({ status: _ }, then(async (match, res) => processError(await res.json()))
-    (end);
+    suppose
+        (R({ status: 200 }), _ => await fetch(url, options))
+        ({ body: { name: N, id: I }}, matches => await matches.R.json())
+        (true, matches => isValidUserName(matches.N))
+        (true, matches => isUniqueUserId(matches.I))
+    (then)
+        (matches => `Welcome ${matches.N}`)
+    (otherwise)
+        ({ status: S, error: E }, ({ E, S }) => `Got status ${S} with error ${E}`)
+        ({ status: S }, ({ S }) => `Got status ${S} with no error`)
+        (false, () => 'User data validation failed')
+        (_, () => 'Something went wrong in an unexpected way')
+    (end)
 );
+
 ```
