@@ -176,8 +176,8 @@ when(value)
 In other words, *patterns* are just plain old JavaScript data structures that
 (can) contain special placeholders. It follows that **patterns are composable**,
 and you can combine, nest, modify and re-use them in whatever way you want (
-you can even do something we call *parent capturing*, which is prettry neat
-and not widely supported in other libraries):
+you can even do something called [*parent capturing*](https://github.com/moritzploss/ex-patterns#parent-capturing),
+which is prettry neat and not widely supported in other libraries):
 
 ```javascript
 const cityPattern = { city: C };
@@ -532,7 +532,7 @@ Above we have seen that it's possible to match against nested data structures
 with named and unnamed placeholders, and to perform partial matches against
 list- and map-like data structures. This is nice when you're only interested in
 specific properties of, for example, an object, but can cause some headaches
-when you're interested in specific properties *and* the entire data structure.
+**when you're interested in specific properties *and* the entire data structure**.
 For example:
 
 ```javascript
