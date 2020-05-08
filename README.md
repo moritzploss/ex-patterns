@@ -83,7 +83,7 @@ clauses in the format `(pattern, function)` and checks if the return value of
 until the `then` callback is reached. Can be combined with an optional [`otherwise`](https://github.com/moritzploss/ex-patterns#catching-errors) clause.
 
 ```javascript
-import { suppose, then, otherwise, end, N, I, B, S, R } from 'ex-patterns';
+import { suppose, then, otherwise, end, N, I, B, R } from 'ex-patterns';
 
 suppose
     (R({ status: 200 }), _ => await fetch('api/users/123'))
@@ -916,7 +916,7 @@ return. For example, here is a function `fetchUserData` that makes a call to
 an external API and -- if all goes well -- returns a welcome message:
 
 ```javascript
-import { suppose, then, end, otherwise, R, E, _ } from 'ex-patterns';
+import { suppose, then, end, otherwise, E, I, N, R, S, _ } from 'ex-patterns';
 
 const fetchUserData = async (url, options) => (
     suppose
