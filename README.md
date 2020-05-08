@@ -422,7 +422,7 @@ const value   = [1,       [2,    [1, 2, 1      ]], [3, 4, 5]];
 match(pattern, value);   // match
 ```
 
-#### `Immutable.js` Lists
+#### Immutable.js Lists
 
 To perform a pattern match against an immutable `List`, use the same syntax as
 for matches against regular JavaScript arrays:
@@ -479,7 +479,7 @@ match({ _: 1 }, { foo: 1 });   // no match. '_' is just a string here!
 match({ A: 1 }, { foo: 1 });   // no match. 'A' is just a string here!
 ```
 
-#### `Immutable.js` Maps
+#### Immutable.js Maps
 
 To perform a pattern match against an immutable `Map`, use the same syntax as
 for matches against regular JavaScript maps (objects):
