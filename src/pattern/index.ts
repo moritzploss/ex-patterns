@@ -1,10 +1,10 @@
 import { equals } from 'ramda';
 
-import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder } from '../placeholder';
+import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder, resolve } from '../placeholder';
 import { updateMatch, Match } from '../match';
 import { matchArray } from './array';
 import { matchMap, matchObject } from './map';
-import { isObject, isArray, isMap, isList } from '../util';
+import { isObject, isArray, isMap, isList, isFunction } from '../util';
 
 import { Pattern } from './types';
 
@@ -18,7 +18,14 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
   }
 
   if (isNamedPlaceholder(pattern)) {
-    return updateMatch(matches, pattern, value);
+    if (isFunction(pattern)) {
+      return updateMatch(matches, resolve(pattern), value);
+    }
+    const [isSuccess, newMatches] = updateMatch(matches, pattern, value);
+    if (isSuccess) {
+      return _match(pattern.subPattern, value, newMatches);
+    }
+    return [false, {}];
   }
 
   if (equals(pattern, value)) {

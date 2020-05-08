@@ -18,7 +18,7 @@ const isKeyword = (maybeKeyword: any, keywordName, keywordSymbol): boolean => {
     return false;
   }
   return resolved.symbol === keywordSymbol
-    && resolved.name === keywordName
+    && resolved.lookupName === keywordName
     && isPlaceholder(resolved.bindTo);
 };
 

@@ -3,13 +3,13 @@ import { hasKey, equals } from './util';
 
 export type Match = Record<string, any>;
 
-const updateMatch = (match: Match, { name }: Placeholder, value: any): [boolean, Match] => {
-  if (!hasKey(match, name)) {
+const updateMatch = (match: Match, { lookupName }: Placeholder, value: any): [boolean, Match] => {
+  if (!hasKey(match, lookupName)) {
     // eslint-disable-next-line no-param-reassign
-    match[name] = value;
+    match[lookupName] = value;
     return [true, match];
   }
-  if (equals(match[name], value)) {
+  if (equals(match[lookupName], value)) {
     return [true, match];
   }
   return [false, match];

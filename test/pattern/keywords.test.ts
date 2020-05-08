@@ -315,13 +315,13 @@ describe('combining head and tail keyword: arrays', () => {
   });
 
   it('should throw if head is bound to invalid placeholder', () => {
-    const invalidPlaceholder = { name: 'foo', symbol: Symbol('foo') };
+    const invalidPlaceholder = { lookupName: 'foo', symbol: Symbol('foo') };
     const matchFunc = () => match([head(invalidPlaceholder), 2, 3, 4, 5], [1, 2, 3, 4, 5]);
     expect(matchFunc).to.throw(Error);
   });
 
   it('should throw if tail is bound to invalid placeholder', () => {
-    const invalidPlaceholder = { name: 'foo', symbol: Symbol('foo') };
+    const invalidPlaceholder = { lookupName: 'foo', symbol: Symbol('foo') };
     const matchFunc = () => match([1, 2, 3, 4, tail(invalidPlaceholder)], [1, 2, 3, 4, 5]);
     expect(matchFunc).to.throw(Error);
   });
