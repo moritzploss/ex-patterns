@@ -174,17 +174,17 @@ In other words, *patterns* are just plain old JavaScript data structures that
 (can) contain special placeholders. Because of that, **patterns are composable**
 and can be combined, nested, modified and re-used in all kinds of ways (you
 can even do something called [*parent capturing*](https://github.com/moritzploss/ex-patterns#parent-capturing),
-which is pretty neat and not widely supported in other libraries):
+which is not widely supported in other libraries):
 
 ```javascript
+const user = { name: 'Amelie', city: 'Stockholm' };
+
 const cityPattern = { city: C };
 const namePattern = { name: N };
 const composedPattern = { ...cityPattern, ...namePattern };
 
-const user = { name: 'Amelie', city: 'Stockholm' };
-
 when(user)
-    (composedPattern, then(() => 'has both city and name!'))
+    (composedPattern, then(() => 'has city and name!'))
     (cityPattern, then(() => 'has only city!'))
     (namePattern, then(() => 'has only name!'))
     (_, then(() => 'has no city and no name!'))
@@ -192,15 +192,15 @@ when(user)
 ```
 
 While pattern matching in JavaScript is great, there are some **problems related to JavaScript's mutable data types**. For example, if you want to match
-against the tail of an array and return the corresponding elements, there's no
+against the tail of an array and return the corresponding elements (in th example below we bind it to the placeholder `A`), there's no
 way around slicing the array and copying the data:
 
 ```javascript
 const value = [1, 2, 3, 4, 5];
 
 when(value)
-    ([1, 2, 3, tail], then(() => 'tail not bound! no need to slice 🙂'))
-    ([_, _, tail(A)], then(matches => 'tail bound to A! need to slice 🙁'))
+    ([1, 2, 3, tail], then(() => 'unbound tail! no need to slice 🙂'))
+    ([_, _, tail(A)], then(({ A }) => 'bound tail! need to slice 🙁'))
     (_, then(() => 'always matches!'))
 (end);
 ```
@@ -231,11 +231,11 @@ for value equality in JavaScript aren't trivial, this package uses
 lifting.
 
 ```javascript
-match(1, 1)                 // match
-match(1, 2)                 // no match
+match(1, 1);                 // match
+match(1, 2);                 // no match
 
-match([1, 2], [1, 2])       // match
-match([1, 2], [3, 4])       // no match
+match([1, 2], [1, 2]);       // match
+match([1, 2], [3, 4]);       // no match
 ```
 
 The return value of the `match` function is a two element tuple (array). The first
@@ -244,10 +244,10 @@ is a JavaScript object containing the match results. We'll talk more about that
 later!
 
 ```javascript
-match(1, 1)     // match
+match(1, 1);     // match
 > [true, {}]
 
-match(1, 2)     // no match
+match(1, 2);     // no match
 > [false, {}]
 ```
 
@@ -256,7 +256,7 @@ If you're only interested in whether the match was successful, there's also an
 boolean:
 
 ```javascript
-isMatch(1, 1)     // match
+isMatch(1, 1);     // match
 > true
 ```
 
@@ -268,11 +268,11 @@ expressions. Things get more interesting when we introduce the
 (first argument) of a match to stand in for any value on the right:
 
 ```javascript
-match([1, 2], [1, 2])       // match
-match([1, _], [1, 2])       // match
-match([_, _], [1, 2])       // match
+match([1, 2], [1, 2]);       // match
+match([1, _], [1, 2]);       // match
+match([_, _], [1, 2]);       // match
 
-match([5, _], [1, 2])       // no match
+match([5, _], [1, 2]);       // no match
 ```
 
 Note that using placeholders on the **right side** (second argument) of the `match`
@@ -284,17 +284,17 @@ of an array. However, it can also be used as a placeholder for the entire array,
 or any other arbitrary data structure, no matter if flat or nested:
 
 ```javascript
-match(_, 1)                     // match
-match(_, 'foo')                 // match
-match(_, [1, 2])                // match
-match(_, { a: 'b' })            // match
-match({ a: _ }, { a: 'b' })     // match
+match(_, 1);                     // match
+match(_, 'foo');                 // match
+match(_, [1, 2]);                // match
+match(_, { a: 'b' });            // match
+match({ a: _ }, { a: 'b' });     // match
 ```
 
 It's also possible to use the *unnamed placeholder* multiple times in a pattern:
 
 ```javascript
-match([1, _, 3, _, 5], [1, 2, 3, 4, 5])   // match
+match([1, _, 3, _, 5], [1, 2, 3, 4, 5]);   // match
 ```
 
 ### Named Placeholders
@@ -446,7 +446,7 @@ need to worry about inefficient slicing when using `Immutable.js` collections!
 
 ```javascript
 const pattern = [1, 2, tail(A)];
-const value   = List([1, 2, 3, 4]
+const value   = List([1, 2, 3, 4];
 match(pattern, value));             // match
 
 > [true, { A: List([3, 4]) }]       // matches are returned as immutable List!
@@ -534,7 +534,7 @@ For example:
 
 ```javascript
 // imagine this object has a lot of properties
-const value = { name: 'Amelie', id: '123' }
+const value = { name: 'Amelie', id: '123' };
 
 // Option 1: match against name, but loose reference to 'value' as a whole
 match({ name: N }, value));
@@ -554,8 +554,8 @@ by definition):
 
 ```javascript
 // Option 3: capture entire object as 'V', and name as 'N'
-const pattern = V({ name: N })
-const value   = { name: 'Amelie', id: '123' }
+const pattern = V({ name: N });
+const value   = { name: 'Amelie', id: '123' };
 
 match(V({ name: N }), value));
 > [true, { N: 'Amelie', V: { name: 'Amelie', id: '123' } }]
@@ -739,20 +739,20 @@ and works like a chain of `if {} else if {} else {}` statements:
 import { cond, end, then } from 'ex-patterns';
 
 cond
-    (false, then('no match'))
-    (false, then('still no match'))
-    (true, then('match'))
+    (false, then('not truthy'))
+    (false, then('still not truthy'))
+    (true, then('truthy'))
 (end);
 ```
 
 The `cond` function **returns the value** enclosed in the `then` function of the
-matching clause:
+first truthy clause:
 
 ```javascript
 const result = cond
-    (false, then('no match'))
-    (false, then('still no match'))
-    (true, then('match'))
+    (false, then('not truthy'))
+    (false, then('still not truthy'))
+    (true, then('truthy'))
 (end);
 
 result
@@ -764,18 +764,18 @@ values:
 
 ```javascript
 cond
-    (false, then('no match'))
-    (0, then('no match'))
-    (-0, then('no match'))
-    ('', then('no match'))
-    (null, then('no match'))
-    (undefined, then('no match'))
-    (NaN, then('no match'))
-    (1, then('this one matches'))   // match
+    (false, then('not truthy'))
+    (0, then('not truthy'))
+    (-0, then('not truthy'))
+    ('', then('not truthy'))
+    (null, then('not truthy'))
+    (undefined, then('not truthy'))
+    (NaN, then('not truthy'))
+    (1, then('this one is truthy'))   // truthy
 (end);
 ```
 
-As for the `when` function, the `cond` function **throws an error if no matching
+As for the `when` function, the `cond` function **throws an error if no truthy
 clause** is found. Similarly, it's optional to wrap the return value in the `then`
 function, but recommended for readability.
 
@@ -797,7 +797,7 @@ suppose
     (C, () => 3)    // C matches 3, execute 'then' callback
 (then)
     (() => 'all clauses matched!'))
-(end)
+(end);
 ```
 
 **Matches** against named placeholders **are piped along** and can be accessed in all
@@ -812,7 +812,7 @@ suppose
     (C, matches => matches.B + 1)
 (then)
     (matches => [matches.A, matches.B, matches.C])
-(end)
+(end);
 
 ```
 
@@ -828,7 +828,7 @@ const result = suppose
     (C, matches => matches.B + 1)
 (then)
     (matches => [matches.A, matches.B, matches.C])
-(end)
+(end);
 
 result
 > [1, 2, 3]
@@ -855,7 +855,7 @@ suppose
     (7, matches => 'I only catch 7s!')
     (A, matches => `I caught it! It's ${matches.A}`)  // 'A' matches value '4'
     (_, () => 'pff! I would have caught it anyway!')
-(end)
+(end);
 
 > "I caught it! It's 4"
 ```
@@ -882,7 +882,7 @@ suppose                     // function arguments:
     (C, matches => 1)       // { A: 1, B: 1 }
 (then)
     (matches => 'foo')      // { A: 1, B: 1, C: 1 }
-(end)
+(end);
 ```
 
 The match callbacks in the `otherwise` clauses are passed the same arguments as
@@ -900,5 +900,5 @@ suppose
 (otherwise)                                             // function arguments:
     (D, (matches, unmatchedValue, pattern)  => 'hi')    // { D: 'baz' }, 'baz', D
     (_, (matches, unmatchedValue, pattern)  => 'hi')    // {}, 'baz', _
-(end)
+(end);
 ```
