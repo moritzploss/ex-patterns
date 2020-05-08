@@ -155,9 +155,7 @@ problems with.
 
 Firstly, the pattern matching algorithm does not rely on function reflection. 
 This means that **it works out of the box** in `es5` environments, `strict mode`
-or when your code is compiled from `TypeScript`.
-
-More importantly, this also means that **it's possible to match against any
+or when your code is compiled from `TypeScript`. More importantly, this also means that **it's possible to match against any
 variable in the lexical environment**. If you're coming from Elixir, this is
 equivalent to pattern matching against *pinned variables*:
 
