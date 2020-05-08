@@ -582,8 +582,6 @@ when(await fetch('api/user/123'))
 Enter parent capturing:
 
 ```javascript
-import { when, then, S, R } from 'ex-patterns';
-
 when(await fetch('api/user/123'))
     (R({ status: 200 }), then(({ R }) => `Status is 200, here's the response: ${R}`))
     (R({ status: S }), then(({ R, S }) => `Status is ${S}, here's the response: ${R}`))
