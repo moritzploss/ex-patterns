@@ -566,8 +566,8 @@ match(V({ name: N }), value));
 
 From the above it may not be entirely obvious why you'd ever need parent
 capturing, but imagine the following API call (for more information on how to
-use the `when` function, see below). Here you can't pattern match on the response
-status *and* get access to the response as a whole:
+use the `when` function, see below). Here you can't pattern match against the
+response status *and* get access to the response as a whole:
 
 ```javascript
 import { when, then, S } from 'ex-patterns';
