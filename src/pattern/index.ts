@@ -1,6 +1,6 @@
 import { equals } from 'ramda';
 
-import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder, resolve } from '../placeholder';
+import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder } from '../placeholder';
 import { updateMatch, Match } from '../match';
 import { matchArray } from './array';
 import { matchMap, matchObject } from './map';
@@ -18,14 +18,17 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
   }
 
   if (isNamedPlaceholder(pattern)) {
+    // placeholder is used as is
     if (isFunction(pattern)) {
-      return updateMatch(matches, resolve(pattern), value);
+      return updateMatch(matches, pattern, value);
     }
+    // placeholder is used for parent capturing and has been called with subPattern
     const [isSuccess, newMatches] = updateMatch(matches, pattern, value);
     if (isSuccess) {
+      // if parent capture was successful, continue to match against subPattern
       return _match(pattern.subPattern, value, newMatches);
     }
-    return [false, {}];
+    return [false, newMatches];
   }
 
   if (equals(pattern, value)) {

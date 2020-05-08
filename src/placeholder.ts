@@ -9,13 +9,8 @@ const namedPlaceholders = [
   N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
 ];
 
-const resolve = (placeholderFunction: Function) => placeholderFunction();
-
 const symbolsByName: Record<string, Symbol> = namedPlaceholders.reduce(
-  (acc, placeholder) => {
-    const { symbol, lookupName } = resolve(placeholder);
-    return { ...acc, [lookupName]: symbol };
-  }, {},
+  (acc, { symbol, lookupName }) => ({ ...acc, [lookupName]: symbol }), {},
 );
 
 const lookup = (lookupName: string): Symbol | undefined => symbolsByName[lookupName];
@@ -45,5 +40,4 @@ export {
   isNamedPlaceholder,
   isPlaceholder,
   isUnnamedPlaceholder,
-  resolve,
 };

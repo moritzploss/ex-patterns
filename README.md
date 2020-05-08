@@ -87,8 +87,7 @@ handed over to the `otherwise` clause, which works like a `when` function.
 import { suppose, then, otherwise, end, N, I, B, S, R } from 'ex-patterns';
 
 suppose
-    (R, _ => await fetch('api/users/123'))
-    ({ status: 200 }, matches => matches.R)
+    (R({ status: 200 }), _ => await fetch('api/users/123'))
     ({ body: { name: N, id: I }}, matches => await matches.R.json())
     (true, matches => isValidUserName(matches.N))
     (true, matches => isUniqueUserId(matches.I))
@@ -177,7 +176,9 @@ when(value)
 
 In other words, *patterns* are just plain old JavaScript data structures that
 (can) contain special placeholders. It follows that **patterns are composable**,
-and you can combine, nest, modify and re-use them in whatever way you want:
+and you can combine, nest, modify and re-use them in whatever way you want (
+you can even do something we call *parent capturing*, which is prettry neat
+and not widely supported in other libraries):
 
 ```javascript
 const cityPattern = { city: C };
@@ -524,6 +525,86 @@ inside a `Map`:
 ```javascript
 match({ foo: A }, Map({ foo: { bar: 1 }}));     // match
 > [true, { A: { bar: 1 }}]
+```
+
+### Parent Capturing
+
+Above we have seen that it's possible to match against nested data structures
+with named and unnamed placeholders, and to perform partial matches against
+list- and map-like data structures. This is nice when you're only interested in
+specific properties of, for example, an object, but can cause some headaches
+when you're interested in specific properties *and* the entire data structure.
+For example:
+
+```javascript
+// image this object has a lot of properties
+const value = { name: 'Amelie', id: '123' }
+
+// Option 1: match against name, but loose reference to 'value' as a whole
+match({ name: N }, value));
+> [true, { N: 'Amelie' }]
+
+// Option 2: match against value as a whole, but loose ability to match against
+// specific properties at the same time
+match(V, value));
+> [true, { V: { name: 'Amelie', id: '123' } }]
+```
+
+To access specific properties and capture the entire object as a whole, use
+**parent capturing**. This is done by passing the subpattern that you want
+to match against as an argument to a **named placeholder** (parent capturing
+is not supported for the *unnamed placeholder* `_` since it's non-capturing
+by definition):
+
+```javascript
+// Option 3: capture entire object as 'V', and name as 'N'
+const pattern = V({ name: N })
+const value   = { name: 'Amelie', id: '123' }
+
+match(V({ name: N }), value));
+> [true, { N: 'Amelie', V: { name: 'Amelie', id: '123' } }]
+```
+
+From the above it may not be entirely obvious why you'd ever need parent
+capturing, but imagine the following API call (for more information on how to
+use the `when` function, see below). Here you can't pattern match on the response
+status *and* get access to the response as a whole:
+
+```javascript
+import { when, then, S } from 'ex-patterns';
+
+when(await fetch('api/user/123'))
+    ({ status: 200 }, then(() => 'Status is 200, but cannot access response!'))
+    ({ status: S }, then(({ S }) => `Status is ${S}, but cannot access response!`))
+    (_, then(() => 'No status found!'))
+(end);
+```
+
+This situation can be avoided using parent capturing:
+
+```javascript
+import { when, then, S, R } from 'ex-patterns';
+
+when(await fetch('api/user/123'))
+    (R({ status: 200 }), then(({ R }) => `Status is 200, here's the response: ${R}`))
+    (R({ status: S }), then(({ R, S }) => `Status is ${S}, here's the response: ${R}`))
+    (R, then(({ R }) => `No status found! Here's the response: ${R}`))
+(end);
+```
+
+As with all other patterns, **it's perfectly fine to use parent capturing
+multiple times in the same pattern** as long as the same named placeholder is
+always matched against the same value (I really can't think of a practical
+example where this would be useful, but it's good to know that the sky is the
+limit `¯\_(ツ)_/¯`):
+
+```javascript
+const names = { nickname: 'Ami', name: 'Amelie' };
+const value = [{ user: names }, { user: names }];
+
+const pattern = [B, B({ user: U({ nickname: N }) })];
+
+match(pattern, value)   // match
 ```
 
 ## The `when` Function
