@@ -7,7 +7,6 @@
 /* eslint-disable arrow-parens */
 /* eslint-disable operator-linebreak */
 
-
 import { expect } from 'chai';
 
 import { suppose, then, end, otherwise, _, A, B, C, D, E, F, G, V } from '../../src';

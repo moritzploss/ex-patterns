@@ -45,8 +45,8 @@ import { when, end, then, _, A, N } from 'ex-patterns';
 const user = { name: 'Amelie' };
 
 when(user)
-    ({ alias: A }, then(matches => `Hi ${matches.A}!`))
-    ({ name: N }, then(matches => `Hi ${matches.N}!`))
+    ({ alias: A }, then(({ A }) => `Hi ${A}!`))
+    ({ name: N }, then(({ N }) => `Hi ${N}!`))
     (_, then(() => 'Hi!'))
 (end);
 
@@ -559,7 +559,7 @@ when(value)                     // start `when` control flow structure with `val
 Each match clause takes two arguments: the first is a pattern (see above) that
 will be matched against `value`, the second a callback function that will be
 invoked when the match is successful. It's recommend to wrap the callback function
-inside `then` for readability, but it's optional (the `then` function is just
+inside **`then` for readability, but it's optional** (the `then` function is just
 syntactic sugar).
 
 In the following case, `value` will match the second clause; clauses that come
