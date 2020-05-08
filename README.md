@@ -706,10 +706,10 @@ function, but recommended for readability.
 
 ### Basics
 
-The `suppose` function is a control flow structure that performs a series of
-pattern matches before executing the final `then` callback. The function takes
-any amount of `suppose` clauses in the format `(pattern, function)` and proceeds
-from top to bottom as long as all matches succeed.
+The `suppose` function is a control flow structure that **performs a series of
+pattern matches** before executing the final `then` callback. The function takes
+any amount of `suppose` clauses in the format `(pattern, function)` and **proceeds
+from top to bottom** as long as all matches succeed.
 
 ```javascript
 import { suppose, then, end, A, B, C, D, _ } from 'ex-patterns';
@@ -723,7 +723,7 @@ suppose
 (end)
 ```
 
-Matches against named placeholders are piped along and can be accessed in all
+**Matches** against named placeholders **are piped along** and can be accessed in all
 `suppose` clauses and the `then` callback:
 
 ```javascript
@@ -739,8 +739,8 @@ suppose
 
 ```
 
-If all clauses match, the control flow structure returns the return value of
-the `then` callback:
+If all clauses match, the control flow structure **returns the return value of
+the `then` callback**:
 
 ```javascript
 import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
@@ -759,12 +759,11 @@ result
 
 ### Catching Errors
 
-If any of the `suppose` clauses returns an unexpected value that does not match
-the pattern specified in the clause, an error is thrown. To avoid
+**If** any of the `suppose` clauses returns a **value that does not match**
+the pattern specified in the clause, an **error is thrown**. To avoid
 the error, any number of `otherwise` clauses in the format `(pattern, callback)`
-can be inserted before `end`. The patterns are matched against the
-unexpected value, and the callback that belongs to the first matching pattern
-will be executed:
+can be inserted before `end`. The **patterns are matched against the value**,
+and the callback that belongs to the first matching pattern will be executed:
 
 ```javascript
 import { suppose, then, end, A, B, C, _ } from 'ex-patterns';
@@ -785,12 +784,13 @@ suppose
 ```
 
 Thus, you can think of the `otherwise` clause as a `when` function that takes
-the unexpected value as an argument (in fact, that's excatly how it is
-implemented!). Note though that while this is a great way to get you back on
-track when you unexpectedly left the happy path, runtime errors will still be
-raised and the `suppose` function makes no attempt to catch them. Thus, it's
-good practice to carefully think about the error patterns that you might
-encounter and to write an `otherwise` clause for each one of them!
+the first non-matching function return as an argument. (that's excatly
+how it is implemented by the way!). Note though that while this is a great way
+to get you back on track when your program strayed away from the happy path,
+runtime errors will still be raised and the `suppose` function makes no attempt
+to catch them. Thus, it's good practice to carefully think about the non-matching
+patterns that you might encounter in your `suppose` clauses and to write an
+`otherwise` clause for each one of them!
 
 ### Callback Functions
 
