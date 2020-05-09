@@ -16,7 +16,7 @@ Install the package from npm:
 
 ## What's in the Box
 
-### The [`match`](https://github.com/moritzploss/ex-patterns/#the-match-function-1) Function
+### The [`match`](https://moritzploss.github.io/ex-patterns/#/?id=the-match-function) Function
 
 A pattern matching function for flat and nested data structures, including
 arrays, objects and `Immutable.js` collections:
@@ -33,7 +33,7 @@ const value   = [1, 2];
 match(pattern, value)       // match against placeholder A  >>  { A: 1 }
 ```
 
-### The [`when`](https://github.com/moritzploss/ex-patterns/#the-when-function-1) Function
+### The [`when`](https://moritzploss.github.io/ex-patterns/#/?id=the-when-function) Function
 
 A switch statement based on pattern matching, similar to Elixir's [`case`](https://elixir-lang.org/getting-started/case-cond-and-if.html#case)
 control flow structure. It accepts any number of match
@@ -53,27 +53,7 @@ sayHi({ name: 'Amelie' });
 > 'Hi Amelie!'
 ```
 
-### The [`cond`](https://github.com/moritzploss/ex-patterns/#the-cond-function-1) Function
-
-A compact switch statement that accepts any number of clauses in the format
-`(truthy?, value)`, similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
-control flow structure:
-
-```javascript
-import { cond, end, then } from 'ex-patterns';
-
-const fizzBuzz = (number) => cond
-    (number % 15 === 0, then('fizzbuzz'))
-    (number % 3 === 0, then('fizz'))
-    (number % 5 === 0, then('buzz'))
-    (true, then(number))
-(end);
-
-fizzBuzz(5)
-> 'buzz'
-```
-
-### The [`suppose`](https://github.com/moritzploss/ex-patterns/#the-suppose-function-1) Function
+### The [`suppose`](https://moritzploss.github.io/ex-patterns/#/?id=the-suppose-function) Function
 
 A control flow structure to leverage the power of pattern matching while
 coding for the happy path, similar to Elixir's `with`. Takes any number of
@@ -95,6 +75,28 @@ suppose
     (matches => `Welcome ${matches.N}`)
 (end);
 ```
+
+### The [`cond`](https://moritzploss.github.io/ex-patterns/#/?id=the-cond-function) Function
+
+A compact switch statement that accepts any number of clauses in the format
+`(truthy?, value)`, similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
+control flow structure:
+
+```javascript
+import { cond, end, then } from 'ex-patterns';
+
+const fizzBuzz = (number) => cond
+    (number % 15 === 0, then('fizzbuzz'))
+    (number % 3 === 0, then('fizz'))
+    (number % 5 === 0, then('buzz'))
+    (true, then(number))
+(end);
+
+fizzBuzz(5)
+> 'buzz'
+```
+
+### Want to learn more?
 
 Head over to the [**documentation**](https://moritzploss.github.io/ex-patterns/#/)
 for a lot more details and examples!

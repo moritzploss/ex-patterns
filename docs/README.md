@@ -489,7 +489,7 @@ const pattern = [B, B({ user: U({ nickname: N }) })];
 match(pattern, value)   // match
 ```
 
-# The `when` Function
+# The *when* Function
 
 ## Basics
 
@@ -617,7 +617,7 @@ when(user)
 > ['Amelie', 31]
 ```
 
-# The `cond` Function
+# The *cond* Function
 
 The `cond` function is a switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
 statement. It accepts any number of clauses in the format `(truthy?, value)`
@@ -667,7 +667,7 @@ As for the `when` function, the `cond` function **throws an error if no truthy
 clause** is found. Similarly, it's optional to wrap the return value in the `then`
 function, but recommended for readability.
 
-# The `suppose` Function
+# The *suppose* Function
 
 ## Basics
 
