@@ -519,7 +519,7 @@ Data types are also preserved for regular JavaScript objects that are nested
 inside a `Map`:
 
 ```javascript
-match({ foo: A }, Map({ foo: { bar: 1 }}));     // match
+match({ foo: A }, Map({ foo: { bar: 1 } }));     // match
 > [true, { A: { bar: 1 }}]
 ```
 
@@ -528,51 +528,49 @@ match({ foo: A }, Map({ foo: { bar: 1 }}));     // match
 Above we have seen that it's possible to match against nested data structures
 with named and unnamed placeholders, and to perform partial matches against
 list- and map-like data structures. This is nice when you're only interested in
-specific properties of, for example, an object, but can cause some headaches
-**when you're interested in specific properties *and* the entire data structure**.
-For example:
+specific fields of a data structure, but can cause some headaches
+**when you're interested in specific fields *and* the entire data structure**
+at the same time. For example:
 
 ```javascript
-// imagine this object has a lot of properties
-const value = { name: 'Amelie', id: '123' };
+const value = [1, 2, 3];
 
-// Option 1: match against name, but loose reference to 'value' as a whole
-match({ name: N }, value));
-> [true, { N: 'Amelie' }]
+// Option 1: match against elements but loose reference to array
+match([A, B, C], value);
 
-// Option 2: match against value as a whole, but loose ability to match against
-// specific properties at the same time
-match(V, value));
-> [true, { V: { name: 'Amelie', id: '123' } }]
+// Option 2: match against array but loose ability to match against elements
+match(V, value);
 ```
 
-To access specific properties and capture the entire object as a whole, use
+To access specific fields and capture the entire data structure as a whole, use
 **parent capturing**. This is done by passing the subpattern that you want
 to match against as an argument to a **named placeholder** (parent capturing
 is not supported for the *unnamed placeholder* `_` since it's non-capturing
 by definition):
 
 ```javascript
-// Option 3: capture entire object as 'V', and name as 'N'
-const pattern = V({ name: N });
-const value   = { name: 'Amelie', id: '123' };
+// Option 3: capture entire structure as 'V', and elements as 'A', 'B', 'C'
+const pattern = V([A, B, C]);
+const value   = [1, 2, 3];
 
-match(V({ name: N }), value));
-> [true, { N: 'Amelie', V: { name: 'Amelie', id: '123' } }]
+match(pattern, value);
+> [true, { V: [1, 2, 3], A: 1, B: 2, C: 3 }]
 ```
 
 From the above it may not be entirely obvious why you'd ever need parent
-capturing, but imagine the following API call (for more information on how to
-use the `when` function, see below). Here you can't pattern match against the
-response status *and* get access to the response as a whole:
+capturing, but imagine the following API call that returns a deeply nested
+respone object (for more information on how to use the `when` function, see
+below). Here you can't pattern match against the response status *and* get
+access to the response as a whole since the response object was never assigned
+to a variable to begin with:
 
 ```javascript
-import { when, then, S } from 'ex-patterns';
+import { when, then, R, S } from 'ex-patterns';
 
 when(await fetch('api/user/123'))
     ({ status: 200 }, then(() => 'Status is 200, but cannot access response!'))
     ({ status: S }, then(({ S }) => `Status is ${S}, but cannot access response!`))
-    (_, then(() => 'No status found!'))
+    (R, then(({ R }) => `No status found! Here's the response: ${R}`))
 (end);
 ```
 
@@ -588,7 +586,7 @@ when(await fetch('api/user/123'))
 
 As with all other patterns, **it's perfectly fine to use parent capturing
 multiple times in the same pattern** as long as the same named placeholder is
-always matched against the same value (I really can't think of a practical
+always matched against the same value (I can't come up with a practical
 example where this would be useful, but it's good to know that the sky is the
 limit `¯\_(ツ)_/¯`):
 

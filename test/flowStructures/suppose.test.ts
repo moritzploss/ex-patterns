@@ -8,7 +8,6 @@
 /* eslint-disable operator-linebreak */
 
 import { expect } from 'chai';
-import fetch from 'node-fetch';
 
 import { suppose, then, end, otherwise, _, R, S, A, B, C, D, E, F, G, V } from '../../src';
 
