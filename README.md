@@ -754,7 +754,7 @@ const result = cond
 (end);
 
 result
-> 'match'
+> 'truthy'
 ```
 
 Clauses are evaluated **based on** JavaScript's concept of **truthy and falsy**
