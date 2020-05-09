@@ -10,6 +10,12 @@ collections.
 
 # Introduction
 
+## Setup
+
+Install the package from npm:
+
+    npm i ex-patterns
+
 ## Pattern Matching Basics
 
 If you're new to pattern matching, the [**Elixir Docs**](https://elixir-lang.org/getting-started/pattern-matching.html)
@@ -63,7 +69,7 @@ when(value)
 In other words, *patterns* are just plain old JavaScript data structures that
 (can) contain special placeholders. Because of that, **patterns are composable**
 and can be combined, nested, modified and re-used in all kinds of ways (you
-can even do something called [*parent capturing*](https://github.com/moritzploss/ex-patterns#parent-capturing),
+can even do something called [*parent capturing*](https://moritzploss.github.io/ex-patterns/#/?id=parent-capturing),
 which is not widely supported in other libraries):
 
 ```javascript
