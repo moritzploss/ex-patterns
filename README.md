@@ -5,7 +5,7 @@
 
 This project brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
 and control flow structures to JavaScript. Pattern matching is supported for
-native JavaScript data types as well as common [`Immutable.js`](https://immutable-js.github.io/immutable-js/)
+native JavaScript data types as well as common [**Immutable.js**](https://immutable-js.github.io/immutable-js/)
 collections. See the [**documentation**](https://moritzploss.github.io/ex-patterns/#/) for details and examples.
 
 ## Setup
