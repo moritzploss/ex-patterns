@@ -912,6 +912,8 @@ reducer that updates the displayed page (`view`) and user data (`user`) of an
 app based on the type of incoming reducer actions.
 
 ```javascript
+import { when, end, _, U, T } from 'ex-patterns';
+
 const appStateReducer = (appState = initialState, action) => when(action)
     ({ type: 'LOG IN', user: U }, ({ U }) => ({ ...appState, user: U, view: 'HOME' }))
     ({ type: 'GO TO',  view: T }, ({ T }) => ({ ...appState, view: T }))
