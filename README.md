@@ -117,6 +117,8 @@ suppose
     * [Basics](https://github.com/moritzploss/ex-patterns/#basics-2)
     * [Catching Errors](https://github.com/moritzploss/ex-patterns/#catching-errors)
     * [Callback Functions](https://github.com/moritzploss/ex-patterns/#callback-functions-1)
+* [Examples](https://github.com/moritzploss/ex-patterns/#examples)
+    * [Redux Reducer](https://github.com/moritzploss/ex-patterns/#redux-reducer)
 
 ## Introduction
 
@@ -898,5 +900,22 @@ suppose
 (otherwise)                                             // function arguments:
     (D, (matches, unmatchedValue, pattern)  => 'hi')    // { D: 'baz' }, 'baz', D
     (_, (matches, unmatchedValue, pattern)  => 'hi')    // {}, 'baz', _
+(end);
+```
+
+## Examples
+
+### Redux Reducer
+
+This example shows how to use the `when` function to build a simple [Redux](https://redux.js.org/) 
+reducer that updates the displayed page (`view`) and user data (`user`) of an
+app based on the type of incoming reducer actions.
+
+```javascript
+const appStateReducer = (appState = initialState, action) => when(action)
+    ({ type: 'LOG IN', user: U }, ({ U }) => ({ ...appState, user: U, view: 'HOME' }))
+    ({ type: 'GO TO',  view: T }, ({ T }) => ({ ...appState, view: T }))
+    ({ type: 'LOG OUT' }, () => initialState)
+    (_, () => appState)
 (end);
 ```
