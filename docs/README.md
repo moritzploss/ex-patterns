@@ -623,56 +623,6 @@ when(user)
 > ['Amelie', 31]
 ```
 
-# The *cond* Function
-
-The `cond` function is a switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
-statement. It accepts any number of clauses in the format `(truthy?, value)`
-and works like a chain of `if {} else if {} else {}` statements:
-
-```javascript
-import { cond, end, then } from 'ex-patterns';
-
-cond
-    (false, then('not truthy'))
-    (false, then('still not truthy'))
-    (true, then('truthy'))
-(end);
-```
-
-The `cond` function **returns the value** enclosed in the `then` function of the
-first truthy clause:
-
-```javascript
-const result = cond
-    (false, then('not truthy'))
-    (false, then('still not truthy'))
-    (true, then('truthy'))
-(end);
-
-result
-> 'truthy'
-```
-
-Clauses are evaluated **based on** JavaScript's concept of **truthy and falsy**
-values:
-
-```javascript
-cond
-    (false, then('not truthy'))
-    (0, then('not truthy'))
-    (-0, then('not truthy'))
-    ('', then('not truthy'))
-    (null, then('not truthy'))
-    (undefined, then('not truthy'))
-    (NaN, then('not truthy'))
-    (1, then('this one is truthy'))   // truthy
-(end);
-```
-
-As for the `when` function, the `cond` function **throws an error if no truthy
-clause** is found. Similarly, it's optional to wrap the return value in the `then`
-function, but recommended for readability.
-
 # The *suppose* Function
 
 ## Basics
@@ -796,6 +746,56 @@ suppose
     (_, (matches, unmatchedValue, pattern)  => 'hi')    // {}, 'baz', _
 (end);
 ```
+
+# The *cond* Function
+
+The `cond` function is a switch statement similar to Elixir's [`cond`](https://elixir-lang.org/getting-started/case-cond-and-if.html#cond)
+statement. It accepts any number of clauses in the format `(truthy?, value)`
+and works like a chain of `if {} else if {} else {}` statements:
+
+```javascript
+import { cond, end, then } from 'ex-patterns';
+
+cond
+    (false, then('not truthy'))
+    (false, then('still not truthy'))
+    (true, then('truthy'))
+(end);
+```
+
+The `cond` function **returns the value** enclosed in the `then` function of the
+first truthy clause:
+
+```javascript
+const result = cond
+    (false, then('not truthy'))
+    (false, then('still not truthy'))
+    (true, then('truthy'))
+(end);
+
+result
+> 'truthy'
+```
+
+Clauses are evaluated **based on** JavaScript's concept of **truthy and falsy**
+values:
+
+```javascript
+cond
+    (false, then('not truthy'))
+    (0, then('not truthy'))
+    (-0, then('not truthy'))
+    ('', then('not truthy'))
+    (null, then('not truthy'))
+    (undefined, then('not truthy'))
+    (NaN, then('not truthy'))
+    (1, then('this one is truthy'))   // truthy
+(end);
+```
+
+As for the `when` function, the `cond` function **throws an error if no truthy
+clause** is found. Similarly, it's optional to wrap the return value in the `then`
+function, but recommended for readability.
 
 # Examples
 
