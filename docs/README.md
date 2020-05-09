@@ -150,7 +150,7 @@ isMatch(1, 1);     // match
 > true
 ```
 
-## The `_` Placeholder
+## The *_* Placeholder
 
 In the examples above, both the pattern and the value are regular JavaScript
 expressions. Things get more interesting when we introduce the
