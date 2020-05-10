@@ -14,7 +14,7 @@ Install the package from npm:
 
     npm i ex-patterns
 
-## What's in the Box
+## Quick Start Guide
 
 ### The [`match`](https://moritzploss.github.io/ex-patterns/#/?id=the-match-function) Function
 
@@ -59,7 +59,7 @@ A control flow structure to leverage the power of pattern matching while
 coding for the happy path, similar to Elixir's `with`. Takes any number of
 clauses in the format `(pattern, function)` and checks if the return value of
 `function` matches `pattern`. Matches are piped through the `suppose` clauses
-until the `then` callback is reached. Can be combined with an optional [`otherwise`](https://github.com/moritzploss/ex-patterns#catching-errors) clause.
+until the `then` callback is reached. Can be combined with an optional [`otherwise`](https://moritzploss.github.io/ex-patterns/#/?id=catching-errors) clause.
 
 ```javascript
 import { suppose, then, otherwise, end, I, N, R } from 'ex-patterns';
@@ -96,7 +96,7 @@ fizzBuzz(5)
 > 'buzz'
 ```
 
-### Want to learn more?
+## Want to learn more?
 
 Head over to the [**documentation**](https://moritzploss.github.io/ex-patterns/#/)
 for a lot more details and examples!

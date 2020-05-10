@@ -1,12 +1,14 @@
 ![build](https://github.com/moritzploss/ex-patterns/workflows/Build/badge.svg)
 ![tests](https://github.com/moritzploss/ex-patterns/workflows/Tests/badge.svg)
 
-# Ex Patterns Documentation
+# Ex Patterns Documentation {docsify-ignore}
 
 This project brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
 and control flow structures to JavaScript. Pattern matching is supported for
 native JavaScript data types as well as common [**Immutable.js**](https://immutable-js.github.io/immutable-js/)
-collections.
+collections. If you're new to pattern matching, get started with [the basics](https://moritzploss.github.io/ex-patterns/#/?id=basic-pattern-matching), then explore the [`match`](https://moritzploss.github.io/ex-patterns/#/?id=the-match-function) function. If you have previsouly used pattern matching in
+JavaScript, [find out](https://moritzploss.github.io/ex-patterns/#/?id=why-this-library)
+what sets *Ex Patterns* apart from other libraries!
 
 # Introduction
 
@@ -18,30 +20,34 @@ Install the package from npm:
 
 ## Pattern Matching Basics
 
-If you're new to pattern matching, the [**Elixir Docs**](https://elixir-lang.org/getting-started/pattern-matching.html)
-contain all you need to know. In essence, pattern matching is a way of
-destructuring complex (or simple) data structures and extracting the information
-that you're interested in. This can result in a much cleaner and more expressive
-programming style with fewer conditionals and less explicit branching logic.
+Pattern matching is a way of desctructuring and inspecting data structures.
+It can be used to filter, access and compare data, all without the need for
+type and property checks. If done right, the resulting code is clean and
+expressive with few conditionals and little explicit branching logic.
 
-In JavaScript, the equal sign is an *assignment operator*. A variable on the
+In JavaScript, the equal sign `=` is an *assignment operator*. A variable on the
 left side is *assigned* the value on the right side.
 
 ```javascript
-const a = 1;
-const b = [1, 2, 3];
+const x = [1, 2, 3];
+const y = 'hello';
 ```
 
-In contrast, **pattern matching** allows for having data structures on both
-sides of the `=` sign, and to evaluate if there's a way to match them. It's
+In contrast, **pattern matching** is based on equality in the mathematical sense.
+Data structures can appear on both sides of the equal sign `=` as long as the
+equation is balanced, i.e., if the patterns on both sides can be *matched*. It's
 helpful to keep this idea of `left` and `right` in mind when going through the
 examples below!
 
 ```javascript
-b = [1, 2, 3]  // match
-[1, 2, 3] = b  // match
-[1, _, _] = b  // match
+x = [1, 2, 3]   // match
+[1, 2, 3] = x   // match
+[1, _, _] = x   // match
 ```
+
+If you're new to pattern matching, it's recommended to skip over the next
+section and to continue with the [`match`](https://moritzploss.github.io/ex-patterns/#/?id=the-match-function)
+function.
 
 ## Why this Library?
 
@@ -108,9 +114,9 @@ arrays and objects!
 
 Finally, `ex-patterns` does not only come with a powerful pattern matching algorithm, but a whole array of **control flow structures that can change the way you think about programming** in JavaScript. Have fun!
 
-# The *match* Function
+# Basic Pattern Matching
 
-## Basics
+## The *match* Function
 
 To follow along with the examples, start by importing the `match` function as
 well as `_` (underscore), the *unnamed placeholder*.
@@ -243,6 +249,12 @@ match(pattern, value);
 
 > [true, { B: 2, C: 'k' }]
 ```
+
+Continue reading below if you want to learn more about advanced pattern matching
+techniques. Or jump to the [`when`](https://moritzploss.github.io/ex-patterns/#/?id=the-when-function)
+function to see pattern matching in action!
+
+# Advanced Pattern Matching
 
 ## Array-like Data Types
 
@@ -534,7 +546,9 @@ inside **`then` for readability, but it's optional** (the `then` function is jus
 syntactic sugar).
 
 In the following case, `value` will match the second clause; clauses that come
-**after** a matching clause will not be matched against:
+**after** a matching clause will not be matched against. The `when` function
+**returns the return value of the callback function that belongs to the first
+matching clause:**
 
 ```javascript
 const value = 2;
@@ -543,25 +557,12 @@ when(value)
     (2, then(() => 'bar'))    // '2' matches '2' => invoke callback!
     (3, then(() => 'baz'))    // will not be matched against
 (end);
-```
 
-**The `when` control flow structure returns the return value of the callback
-function that belongs to the first matching clause!**
-
-```javascript
-const value = 2;
-const result = when(value)
-    (1, then(() => 'foo'))    // no match
-    (2, then(() => 'bar'))    // '2' matches '2' => callback returns 'bar'
-    (3, then(() => 'baz'))
-(end);
-
-result
 > 'bar'
 ```
 
 The pattern in the match clause can be arbitrarily complex and make use of the
-rules and placeholders introduced above:
+rules and placeholders introduced [above](https://moritzploss.github.io/ex-patterns/#/?id=the-_-placeholder):
 
 ```javascript
 const value = [1, 2, 3];
@@ -799,19 +800,38 @@ function, but recommended for readability.
 
 # Examples
 
-## Redux Reducer
+## Redux Reducer with *when*
 
 This example shows how to use the `when` function to build a simple [Redux](https://redux.js.org/) 
 reducer that updates the displayed page (`view`) and user data (`user`) of an
-app based on the type of incoming reducer actions.
+app based on the types of incoming reducer actions.
 
 ```javascript
-import { when, end, _, U, T } from 'ex-patterns';
+import { when, end, _, U, V } from 'ex-patterns';
 
 const appStateReducer = (appState = initialState, action) => when(action)
-    ({ type: 'LOG IN', user: U }, ({ U }) => ({ ...appState, user: U, view: 'HOME' }))
-    ({ type: 'GO TO',  view: T }, ({ T }) => ({ ...appState, view: T }))
-    ({ type: 'LOG OUT' }, () => initialState)
-    (_, () => appState)
+    ({ type: 'LOG IN', user: U }, then(({ U }) => ({ ...appState, user: U, view: 'HOME' })))
+    ({ type: 'GO TO',  view: V }, then(({ V }) => ({ ...appState, view: V })))
+    ({ type: 'LOG OUT' }, then(() => initialState))
+    (_, then(() => appState))
 (end);
+```
+
+## FizzBuzz with *cond*
+
+This example shows how to use the `cond` function to play the FizzBuzz group
+word game:
+
+```javascript
+import { cond, end, then } from 'ex-patterns';
+
+const fizzBuzz = (number) => cond
+    (number % 15 === 0, then('Fizz Buzz'))
+    (number % 3 === 0, then('Fizz'))
+    (number % 5 === 0, then('Buzz'))
+    (true, then(number))
+(end);
+
+fizzBuzz(5)
+> 'Buzz'
 ```
