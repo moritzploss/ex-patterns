@@ -3,9 +3,9 @@
 
 # Ex Patterns Documentation {docsify-ignore}
 
-This project brings Elixir-style [**pattern matching**](https://elixir-lang.org/getting-started/pattern-matching.html)
+This project brings [Elixir-style pattern matching](https://elixir-lang.org/getting-started/pattern-matching.html)
 and control flow structures to JavaScript. Pattern matching is supported for
-native JavaScript data types as well as common [**Immutable.js**](https://immutable-js.github.io/immutable-js/)
+native JavaScript data types as well as common [Immutable.js](https://immutable-js.github.io/immutable-js/)
 collections. If you're new to pattern matching, get started with [the basics](https://moritzploss.github.io/ex-patterns/#/?id=basic-pattern-matching), then explore the [`match`](https://moritzploss.github.io/ex-patterns/#/?id=the-match-function) function. If you have previsouly used pattern matching in
 JavaScript, [find out](https://moritzploss.github.io/ex-patterns/#/?id=why-this-library)
 what sets *Ex Patterns* apart from other libraries!
@@ -23,7 +23,7 @@ Install the package from npm:
 Pattern matching is a way of desctructuring and inspecting data structures.
 It can be used to filter, access and compare data, all without the need for
 type and property checks. If done right, the resulting code is clean and
-expressive with few conditionals and little explicit branching logic.
+expressive with little explicit branching logic.
 
 In JavaScript, the equal sign `=` is an *assignment operator*. A variable on the
 left side is *assigned* the value on the right side.
@@ -51,7 +51,7 @@ function.
 
 ## Why this Library?
 
-It's not surprising that `ex-patterns` isn't the only pattern matching library
+It's not surprising that *Ex Patterns* isn't the only pattern matching library
 in the JavaScript universe; however, it can do a couple of things that others have
 problems with.
 
@@ -93,9 +93,15 @@ when(user)
 (end);
 ```
 
-While pattern matching in JavaScript is great, there are some **problems related to JavaScript's mutable data types**. For example, if you want to match
-against the tail of an array and return the corresponding elements (in th example below we bind it to the placeholder `A`), there's no
-way around slicing the array and copying the data:
+While pattern matching in JavaScript is great, **JavaScript's mutable data types
+can cause performance issues** that are only apparent on closer inspection. For
+example, if you want to match against the tail of an array and return the
+corresponding elements (in the example below we bind it to the placeholder `A`),
+there's no way around slicing the array and copying the data. However, if you're
+not interested in returing the tail elements, slicing the array would be
+unneccessary and wasteful. To avoid these situations, *Ex Patterns* has a range
+of binding and non-binding placeholders and **only creates copies when it's
+absolutely necessary**:
 
 ```javascript
 const value = [1, 2, 3, 4, 5];
@@ -106,11 +112,9 @@ when(value)
     (_, then(() => 'always matches!'))
 (end);
 ```
-
-To avoid the performance penalties that come with copying data, copies are only created when it's absolutely necessary. Moreover, the package comes with **first class support
-for Immutable.js collections**, which means that you can simply match against
-immutable `List` and `Map` structures as if they were regular JavaScript
-arrays and objects!
+Moreover, the package comes with **first class support for Immutable.js
+collections**, which means that you can simply match against immutable `List`
+and `Map` structures as if they were regular JavaScript arrays and objects!
 
 Finally, `ex-patterns` does not only come with a powerful pattern matching algorithm, but a whole array of **control flow structures that can change the way you think about programming** in JavaScript. Have fun!
 
