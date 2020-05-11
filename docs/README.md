@@ -798,7 +798,45 @@ As for the `when` function, the `cond` function **throws an error if no truthy
 clause** is found. Similarly, it's optional to wrap the return value in the `then`
 function, but recommended for readability.
 
-# Summary Functions & Keywords
+# Examples
+
+## Redux Reducer with *when*
+
+This example shows how to use the `when` function to build a simple [Redux](https://redux.js.org/) 
+reducer that updates the displayed page (`view`) and user data (`user`) of an
+app based on the types of incoming reducer actions.
+
+```javascript
+import { when, end, _, U, V } from 'ex-patterns';
+
+const appStateReducer = (appState = initialState, action) => when(action)
+    ({ type: 'LOG IN', user: U }, then(({ U }) => ({ ...appState, user: U, view: 'HOME' })))
+    ({ type: 'GO TO',  view: V }, then(({ V }) => ({ ...appState, view: V })))
+    ({ type: 'LOG OUT' }, then(() => initialState))
+    (_, then(() => appState))
+(end);
+```
+
+## FizzBuzz with *cond*
+
+This example shows how to use the `cond` function to play the FizzBuzz group
+word game:
+
+```javascript
+import { cond, end, then } from 'ex-patterns';
+
+const fizzBuzz = (number) => cond
+    (number % 15 === 0, then('Fizz Buzz'))
+    (number % 3 === 0, then('Fizz'))
+    (number % 5 === 0, then('Buzz'))
+    (true, then(number))
+(end);
+
+fizzBuzz(5)
+> 'Buzz'
+```
+
+# Function Glossary
 
 The following functions and keywords are exported:
 
@@ -850,41 +888,3 @@ to make it binding.</p>
 <code>(pattern, callback)</code>. Returns return value of callback that belongs to
 first pattern that matches <code>value</code>. Throws error if no matching
 pattern is found.</p>
-
-# Examples
-
-## Redux Reducer with *when*
-
-This example shows how to use the `when` function to build a simple [Redux](https://redux.js.org/) 
-reducer that updates the displayed page (`view`) and user data (`user`) of an
-app based on the types of incoming reducer actions.
-
-```javascript
-import { when, end, _, U, V } from 'ex-patterns';
-
-const appStateReducer = (appState = initialState, action) => when(action)
-    ({ type: 'LOG IN', user: U }, then(({ U }) => ({ ...appState, user: U, view: 'HOME' })))
-    ({ type: 'GO TO',  view: V }, then(({ V }) => ({ ...appState, view: V })))
-    ({ type: 'LOG OUT' }, then(() => initialState))
-    (_, then(() => appState))
-(end);
-```
-
-## FizzBuzz with *cond*
-
-This example shows how to use the `cond` function to play the FizzBuzz group
-word game:
-
-```javascript
-import { cond, end, then } from 'ex-patterns';
-
-const fizzBuzz = (number) => cond
-    (number % 15 === 0, then('Fizz Buzz'))
-    (number % 3 === 0, then('Fizz'))
-    (number % 5 === 0, then('Buzz'))
-    (true, then(number))
-(end);
-
-fizzBuzz(5)
-> 'Buzz'
-```
