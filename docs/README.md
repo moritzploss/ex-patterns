@@ -35,7 +35,7 @@ const x = [1, 2, 3];
 const y = 'hello';
 ```
 
-In contrast, **pattern matching** allows for data data structures to appear
+In contrast, **pattern matching** allows for data structures to appear
 on both sides of the equal sign `=` as long as the equation is balanced, i.e.,
 if the pattern on the left *matches* the value on the right.
 
@@ -47,7 +47,7 @@ x = [1, 2, 3]   // match
 
 While JavaScript doesn't directly support the above syntax, it's helpful to keep
 this idea of `left` and `right` in mind when going through the examples below!
-If you're new to pattern matching, it's recommended to skip over the next
+If you're new to pattern matching, it's recommended to skip the next
 section and to continue with the [`match`](https://moritzploss.github.io/ex-patterns/#/?id=the-match-function)
 function.
 
@@ -78,22 +78,7 @@ In other words, *patterns* are just plain old JavaScript data structures that
 (can) contain special placeholders. Because of that, **patterns are composable**
 and can be combined, nested, modified and re-used in all kinds of ways (you
 can even do something called [*parent capturing*](https://moritzploss.github.io/ex-patterns/#/?id=parent-capturing),
-which is not widely supported in other libraries):
-
-```javascript
-const user = { name: 'Amelie', city: 'Stockholm' };
-
-const cityPattern = { city: C };
-const namePattern = { name: N };
-const composedPattern = { ...cityPattern, ...namePattern };
-
-when(user)
-    (composedPattern, then(() => 'has city and name!'))
-    (cityPattern, then(() => 'has only city!'))
-    (namePattern, then(() => 'has only name!'))
-    (_, then(() => 'has no city and no name!'))
-(end);
-```
+which is not widely supported in other libraries).
 
 While pattern matching in JavaScript is great, **JavaScript's mutable data types
 can cause performance issues** that are only apparent on closer inspection. For
@@ -118,7 +103,9 @@ Moreover, the package comes with **first class support for Immutable.js
 collections**, which means that you can simply match against immutable `List`
 and `Map` structures as if they were regular JavaScript arrays and objects!
 
-Finally, `ex-patterns` does not only come with a powerful pattern matching algorithm, but a whole array of **control flow structures that can change the way you think about programming** in JavaScript. Have fun!
+Finally, `ex-patterns` does not only come with a powerful pattern matching
+algorithm, but a whole array of **control flow structures that can change the
+way you think about programming** in JavaScript. Have fun!
 
 # Basic Pattern Matching
 
