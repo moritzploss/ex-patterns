@@ -3,10 +3,12 @@
 
 # Ex Patterns Documentation {docsify-ignore}
 
-This project brings [Elixir-style pattern matching](https://elixir-lang.org/getting-started/pattern-matching.html)
+This project brings Elixir-style [pattern matching](https://elixir-lang.org/getting-started/pattern-matching.html)
 and control flow structures to JavaScript. Pattern matching is supported for
 native JavaScript data types as well as common [Immutable.js](https://immutable-js.github.io/immutable-js/)
-collections. If you're new to pattern matching, get started with [the basics](https://moritzploss.github.io/ex-patterns/#/?id=basic-pattern-matching), then explore the [`match`](https://moritzploss.github.io/ex-patterns/#/?id=the-match-function) function. If you have previsouly used pattern matching in
+collections.
+
+If you're new to pattern matching, get started with [the basics](https://moritzploss.github.io/ex-patterns/#/?id=basic-pattern-matching), then explore the [`match`](https://moritzploss.github.io/ex-patterns/#/?id=the-match-function) function. If you have previously worked with pattern matching in
 JavaScript, [find out](https://moritzploss.github.io/ex-patterns/#/?id=why-this-library)
 what sets *Ex Patterns* apart from other libraries!
 
@@ -20,24 +22,22 @@ Install the package from npm:
 
 ## Pattern Matching Basics
 
-Pattern matching is a way of desctructuring and inspecting data structures.
+Pattern matching is a technique to destructure and inspect data structures.
 It can be used to filter, access and compare data, all without the need for
-type and property checks. If done right, the resulting code is clean and
-expressive with little explicit branching logic.
+explicit type and property checks.
 
-In JavaScript, the equal sign `=` is an *assignment operator*. A variable on the
-left side is *assigned* the value on the right side.
+At its core, pattern matching is all about asserting equivalence between two
+values. In JavaScript, the equal sign `=` is an *assignment operator*. A
+variable on its left side is *assigned* the value on its right side.
 
 ```javascript
 const x = [1, 2, 3];
 const y = 'hello';
 ```
 
-In contrast, **pattern matching** is based on equality in the mathematical sense.
-Data structures can appear on both sides of the equal sign `=` as long as the
-equation is balanced, i.e., if the patterns on both sides can be *matched*. It's
-helpful to keep this idea of `left` and `right` in mind when going through the
-examples below!
+In contrast, **pattern matching** allows for data data structures to appear
+on both sides of the equal sign `=` as long as the equation is balanced, i.e.,
+if the pattern on the left *matches* the value on the right.
 
 ```javascript
 x = [1, 2, 3]   // match
@@ -45,6 +45,8 @@ x = [1, 2, 3]   // match
 [1, _, _] = x   // match
 ```
 
+While JavaScript doesn't directly support the above syntax, it's helpful to keep
+this idea of `left` and `right` in mind when going through the examples below!
 If you're new to pattern matching, it's recommended to skip over the next
 section and to continue with the [`match`](https://moritzploss.github.io/ex-patterns/#/?id=the-match-function)
 function.
