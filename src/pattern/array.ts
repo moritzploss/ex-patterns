@@ -32,7 +32,7 @@ const _getHead = (pattern: Pattern[]): [boolean, Head | null] => {
     : [false, null];
 };
 
-const throwIfMultipleHeads = (pattern: Pattern[]) => {
+const _throwIfMultipleHeads = (pattern: Pattern[]) => {
   pattern.forEach((element, index) => {
     if (index > 0 && isHead(element)) {
       throw Error('Pattern has multiple heads in one array.');
@@ -40,24 +40,24 @@ const throwIfMultipleHeads = (pattern: Pattern[]) => {
   });
 };
 
-const _matchNamedHead = (pattern: Pattern, array: ListLike, head: Head, lastHeadIndex: number, matchFunc: Function, matches: Match) => {
-  throwIfMultipleHeads(pattern);
-  const [isMatch, newMatches] = matchFunc(head.bindTo, array.slice(0, lastHeadIndex + 1), matches);
+const _matchNamedHead = (pattern: Pattern, array: ListLike, head: Head, lastHeadIndex: number, _match: Function, matches: Match) => {
+  _throwIfMultipleHeads(pattern);
+  const [isMatch, newMatches] = _match(head.bindTo, array.slice(0, lastHeadIndex + 1), matches);
   if (!isMatch) {
     return [false, {}];
   }
-  return matchFunc(pattern.slice(1), array.slice(lastHeadIndex + 1), newMatches);
+  return _match(pattern.slice(1), array.slice(lastHeadIndex + 1), newMatches);
 };
 
-const _matchTail = (tail: Tail, array: ListLike, acc: Match, isMatch: boolean, i: number, matchFunc: Function) => {
+const _matchTail = (tail: Tail, array: ListLike, acc: Match, isMatch: boolean, i: number, _match: Function) => {
   if (isUnnamedPlaceholder(tail.bindTo)) {
     return [stop, [true, acc]];
   }
-  [isMatch, acc] = matchFunc(tail.bindTo, array.slice(i), acc); // eslint-disable-line no-param-reassign
+  [isMatch, acc] = _match(tail.bindTo, array.slice(i), acc); // eslint-disable-line no-param-reassign
   return _accOrNone(isMatch, acc);
 };
 
-const matchArray = (pattern: Pattern, array: ListLike, arrayLen: number, getElement: Function, matchFunc: Function, matches: Match) => {
+const matchArray = (pattern: Pattern, array: ListLike, arrayLen: number, get: Function, _match: Function, matches: Match) => {
   const patternLen = pattern.length;
   const tailIndex = patternLen - 1;
 
@@ -79,14 +79,14 @@ const matchArray = (pattern: Pattern, array: ListLike, arrayLen: number, getElem
   const lastHeadIndex = arrayLen - patternLen;
 
   if (hasHead && isNamedPlaceholder(head.bindTo)) {
-    return _matchNamedHead(pattern, array, head, lastHeadIndex, matchFunc, matches);
+    return _matchNamedHead(pattern, array, head, lastHeadIndex, _match, matches);
   }
 
   const headOffset = hasHead ? lastHeadIndex : 0;
 
   return reduceWhile(pattern, [true, matches], ([isMatch, acc]: MatchTuple, elm: any, i: number) => {
     if (i === tailIndex && hasTail) {
-      return _matchTail(tail, array, acc, isMatch, i, matchFunc);
+      return _matchTail(tail, array, acc, isMatch, i, _match);
     }
     if (i === 0 && hasHead) {
       return [ok, [true, acc]];
@@ -94,8 +94,8 @@ const matchArray = (pattern: Pattern, array: ListLike, arrayLen: number, getElem
     if (isReservedKeyword(elm)) {
       throw Error(`Reserved keyword ${elm.lookupName} used in invalid position.`);
     }
-    const arrayElement = getElement(i + headOffset);
-    [isMatch, acc] = matchFunc(elm, arrayElement, acc); // eslint-disable-line no-param-reassign
+    const arrayElement = get(array, i + headOffset);
+    [isMatch, acc] = _match(elm, arrayElement, acc); // eslint-disable-line no-param-reassign
     return _accOrNone(isMatch, acc);
   });
 };

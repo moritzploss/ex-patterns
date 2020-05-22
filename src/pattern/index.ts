@@ -1,12 +1,27 @@
 import { equals } from 'ramda';
+import { List } from 'immutable';
 
 import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder } from '../placeholder';
 import { updateMatch, Match } from '../match';
 import { matchArray } from './array';
-import { matchMap, matchObject } from './map';
-import { isObject, isArray, isMap, isList, isFunction } from '../util';
+import { matchMap } from './map';
+import { isObject, isArray, isMap, isList, isFunction, hasKey } from '../util';
 
 import { Pattern } from './types';
+
+const matchNamedPlaceholder = (pattern: Pattern, value: any, matches: Match, _match: Function) => {
+  // placeholder is used as is
+  if (isFunction(pattern)) {
+    return updateMatch(matches, pattern, value);
+  }
+  // placeholder is used for parent capturing and has been called with subPattern
+  const [isSuccess, newMatches] = updateMatch(matches, pattern, value);
+  if (isSuccess) {
+    // if parent capture was successful, continue to match against subPattern
+    return _match(pattern.subPattern, value, newMatches);
+  }
+  return [false, newMatches];
+};
 
 const _match = (pattern: Pattern, value: any, matches = {}) => {
   if (isPlaceholder(value)) {
@@ -18,17 +33,7 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
   }
 
   if (isNamedPlaceholder(pattern)) {
-    // placeholder is used as is
-    if (isFunction(pattern)) {
-      return updateMatch(matches, pattern, value);
-    }
-    // placeholder is used for parent capturing and has been called with subPattern
-    const [isSuccess, newMatches] = updateMatch(matches, pattern, value);
-    if (isSuccess) {
-      // if parent capture was successful, continue to match against subPattern
-      return _match(pattern.subPattern, value, newMatches);
-    }
-    return [false, newMatches];
+    return matchNamedPlaceholder(pattern, value, matches, _match);
   }
 
   if (equals(pattern, value)) {
@@ -37,21 +42,24 @@ const _match = (pattern: Pattern, value: any, matches = {}) => {
 
   if (isArray(pattern)) {
     if (isList(value)) {
-      const getElement = (index: number) => value.get(index);
-      return matchArray(pattern, value, value.size, getElement, _match, matches);
+      const get = (list: List<any>, index: number) => list.get(index);
+      return matchArray(pattern, value, value.size, get, _match, matches);
     }
     if (isArray(value)) {
-      const getElement = (index: number) => value[index];
-      return matchArray(pattern, value, value.length, getElement, _match, matches);
+      const get = (array: Array<any>, index: number) => array[index];
+      return matchArray(pattern, value, value.length, get, _match, matches);
     }
   }
 
   if (isObject(pattern)) {
     if (isMap(value)) {
-      return matchMap(pattern, value, _match, matches);
+      const has = (map: Map<string, any>, key: string) => map.has(key);
+      const get = (map: Map<string, any>, key: string) => map.get(key);
+      return matchMap(pattern, value, _match, matches, has, get);
     }
     if (isObject(value)) {
-      return matchObject(pattern, value, _match, matches);
+      const get = (map: Object, key: string) => map[key];
+      return matchMap(pattern, value, _match, matches, hasKey, get);
     }
   }
 
@@ -126,7 +134,7 @@ function match(pattern: Pattern, value: any): [boolean, Match] {
  * ```
  */
 function isMatch(pattern: Pattern, value: any): boolean {
-  return match(pattern, value)[0];
+  return _match(pattern, value)[0];
 }
 
 export { match, isMatch, _match };
