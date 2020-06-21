@@ -458,8 +458,8 @@ match(pattern, value);
 > [true, { V: [1, 2, 3], A: 1, B: 2, C: 3 }]
 ```
 
-From the above it may not be entirely obvious why you'd ever need parent
-capturing, but imagine the following API call that returns a deeply nested
+From the above it may not be entirely obvious why you'd ever need as-patterns,
+but imagine the following API call that returns a deeply nested
 respone object (for more information on how to use the `when` function, see
 below). Here you can't pattern match against the response status *and* get
 access to the response as a whole since the response object was never assigned
