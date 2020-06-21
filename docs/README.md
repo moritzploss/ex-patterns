@@ -75,7 +75,7 @@ when(value)
 In other words, *patterns* are just plain old JavaScript data structures that
 (can) contain special placeholders. Because of that, **patterns are composable**
 and can be combined, nested, modified and re-used in all kinds of ways (you
-can even do something called [*parent capturing*](https://moritzploss.github.io/ex-patterns/#/?id=parent-capturing),
+can even do Haskell-style [*as-patterns*](https://moritzploss.github.io/ex-patterns/#/?id=as-patterns),
 which is not widely supported in other libraries):
 
 ```javascript
@@ -431,7 +431,7 @@ match({ foo: A }, Map({ foo: { bar: 1 } }));     // match
 > [true, { A: { bar: 1 }}]
 ```
 
-## Parent Capturing
+## As-Patterns
 
 Above we have seen that it's possible to match against nested data structures
 with named and unnamed placeholders, and to perform partial matches against
@@ -451,9 +451,9 @@ match(V, value);
 ```
 
 To access specific fields and capture the entire data structure as a whole, use
-**parent capturing**. This is done by passing the subpattern that you want
-to match against as an argument to a **named placeholder** (parent capturing
-is not supported for the *unnamed placeholder* `_` since it's non-capturing
+**as-patterns**. This is done by passing the subpattern that you want
+to match against as an argument to a **named placeholder** (as-patterns
+are not supported for the *unnamed placeholder* `_` since it's non-capturing
 by definition):
 
 ```javascript
@@ -482,7 +482,7 @@ when(await fetch('api/user/123'))
 (end);
 ```
 
-Enter parent capturing:
+Enter as-patterns:
 
 ```javascript
 when(await fetch('api/user/123'))
@@ -492,7 +492,7 @@ when(await fetch('api/user/123'))
 (end);
 ```
 
-As with all other patterns, **it's perfectly fine to use parent capturing
+As with all other patterns, **it's perfectly fine to use as-patterns
 multiple times in the same pattern** as long as the same named placeholder is
 always matched against the same value (I can't come up with a practical
 example where this would be useful, but it's good to know that the sky is the
