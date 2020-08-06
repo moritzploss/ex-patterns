@@ -1,7 +1,7 @@
 import { Map, List } from 'immutable';
 import * as R from 'ramda';
 
-export const { equals }: { equals: (value1: any, value2: any) => boolean } = R;
+export const { equals } = R;
 
 export const hasKey = (object: Object, key: string): boolean => (
   Object.prototype.hasOwnProperty.call(object, key)
