@@ -1,14 +1,7 @@
 import { tailSymbol, _ } from '../symbols';
-import { Placeholder, isPlaceholder } from '../placeholder';
+import { isPlaceholder } from '../placeholder';
 import { isKeyword, throwBindError } from './keyword';
-
-export type Tail = {
-  symbol: Symbol;
-  lookupName: 'tail';
-  bindTo: Placeholder;
-}
-
-export type TailFunction = (placeholder?: Placeholder) => Tail;
+import { Tail } from './types';
 
 const tail = (placeholder = _): Tail => {
   if (!isPlaceholder(placeholder)) {

@@ -1,16 +1,10 @@
-import { List } from 'immutable';
-
 import { reduceWhile, ok, stop } from '../util/enum';
 import { isUnnamedPlaceholder, isNamedPlaceholder } from '../placeholder';
-import { Match } from '../match';
+import { Match, MatchTuple, Pattern, Placeholder } from '../types';
 import { Tail, Head, isTail, isHead, resolve, isReservedKeyword } from '../keywords';
+import { ListLike, ListGet, MatchFunction } from './types';
 
-import { Pattern } from './types';
-
-type MatchTuple = [boolean, Match];
-type ListLike = [] | List<any>;
-
-const _accOrNone = (isMatch: boolean, acc: Match) => (
+const _accumulatorOrNone = (isMatch: boolean, acc: Match) => (
   isMatch
     ? [ok, [true, acc]]
     : [stop, [false, {}]]
@@ -40,24 +34,45 @@ const _throwIfMultipleHeads = (pattern: Pattern[]) => {
   });
 };
 
-const _matchNamedHead = (pattern: Pattern, array: ListLike, head: Head, lastHeadIndex: number, _match: Function, matches: Match) => {
+const _matchNamedHead = (
+  pattern: Pattern[],
+  array: ListLike,
+  placeholder: Placeholder,
+  lastHeadIndex: number,
+  _match: MatchFunction,
+  matches: Match,
+): MatchTuple => {
   _throwIfMultipleHeads(pattern);
-  const [isMatch, newMatches] = _match(head.bindTo, array.slice(0, lastHeadIndex + 1), matches);
-  if (!isMatch) {
-    return [false, {}];
-  }
-  return _match(pattern.slice(1), array.slice(lastHeadIndex + 1), newMatches);
+  const [isMatch, newMatches] = _match(
+    placeholder,
+    array.slice(0, lastHeadIndex + 1),
+    matches,
+  );
+  return isMatch
+    ? _match(pattern.slice(1), array.slice(lastHeadIndex + 1), newMatches)
+    : [false, {}];
 };
 
-const _matchTail = (tail: Tail, array: ListLike, acc: Match, isMatch: boolean, i: number, _match: Function) => {
-  if (isUnnamedPlaceholder(tail.bindTo)) {
-    return [stop, [true, acc]];
-  }
-  [isMatch, acc] = _match(tail.bindTo, array.slice(i), acc); // eslint-disable-line no-param-reassign
-  return _accOrNone(isMatch, acc);
-};
+const _matchTail = (
+  tail: Tail,
+  array: ListLike,
+  accumulator: Match,
+  i: number,
+  _match: MatchFunction,
+) => (
+  isUnnamedPlaceholder(tail.bindTo)
+    ? [stop, [true, accumulator]]
+    : _accumulatorOrNone(..._match(tail.bindTo, array.slice(i), accumulator))
+);
 
-const matchArray = (pattern: Pattern, array: ListLike, arrayLen: number, get: Function, _match: Function, matches: Match) => {
+const matchArray = (
+  pattern: Pattern,
+  array: ListLike,
+  arrayLen: number,
+  get: ListGet,
+  _match: MatchFunction,
+  matches: Match,
+) => {
   const patternLen = pattern.length;
   const tailIndex = patternLen - 1;
 
@@ -79,25 +94,26 @@ const matchArray = (pattern: Pattern, array: ListLike, arrayLen: number, get: Fu
   const lastHeadIndex = arrayLen - patternLen;
 
   if (hasHead && isNamedPlaceholder(head.bindTo)) {
-    return _matchNamedHead(pattern, array, head, lastHeadIndex, _match, matches);
+    return _matchNamedHead(pattern, array, head.bindTo, lastHeadIndex, _match, matches);
   }
 
   const headOffset = hasHead ? lastHeadIndex : 0;
 
-  return reduceWhile(pattern, [true, matches], ([isMatch, acc]: MatchTuple, elm: any, i: number) => {
+  const reducer = ({ 1: accumulator }: MatchTuple, elm: any, i: number) => {
     if (i === tailIndex && hasTail) {
-      return _matchTail(tail, array, acc, isMatch, i, _match);
+      return _matchTail(tail, array, accumulator, i, _match);
     }
     if (i === 0 && hasHead) {
-      return [ok, [true, acc]];
+      return [ok, [true, accumulator]];
     }
     if (isReservedKeyword(elm)) {
       throw Error(`Reserved keyword ${elm.lookupName} used in invalid position.`);
     }
-    const arrayElement = get(array, i + headOffset);
-    [isMatch, acc] = _match(elm, arrayElement, acc); // eslint-disable-line no-param-reassign
-    return _accOrNone(isMatch, acc);
-  });
+    const arrayElement = get(i + headOffset);
+    return _accumulatorOrNone(..._match(elm, arrayElement, accumulator));
+  };
+
+  return reduceWhile(reducer, [true, matches], pattern);
 };
 
 export { matchArray };

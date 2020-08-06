@@ -1,14 +1,7 @@
 import { _, headSymbol } from '../symbols';
-import { Placeholder, isPlaceholder } from '../placeholder';
+import { isPlaceholder } from '../placeholder';
 import { isKeyword, throwBindError } from './keyword';
-
-export type Head = {
-  symbol: Symbol;
-  lookupName: 'head';
-  bindTo: Placeholder;
-}
-
-export type HeadFunction = (placeholder?: Placeholder) => Head;
+import { Head } from './types';
 
 const head = (placeholder = _): Head => {
   if (!isPlaceholder(placeholder)) {

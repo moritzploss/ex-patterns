@@ -1,9 +1,7 @@
-import { Placeholder } from './placeholder';
 import { hasKey, equals } from './util';
+import { Match, MatchTuple, Placeholder } from './types';
 
-export type Match = Record<string, any>;
-
-const updateMatch = (match: Match, { lookupName }: Placeholder, value: any): [boolean, Match] => {
+const updateMatch = (match: Match, { lookupName }: Placeholder, value: any): MatchTuple => {
   if (!hasKey(match, lookupName)) {
     // eslint-disable-next-line no-param-reassign
     match[lookupName] = value;

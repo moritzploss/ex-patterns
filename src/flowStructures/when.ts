@@ -1,14 +1,11 @@
 import { match } from '../pattern';
-import { Pattern } from '../pattern/types';
-import { Match } from '../match';
 import { end, End } from '../symbols';
 import { isFunction } from '../util';
-
-type Callback = (matches?: Match, value?: any, pattern?: Pattern) => any;
-type MatchClause = (pattern: Pattern | End, callback?: Callback) => any;
+import { MatchClause, MatchCallback } from './types';
+import { Pattern } from '../types';
 
 const _when = (value: any, done = false, result = null): MatchClause => (
-  (pattern: Pattern | End, callback?: Callback): any => {
+  (pattern: Pattern | End, callback?: MatchCallback): any => {
     if (pattern === end) {
       if (done) {
         return result;

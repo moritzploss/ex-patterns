@@ -1,4 +1,4 @@
-const reduceWhile = (array: any[], accumulator: any, func: Function): any => {
+const reduceWhile = <T>(func: Function, accumulator: T, array: any[]): T => {
   let proceed: boolean;
   for (let i = 0; i < array.length; i += 1) {
     // eslint-disable-next-line no-param-reassign

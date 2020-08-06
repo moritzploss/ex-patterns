@@ -1,7 +1,8 @@
 import { isPlaceholder } from '../placeholder';
 import { isFunction, isObject } from '../util';
+import { Placeholder } from '../types';
 
-const throwBindError = (keyword, placeholder) => {
+const throwBindError = (keyword: any, placeholder: Placeholder) => {
   throw Error(`Cannot bind '${keyword}' to invalid placeholder ${placeholder}`);
 };
 

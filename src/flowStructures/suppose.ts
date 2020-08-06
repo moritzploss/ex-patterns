@@ -3,8 +3,7 @@ import { isFunction } from '../util';
 import { _match } from '../pattern';
 import { isThen } from './then';
 import { when } from './when';
-import { Pattern } from '../pattern/types';
-import { Match } from '../match';
+import { Match, Pattern } from '../types';
 
 const thenCallback = (matches: Match, supposeFunc: Function) => (callback: Function): any => {
   if (!isFunction(callback)) {
@@ -156,7 +155,7 @@ encounter and to write an `otherwise` clause for each one of them!
 
 ### Callback Functions
 
-The functions in the `suppose` clauses are passed the piped matches as their 
+The functions in the `suppose` clauses are passed the piped matches as their
 only argument. The same is true for the `then` callback.
 
 ```javascript
