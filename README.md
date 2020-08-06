@@ -67,12 +67,12 @@ import { suppose, then, otherwise, end, I, N, R } from 'ex-patterns';
 const response = await ...
 
 suppose
-    ({ status: 200 }, () => response)
+    ({ status: 200 },             () => response)
     ({ body: { name: N, id: I }}, () => response)
-    (true, matches => isValidUserName(matches.N))
-    (true, matches => isUniqueUserId(matches.I))
+    (true,                        ({ N }) => isValidUserName(N))
+    (true,                        ({ I }) => isUniqueUserId(I))
 (then)
-    (matches => `Welcome ${matches.N}`)
+    (({ N }) => `Welcome ${N}`)
 (end);
 ```
 
