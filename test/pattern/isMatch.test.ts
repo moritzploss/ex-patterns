@@ -16,3 +16,16 @@ describe('the isMatch function: primitives', () => {
     expect(status).to.be.false;
   });
 });
+
+describe('the isMatch function: partial application', () => {
+  it('should be possible to partially apply isMatch', () => {
+    const status1 = isMatch()(1)(1);
+    expect(status1).to.be.true;
+
+    const status2 = isMatch(1)(1);
+    expect(status2).to.be.true;
+
+    const status3 = isMatch(1, 1);
+    expect(status3).to.be.true;
+  });
+});

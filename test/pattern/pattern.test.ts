@@ -226,3 +226,16 @@ describe('the match function: user errors', () => {
     expect(() => match({ _: 1 }, { a: 1 })).to.not.throw(Error);
   });
 });
+
+describe('the match function: partial application', () => {
+  it('should be possible to partially apply match', () => {
+    const [status1] = match()(1)(1);
+    expect(status1).to.be.true;
+
+    const [status2] = match(1)(1);
+    expect(status2).to.be.true;
+
+    const [status3] = match(1, 1);
+    expect(status3).to.be.true;
+  });
+});

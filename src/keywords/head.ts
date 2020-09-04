@@ -1,5 +1,5 @@
 import { _, headSymbol } from '../symbols';
-import { isPlaceholder } from '../placeholder';
+import { isPlaceholder } from '../placeholders';
 import { isKeyword, throwBindError } from './keyword';
 import { Head } from './types';
 

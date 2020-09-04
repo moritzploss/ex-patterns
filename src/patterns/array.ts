@@ -1,5 +1,5 @@
 import { reduceWhile, ok, stop } from '../util/enum';
-import { isUnnamedPlaceholder, isNamedPlaceholder } from '../placeholder';
+import { isUnnamedPlaceholder, isNamedPlaceholder } from '../placeholders';
 import { Match, MatchTuple, Pattern, Placeholder } from '../types';
 import { Tail, Head, isTail, isHead, resolve, isReservedKeyword } from '../keywords';
 import { ListLike, ListGet, MatchFunction } from './types';

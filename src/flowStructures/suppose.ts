@@ -1,6 +1,6 @@
 import { end, otherwise } from '../symbols';
 import { isFunction } from '../util';
-import { _match } from '../pattern';
+import { _match } from '../patterns/matchInternal';
 import { isThen } from './then';
 import { when } from './when';
 import { Match, Pattern } from '../types';

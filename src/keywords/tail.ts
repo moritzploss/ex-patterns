@@ -1,5 +1,5 @@
 import { tailSymbol, _ } from '../symbols';
-import { isPlaceholder } from '../placeholder';
+import { isPlaceholder } from '../placeholders';
 import { isKeyword, throwBindError } from './keyword';
 import { Tail } from './types';
 

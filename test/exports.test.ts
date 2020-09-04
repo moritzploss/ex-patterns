@@ -4,7 +4,7 @@
 import { expect } from 'chai';
 
 import { A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } from '../src/index';
-import { isPlaceholder } from '../src/placeholder';
+import { isPlaceholder } from '../src/placeholders';
 
 const placeholders = [
   A, B, C, D, E, F,

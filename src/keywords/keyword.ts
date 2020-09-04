@@ -1,4 +1,4 @@
-import { isPlaceholder } from '../placeholder';
+import { isPlaceholder } from '../placeholders';
 import { isFunction, isObject } from '../util';
 import { Placeholder } from '../types';
 

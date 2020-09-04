@@ -1,6 +1,8 @@
-import { _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } from './symbols';
-import { hasKey, isObject } from './util';
-import { Placeholder } from './types';
+import { curry } from 'ramda';
+
+import { _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } from '../symbols';
+import { hasKey, isObject } from '../util';
+import { Placeholder } from '../types';
 
 const namedPlaceholders = [
   A, B, C, D, E, F, G, H, I, J, K, L, M,
@@ -15,7 +17,7 @@ const lookup = (lookupName: Placeholder['lookupName']): Symbol | undefined => (
   symbolsByName[lookupName]
 );
 
-const isNamedPlaceholder = (value: any): boolean => {
+const isNamedPlaceholder = curry((value: any): boolean => {
   if (value === null || value === undefined) {
     return false;
   }
@@ -23,18 +25,18 @@ const isNamedPlaceholder = (value: any): boolean => {
     return false;
   }
   return lookup(value.lookupName) === value.symbol;
-};
+});
 
-const isUnnamedPlaceholder = (value: any): boolean => {
+const isUnnamedPlaceholder = curry((value: any): boolean => {
   if (!isObject(value)) {
     return false;
   }
   return value.symbol === _.symbol;
-};
+});
 
-const isPlaceholder = (value: any): boolean => (
+const isPlaceholder = curry((value: any): boolean => (
   isUnnamedPlaceholder(value) || isNamedPlaceholder(value)
-);
+));
 
 export {
   isNamedPlaceholder,
