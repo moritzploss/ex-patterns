@@ -10,7 +10,7 @@ import { hasKey } from '../util';
  * @returns The `callback` function.
  *
  *
- * ## Examples
+ * @example
  * Use `when` to pattern match against `value`. The callback function that belongs
  * to the first matching pattern is invoked and the result is returned.
  * ```

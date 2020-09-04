@@ -11,7 +11,7 @@ import { _match } from './matchInternal';
  *
  * @returns Two-element array [`isMatch`, `matches`]
  *
- * ## Examples
+ * @example
  * Successful match against the unnamed placeholder `_`:
  * ```
  *      const pattern = [_, 2];

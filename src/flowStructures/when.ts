@@ -56,7 +56,7 @@ const _when = (value: any, done = false, result = null): MatchClause => (
  * @returns Function that can be invoked with `(pattern, callback)` or `end`.
  *
  *
- * ## Examples
+ * @example
  * Use `when` to pattern match against `value`. The callback function that belongs
  * to the first matching pattern is invoked and the result is returned.
  * ```

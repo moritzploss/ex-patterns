@@ -70,7 +70,7 @@ as all matches succeed.
 
 @returns Chainable control flow structure. See examples.
 
-## Examples
+@example
 
 ```javascript
 import { suppose, then, end, A, B, C, D, _ } from 'ex-patterns';

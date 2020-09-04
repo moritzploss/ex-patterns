@@ -36,7 +36,7 @@ const _cond = (done = false, result = null) => (
  *
  * @returns `value`
  *
- * ## Examples
+ * @example
  * ```
       import { cond, end, then } from 'ex-patterns';
 
