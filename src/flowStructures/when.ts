@@ -1,3 +1,5 @@
+import { curry } from 'ramda';
+
 import { match } from '../patterns';
 import { end, End } from '../symbols';
 import { isFunction } from '../util';
@@ -5,12 +7,16 @@ import { MatchClause, MatchCallback } from './types';
 import { Pattern } from '../types';
 
 const _when = (value: any, done = false, result = null): MatchClause => (
-  (pattern: Pattern | End, callback?: MatchCallback): any => {
+  function _inner(pattern: Pattern | End, callback?: MatchCallback): any {
     if (pattern === end) {
       if (done) {
         return result;
       }
       throw Error('No matching clause found. ');
+    }
+
+    if (arguments.length === 1) {
+      return curry(_inner)(pattern);
     }
 
     if (!isFunction(callback)) {
@@ -69,8 +75,6 @@ const _when = (value: any, done = false, result = null): MatchClause => (
  *      > 'bar'
  * ```
  */
-function when(value: any) {
-  return _when(value);
-}
+const when = curry((value: any) => _when(value));
 
 export { when };

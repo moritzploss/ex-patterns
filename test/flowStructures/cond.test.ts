@@ -21,18 +21,6 @@ describe('the when function: base cases', () => {
     expect(result).to.deep.equal([1, 2, 'fizz', 4, 'buzz', 7, 'fizzbuzz', 16]);
   });
 
-  it('should throw if called with only one argument that is not \'end\'', () => {
-    const fizzBuzz = (number) => cond
-      (number % 15 === 0, then('fizzbuzz'))
-      (number % 3 === 0, then('fizz'))
-      (number % 5 === 0, then('buzz'))
-      (true, then(number))
-    ('end');
-
-    const func = () => fizzBuzz(5);
-    expect(func).to.throw(Error);
-  });
-
   it('should throw if no matching clause is found', () => {
     const fizzBuzz = (number) => cond
       (number % 15 === 0, then('fizzbuzz'))
@@ -77,5 +65,16 @@ describe('the when function: base cases', () => {
     (end);
 
     expect(result).to.deep.equal('this one matches');
+  });
+});
+
+describe('the cond function: partial application', () => {
+  it('should be possible to partially apply cond', () => {
+    const result = cond
+      (false)(1)
+      (true)(2)
+    (end);
+
+    expect(result).to.equal(2);
   });
 });

@@ -1,3 +1,5 @@
+import { curry } from 'ramda';
+
 import { end, otherwise } from '../symbols';
 import { isFunction } from '../util';
 import { _match } from '../patterns/matchInternal';
@@ -13,7 +15,7 @@ const thenCallback = (matches: Match, supposeFunc: Function) => (callback: Funct
 };
 
 const _suppose = (happy = true, matches = {}, result = null, hasResult = false): Function => (
-  (pattern: Pattern, func: any): any => {
+  function _inner(pattern: Pattern, func: any) {
     // if called with 'end', return result
     if (pattern === end) {
       if (hasResult) {
@@ -42,6 +44,10 @@ const _suppose = (happy = true, matches = {}, result = null, hasResult = false):
     // if function has been called with 'then'
     if (isThen(pattern)) {
       return thenCallback(matches, _suppose);
+    }
+
+    if (arguments.length === 1) {
+      return curry(_inner)(pattern);
     }
 
     // check if second argument in 'suppose' clause is a function
@@ -188,8 +194,8 @@ suppose
 (end)
 ```
  */
-function suppose(pattern: Pattern, func: any): any {
-  return _suppose()(pattern, func);
-}
+const suppose = curry(
+  (pattern: Pattern, func: any) => _suppose()(pattern, func),
+);
 
 export { suppose };

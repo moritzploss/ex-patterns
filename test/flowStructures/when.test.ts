@@ -253,17 +253,6 @@ describe('the when function: user errors', () => {
     expect(fun).to.throw(Error);
   });
 
-  it('should throw an error if last clause is called with argument that is not symbol \'end\'', () => {
-    const value = 2;
-    const fun = () => when(value)
-      (1, then(() => 1))
-      (2, then(() => 2))
-      (3, then(() => 3))
-    ('end');
-
-    expect(fun).to.throw(Error);
-  });
-
   it('should throw an error if last clause is called with no arguments', () => {
     const value = 2;
     const fun = () => when(value)
@@ -313,5 +302,17 @@ describe('the when function: all together now', () => {
     (end);
 
     expect(result).to.deep.equal('Hi Amelie!');
+  });
+});
+
+describe('the when function: partial application', () => {
+  it('should be possible to partially apply when', () => {
+    const result = when(true)
+      (false)(() => 1)
+      (true)(() => 2)
+      (_)(() => 3)
+    (end);
+
+    expect(result).to.equal(2);
   });
 });

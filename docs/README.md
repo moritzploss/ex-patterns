@@ -847,13 +847,13 @@ The following functions and keywords are exported:
 <code>_ *(underscore)*</code>
 <p style="margin-left: 40px">Non-binding placeholder.</p>
 
-<code>$(*name*) *-> placeholder*</code>
+<code>$ :: *name -> placeholder*</code>
 <p style="margin-left: 40px">Create a named placeholder.</p>
 
-<code>A*-*Z, *also* A(*subpattern*)*-*Z(*subpattern*) *-> placeholder* </code>
+<code>A-Z, *also* A-Z :: *subpattern -> placeholder* </code>
 <p style="margin-left: 40px">Binding placeholders. Can be invoked with subpattern.</p>
 
-<code>cond(*thruthy?*, *value*)(*...*)(end) *-> value?*</code>
+<code>cond :: *thruthy? -> value -> ... -> end -> Typeof value*</code>
 <p style="margin-left: 40px">Switch statement that accepts any number of clauses in the format
 <code>(truthy?, value)</code>. Returns <code>value</code> of the first truthy clause or
 throws error if no truthy clause is found.</p>
@@ -861,36 +861,36 @@ throws error if no truthy clause is found.</p>
 <code>end</code>
 <p style="margin-left: 40px">Keyword indicating end of control-flow-structure-style functions.</p>
 
-<code>head, *also* head(*placeholder*) *-> placeholder*</code>
+<code>head, *also* head :: *placeholder -> placeholder*</code>
 <p style="margin-left: 40px">Non-binding placeholder to match against any number
 of leading elements of an array-like data type. Can be invoked with named placeholder
 to make it binding.</p>
 
-<code>isMatch(*pattern*, *value*) *-> isMatch?*</code>
+<code>isMatch :: *pattern -> value -> isMatch?*</code>
 <p style="margin-left: 40px">Same as <code>match</code> but returns a boolean.</p>
 
-<code>match(*pattern*, *value*) *-> [isMatch?, matches]*</code>
+<code>match :: *pattern -> value -> [isMatch?, matches]*</code>
 <p style="margin-left: 40px">Matches a pattern against a value. Returns
 two-element tuple containing match result.</p>
 
 <code>otherwise</code>
 <p style="margin-left: 40px">Optional keyword for <code>suppose</code> function.</p>
 
-<code>suppose(*pattern*, *function*)(*...*)(then)(*callback*)(otherwise*?*)(*pattern*, *callback*)(*...*)(end) *-> callback(matches)?* or *callback(matches, value, pattern)*</code>
+<code>suppose :: *pattern -> function -> ... -> then -> callback -> otherwise? -> pattern -> callback -> ... -> end -> ReturnType callback*</code>
 <p style="margin-left: 40px">Switch statement that accepts any number of clauses in the format
 <code>(pattern, function)</code>. Returns <code>callback()</code> if all patterns
 match their respective function returns. Throws error otherwise. Can be combined with
 <code>otherwise</code> clause.</p>
 
-<code>tail, *also* tail(*placeholder*) *-> placeholder*</code>
+<code>tail, *also* tail :: *placeholder -> placeholder*</code>
 <p style="margin-left: 40px">Non-binding placeholder to match against any number
 of trailing elements of an array-like data type. Can be invoked with named placeholder
 to make it binding.</p>
 
-<code>then, *also* then(*function*) *-> function*</code>
+<code>then, *also* then :: *function -> function*</code>
 <p style="margin-left: 40px">Both keyword and optional return function wrapper.</p>
 
-<code>when(*value*)(*pattern*, *callback*)(*...*)(end) *-> callback(matches, value, pattern)?*</code>
+<code>when :: *value -> pattern -> callback -> ... -> end -> ReturnType callback*</code>
 <p style="margin-left: 40px">Switch statement that accepts any number of clauses in the format
 <code>(pattern, callback)</code>. Returns return value of callback that belongs to
 first pattern that matches <code>value</code>. Throws error if no matching

@@ -203,3 +203,33 @@ describe('the suppose function: base cases', () => {
     expect(func).to.throw(Error);
   });
 });
+
+describe('the suppose function: partial application', () => {
+  it('should be possible to partially apply suppose', () => {
+    const result = suppose
+      (false)(() => false)
+      (true)(() => true)
+      (_)(() => 3)
+    (then)
+      (() => 'hello')
+    (end);
+
+    expect(result).to.equal('hello');
+  });
+
+  it('should be possible to partially apply suppose with otherwise', () => {
+    const result = suppose
+      (false)(() => false)
+      (true)(() => false)
+      (_)(() => 3)
+    (then)
+      (() => 'foo')
+    (otherwise)
+      (true)(() => 'bar')
+      (false)(() => 'hello')
+      (_)(() => 'baz')
+    (end);
+
+    expect(result).to.equal('hello');
+  });
+});

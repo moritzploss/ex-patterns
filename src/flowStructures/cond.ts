@@ -1,3 +1,5 @@
+import { curry } from 'ramda';
+
 import { end, End } from '../symbols';
 
 const _cond = (done = false, result = null) => (
@@ -10,8 +12,8 @@ const _cond = (done = false, result = null) => (
       throw Error('No matching clause found. ');
     }
 
-    if (arguments.length !== 2) {
-      throw Error('Expected 1 or 2 arguments of type (end) or (pattern, function).');
+    if (arguments.length === 1) {
+      return curry(_cond)(value);
     }
 
     if (done) {
@@ -51,8 +53,8 @@ const _cond = (done = false, result = null) => (
         > 'buzz'
  * ```
  */
-function cond(value: any, returnValue: any) {
-  return _cond()(value, returnValue);
-}
+const cond = curry(
+  (value: any, returnValue: any) => _cond()(value, returnValue),
+);
 
 export { cond };
