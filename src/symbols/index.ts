@@ -3,7 +3,7 @@ const generatePlaceholder = (name: string) => ({
   symbol: Symbol(name),
 });
 
-const generateNamedPlaceholder = (name: string) => {
+export const generateNamedPlaceholder = (name: string) => {
   const placeholder = generatePlaceholder(name);
   const placeholderFun = (subPattern: any = placeholder) => ({ subPattern, ...placeholder });
   return Object.assign(placeholderFun, placeholder);
@@ -49,3 +49,5 @@ export type ThenSymbol = typeof thenSymbol;
 
 export const tailSymbol = Symbol('tail');
 export const headSymbol = Symbol('head');
+
+export const reservedStrings = ['tail', 'head', '_'];

@@ -203,7 +203,7 @@ always been empty. Let's change that!
 To start using named placeholders, import them first:
 
 ```javascript
-import { match, _, A, B, C, D } from 'ex-patterns';
+import { match, _, A, B, C, D, $ } from 'ex-patterns';
 ```
 
 Here we import the named placeholders `A`, `B`, `C` and `D`. You can import
@@ -241,6 +241,17 @@ const value   = [1, 2, 2, { foo: 'k' }];
 match(pattern, value);
 
 > [true, { B: 2, C: 'k' }]
+```
+
+You can **create named placeholders** using the `$` function. Placeholders are
+registered globally and can be reused:
+
+```javascript
+const pattern = [1, 2, $('three')];
+const value   = [1, 2, 3];
+match(pattern, value);
+
+> [true, { three: 3 }]
 ```
 
 Continue reading below if you want to learn more about advanced pattern matching
@@ -835,6 +846,9 @@ The following functions and keywords are exported:
 
 <code>_ *(underscore)*</code>
 <p style="margin-left: 40px">Non-binding placeholder.</p>
+
+<code>$(*name*) *-> placeholder*</code>
+<p style="margin-left: 40px">Create a named placeholder.</p>
 
 <code>A*-*Z, *also* A(*subpattern*)*-*Z(*subpattern*) *-> placeholder* </code>
 <p style="margin-left: 40px">Binding placeholders. Can be invoked with subpattern.</p>
