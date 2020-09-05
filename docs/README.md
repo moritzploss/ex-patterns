@@ -254,6 +254,9 @@ match(pattern, value);
 > [true, { three: 3 }]
 ```
 
+Note that the `$` function **will throw an error** if you try to register a new
+placeholder with one of these protected names: `head`, `tail`, `_`
+
 Continue reading below if you want to learn more about advanced pattern matching
 techniques. Or jump to the [`when`](https://moritzploss.github.io/ex-patterns/#/?id=the-when-function)
 function to see pattern matching in action!

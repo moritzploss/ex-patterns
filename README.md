@@ -22,15 +22,19 @@ A pattern matching function for flat and nested data structures, including
 arrays, objects and `Immutable.js` collections:
 
 ```javascript
-import { match, _, A } from 'ex-patterns';
+import { match, _, $, A } from 'ex-patterns';
 
 const pattern = [_, 2];
 const value   = [1, 2];
-match(pattern, value)       // match
+match(pattern, value)           // returns [true, { }]
 
-const pattern = [A, 2];
+const pattern = [A, 2];         // match against placeholder 'A'
 const value   = [1, 2];
-match(pattern, value)       // match against placeholder A  >>  { A: 1 }
+match(pattern, value)           // returns [true, { A: 1 }]
+
+const pattern = [1, $('foo')];  // match against placeholder 'foo'
+const value   = [1, 2];
+match(pattern, value)           // returns [true, { foo: 2 }]
 ```
 
 ### The [`when`](https://moritzploss.github.io/ex-patterns/#/?id=the-when-function) Function
