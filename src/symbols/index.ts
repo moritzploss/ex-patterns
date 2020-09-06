@@ -38,6 +38,11 @@ export const X = generateNamedPlaceholder('X');
 export const Y = generateNamedPlaceholder('Y');
 export const Z = generateNamedPlaceholder('Z');
 
+export const namedPlaceholders = [
+  A, B, C, D, E, F, G, H, I, J, K, L, M,
+  N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+];
+
 export const end = Symbol('end');
 export type End = typeof end;
 

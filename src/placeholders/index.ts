@@ -1,22 +1,9 @@
 import { curry } from 'ramda';
-import { Map } from 'immutable';
 
-import { _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z } from '../symbols';
 import { hasKey, isObject } from '../util';
 import { Placeholder } from '../types';
-import { generateNamedPlaceholder, reservedStrings } from '../symbols';
-
-const namedPlaceholders = [
-  A, B, C, D, E, F, G, H, I, J, K, L, M,
-  N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
-];
-
-let placeholdersByName = namedPlaceholders.reduce(
-  (acc, placeholder) => acc.set(placeholder.lookupName, placeholder),
-  Map<string, Placeholder>(),
-);
-
-let symbolsByName = placeholdersByName.map(({ symbol }) => symbol);
+import { _, generateNamedPlaceholder, reservedStrings } from '../symbols';
+import * as store from './store';
 
 const isNamedPlaceholder = (value: any): boolean => {
   if (value === null || value === undefined) {
@@ -25,7 +12,7 @@ const isNamedPlaceholder = (value: any): boolean => {
   if (!(hasKey(value, 'symbol') && hasKey(value, 'lookupName'))) {
     return false;
   }
-  return symbolsByName.get(value.lookupName) === value.symbol;
+  return store.get(value.lookupName)?.symbol === value.symbol;
 };
 
 const isUnnamedPlaceholder = (value: any): boolean => {
@@ -44,14 +31,13 @@ const createNamedPlaceholder = (lookupName: string): Placeholder => {
     throw new Error(`Can't create named placeholder with reserved name '${lookupName}'`);
   }
 
-  const maybePlaceholder = placeholdersByName.get(lookupName);
+  const maybePlaceholder = store.get(lookupName);
   if (isNamedPlaceholder(maybePlaceholder)) {
     return maybePlaceholder;
   }
 
   const placeholder = generateNamedPlaceholder(lookupName);
-  symbolsByName = symbolsByName.set(lookupName, placeholder.symbol);
-  placeholdersByName = placeholdersByName.set(lookupName, placeholder);
+  store.add(lookupName, placeholder);
   return placeholder;
 };
 
