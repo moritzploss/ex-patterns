@@ -8,32 +8,32 @@ import { match, _, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U
 
 describe('the match function: regular expressions', () => {
   it('should not match regular expressions on strings', () => {
-    const [status, matches] = match(/hello/, 'hello');
+    const [status] = match(/hello/, 'hello');
     expect(status).to.be.false;
   });
 
   it('should match regular expressions on regular expressions', () => {
-    const [status, matches] = match(/abc/, /abc/);
+    const [status] = match(/abc/, /abc/);
     expect(status).to.be.true;
   });
 });
 
 describe('the match function: functions', () => {
   it('should not match anonymous functions', () => {
-    const [status, matches] = match((foo) => foo, (foo) => foo);
+    const [status] = match((foo) => foo, (foo) => foo);
     expect(status).to.be.false;
   });
 
   it('should named functions to themselves', () => {
     function a(foo) { return false; }
-    const [status, matches] = match(a, a);
+    const [status] = match(a, a);
     expect(status).to.be.true;
   });
 
   it('should not match named functions to other named functions', () => {
     function a(foo) { return false; }
     function b(foo) { return false; }
-    const [status, matches] = match(a, b);
+    const [status] = match(a, b);
     expect(status).to.be.false;
   });
 });
@@ -163,7 +163,7 @@ describe('the match function: all together now', () => {
     // eslint-disable-next-line no-multi-spaces, no-undef
     const value   = { a: [1, 2, undefined], b: { c: [null, BigInt('1'), ['baz', 'foo']] } };
 
-    const [status, matches] = match(pattern, value);
+    const [status] = match(pattern, value);
     expect(status).to.be.true;
   });
 
@@ -173,7 +173,7 @@ describe('the match function: all together now', () => {
     // eslint-disable-next-line no-multi-spaces, no-undef
     const value   = { a: [1, 2, undefined], b: { c: [null, BigInt('1'), ['baz', 'foo']] } };
 
-    const [status, matches] = match(pattern, value);
+    const [status] = match(pattern, value);
     expect(status).to.be.false;
   });
 });

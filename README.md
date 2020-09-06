@@ -24,17 +24,23 @@ arrays, objects and `Immutable.js` collections:
 ```javascript
 import { match, _, $, A } from 'ex-patterns';
 
+// match against non-binding placeholder '_'
 const pattern = [_, 2];
 const value   = [1, 2];
-match(pattern, value)           // returns [true, { }]
+match(pattern, value)
+>> [true, { }]
 
-const pattern = [A, 2];         // match against placeholder 'A'
+// match against placeholder 'A'
+const pattern = [A, 2];         
 const value   = [1, 2];
-match(pattern, value)           // returns [true, { A: 1 }]
+match(pattern, value)
+>> [true, { A: 1 }]
 
-const pattern = [1, $('foo')];  // match against placeholder 'foo'
+// match against placeholder 'first' and 'second'
+const pattern = [$('first'), $('second')];
 const value   = [1, 2];
-match(pattern, value)           // returns [true, { foo: 2 }]
+match(pattern, value)
+>> [true, { first: 1, second: 2 }]
 ```
 
 ### The [`when`](https://moritzploss.github.io/ex-patterns/#/?id=the-when-function) Function
@@ -47,14 +53,14 @@ clauses in the format `(pattern, callback)` that are matched against a value.
 import { when, end, then, _, A, H, N } from 'ex-patterns';
 
 const sayHi = (user) => when(user)
-    ({ name:    N }, then(({ N }) => `Hi ${N}!`))
-    ({ alias:   A }, then(({ A }) => `Hi ${A}!`))
-    ({ handle:  H }, then(({ H }) => `Hi ${H}!`))
-    (_, then(() => 'Hi!'))
+    ({ name:   N }, ({ N }) => `Hi ${N}!`)
+    ({ alias:  A }, ({ A }) => `Hi ${A}!`)
+    ({ handle: H }, ({ H }) => `Hi ${H}!`)
+    (_, () => 'Hi!')
 (end);
 
 sayHi({ name: 'Amelie' });
-> 'Hi Amelie!'
+>> 'Hi Amelie!'
 ```
 
 ### The [`suppose`](https://moritzploss.github.io/ex-patterns/#/?id=the-suppose-function) Function
@@ -73,7 +79,6 @@ const response = await ...
 suppose
     ({ status: 200 },             () => response)
     ({ body: { name: N, id: I }}, () => response)
-    (true,                        ({ N }) => isValidUserName(N))
     (true,                        ({ I }) => isUniqueUserId(I))
 (then)
     (({ N }) => `Welcome ${N}`)
@@ -90,14 +95,14 @@ control flow structure:
 import { cond, end, then } from 'ex-patterns';
 
 const fizzBuzz = (number) => cond
-    (number % 15 === 0, then('fizzbuzz'))
-    (number % 3 === 0, then('fizz'))
-    (number % 5 === 0, then('buzz'))
-    (true, then(number))
+    (number % 15 === 0, 'fizzbuzz')
+    (number % 3 === 0, 'fizz')
+    (number % 5 === 0, 'buzz')
+    (true, number)
 (end);
 
 fizzBuzz(5)
-> 'buzz'
+>> 'buzz'
 ```
 
 ## Want to learn more?

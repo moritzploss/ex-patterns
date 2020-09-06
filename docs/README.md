@@ -805,6 +805,59 @@ As for the `when` function, the `cond` function **throws an error if no truthy
 clause** is found. Similarly, it's optional to wrap the return value in the `then`
 function, but recommended for readability.
 
+# Curry and Compose Everything!
+
+All control flow structures are exported as curried functions and return
+functions until called with `end`. That means you can compose them as you go.
+For example, the following uses of the `when` function are equivalent and
+result in the same `sayHi` function:
+
+```javascript
+// provide pattern and callback in same match clause
+const sayHi = (user) => when(user)
+    ({ name:   N }, ({ N }) => `Hi ${N}!`)
+    ({ alias:  A }, ({ A }) => `Hi ${A}!`)
+    ({ handle: H }, ({ H }) => `Hi ${H}!`)
+    (_, () => 'Hi!')
+(end);
+
+sayHi({ name: 'Amelie' });
+>> 'Hi Amelie!'
+
+// provide pattern and callback in separate clauses
+const sayHi = (user) => when(user)
+    ({ name: N })
+        (({ N }) => `Hi ${N}!`)
+    ({ alias: A })
+        (({ A }) => `Hi ${A}!`)
+    ({ handle: H })
+        (({ H }) => `Hi ${H}!`)
+    (_)
+        (() => 'Hi!')
+(end);
+
+// or compose the flow structure as you go
+const sayHi = (user) => {
+    const baseGreeting = when(user)
+        ({ name: N }, ({ N }) => `Hi ${N}!`);
+
+    const withAlias = baseGreeting
+        ({ alias: A }, ({ A }) => `Hi ${A}!`);
+
+    const withHandle = withAlias
+        ({ handle: H }, ({ A }) => `Hi ${A}!`);
+
+    const withDefault = withHandle
+        (_, () => 'Hi!');
+
+    return withDefault(end);
+};
+
+```
+
+Similarly, you can also curry and compose the building blocks of `cond` and
+`suppose` functions. Have fun!
+
 # Examples
 
 ## Redux Reducer with *when*
