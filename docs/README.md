@@ -917,7 +917,7 @@ throws error if no truthy clause is found.</p>
 <code>end</code>
 <p style="margin-left: 40px">Keyword indicating end of control-flow-structure-style functions.</p>
 
-<code>head, *also* head :: *placeholder -> placeholder*</code>
+<code>head, *also* head :: *pattern -> placeholder*</code>
 <p style="margin-left: 40px">Non-binding placeholder to match against any number
 of leading elements of an array-like data type. Can be invoked with named placeholder
 to make it binding.</p>
@@ -938,7 +938,7 @@ two-element tuple containing match result.</p>
 match their respective function returns. Throws error otherwise. Can be combined with
 <code>otherwise</code> clause.</p>
 
-<code>tail, *also* tail :: *placeholder -> placeholder*</code>
+<code>tail, *also* tail :: *pattern -> placeholder*</code>
 <p style="margin-left: 40px">Non-binding placeholder to match against any number
 of trailing elements of an array-like data type. Can be invoked with named placeholder
 to make it binding.</p>
