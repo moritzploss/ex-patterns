@@ -50,7 +50,7 @@ control flow structure. It accepts any number of match
 clauses in the format `(pattern, callback)` that are matched against a value.
 
 ```javascript
-import { when, end, then, _, A, H, N } from 'ex-patterns';
+import { when, end, _, A, H, N } from 'ex-patterns';
 
 const sayHi = (user) => when(user)
     ({ name:   N }, ({ N }) => `Hi ${N}!`)
@@ -59,7 +59,9 @@ const sayHi = (user) => when(user)
     (_, () => 'Hi!')
 (end);
 
-sayHi({ name: 'Amelie' });
+const user = { name: 'Amelie', hometown: 'Stockholm' };
+
+sayHi(user);
 >> 'Hi Amelie!'
 ```
 
@@ -92,7 +94,7 @@ A compact switch statement that accepts any number of clauses in the format
 control flow structure:
 
 ```javascript
-import { cond, end, then } from 'ex-patterns';
+import { cond, end } from 'ex-patterns';
 
 const fizzBuzz = (number) => cond
     (number % 15 === 0, 'fizzbuzz')

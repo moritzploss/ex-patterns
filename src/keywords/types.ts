@@ -15,3 +15,5 @@ export type Tail = {
 }
 
 export type TailFunction = (placeholder?: Placeholder) => Tail;
+
+export type ReservedKeyword = Head | Tail;

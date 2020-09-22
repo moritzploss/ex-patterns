@@ -3,12 +3,7 @@ import { isUnnamedPlaceholder, isNamedPlaceholder } from '../placeholders';
 import { Match, MatchTuple, Pattern, Placeholder } from '../types';
 import { Tail, Head, isTail, isHead, resolve, isReservedKeyword } from '../keywords';
 import { ListLike, ListGet, MatchFunction } from './types';
-
-const isMatchOrBreak = (isMatch: boolean, acc: Match) => (
-  isMatch
-    ? [ok, [true, acc]]
-    : [stop, [false, {}]]
-);
+import { isMatchOrBreak } from './util';
 
 const getTail = (pattern: Pattern[], patternLength: number): [boolean, Tail | null] => {
   const maybeTail = pattern[patternLength - 1];

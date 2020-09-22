@@ -1,7 +1,8 @@
 import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder } from '../placeholders';
 import { matchArray } from './array';
 import { matchMap } from './map';
-import { equals, isObject, isArray, isMap, isList, isFunction, hasKey } from '../util';
+import { matchSet } from './set';
+import { equals, isObject, isArray, isList, isMap, isSet, isFunction, hasKey } from '../util';
 import { MatchFunction } from './types';
 import { Match, MatchTuple, Pattern, Placeholder } from '../types';
 
@@ -52,6 +53,9 @@ export const _match: MatchFunction = (pattern: Pattern, value: any, matches = {}
     if (isList(value)) {
       const get = (index: number) => value.get(index);
       return matchArray(pattern, value, value.size, get, _match, matches);
+    }
+    if (isSet(value)) {
+      return matchSet(pattern, value, _match, matches);
     }
     if (isArray(value)) {
       const get = (index: number) => value[index];

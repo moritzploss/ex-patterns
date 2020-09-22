@@ -2,3 +2,4 @@ coverage/
 .github/
 *.tgz
 docs/
+src/

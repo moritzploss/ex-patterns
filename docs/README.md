@@ -367,6 +367,35 @@ match(pattern, value));             // match
 > [true, { A: List([3, 4]) }]       // matches are returned as immutable List!
 ```
 
+### Immutable.js Sets {docsify-ignore}
+
+To perform a pattern match against an immutable `Set`, use the same syntax as
+for matches against regular JavaScript arrays:
+
+```javascript
+match([1, 2, _], Set([1, 2, 3]));  // match
+```
+
+Note that a `Set` does not have any intrinsic ordering, so the following
+examples all result in a `match`:
+
+```javascript
+match([1, 2, 3], Set([1, 2, 3]));  // match
+match([_, 2, 3], Set([1, 2, 3]));  // match
+match([_, 1, 2], Set([1, 2, 3]));  // match
+match([3, 2, 1], Set([1, 2, 3]));  // match
+match([_, _, 1], Set([1, 2, 3]));  // match
+```
+
+Because of that, **you cannot use the `head` and `tail` keywords**
+with the `Set` datatype, and you also **cannot use any named placeholders**:
+
+```javascript
+// this will throw an error since the values bound to A and B are ambiguous.
+// both could be either bound to 1 or 2.
+match([3, A, B], Set([1, 2, 3]));
+```
+
 ## Map-like Data Types
 
 ### Objects {docsify-ignore}

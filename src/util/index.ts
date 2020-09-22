@@ -1,4 +1,4 @@
-import { Map, List } from 'immutable';
+import { Map, List, Set } from 'immutable';
 import * as R from 'ramda';
 
 export const { equals } = R;
@@ -10,6 +10,7 @@ export const hasKey = (object: Object, key: string): boolean => (
 export const isArray = (maybeArray: any) => Array.isArray(maybeArray);
 export const isList = (maybeList: any) => List.isList(maybeList);
 
+export const isSet = (maybeSet: any) => Set.isSet(maybeSet);
 export const isMap = (maybeMap: any) => Map.isMap(maybeMap);
 export const isObject = (maybeObject: any) => R.type(maybeObject) === 'Object';
 
