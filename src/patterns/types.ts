@@ -4,7 +4,7 @@ import { Match, MatchTuple, Pattern } from '../types';
 
 export type MatchFunction = (pattern: Pattern, value: any, matches?: Match) => MatchTuple;
 
-export type ListLike = [] | List<any>;
+export interface ListLike { slice: (start?: Number, end?: Number) => ListLike }
 export type ListGet = (index: number, elm?: any) => any;
 
 export type MapLike = Object | Map<string, any>;

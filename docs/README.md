@@ -265,7 +265,7 @@ function to see pattern matching in action!
 
 ## Array-like Data Types
 
-### Arrays {docsify-ignore}
+### Array {docsify-ignore}
 
 Above we have already seen the basic syntax for matching against JavaScript arrays.
 Arrays are matched both based on value equality as well as on length:
@@ -337,7 +337,7 @@ const value   = [1,       [2,    [1, 2, 1      ]], [3, 4, 5]];
 match(pattern, value);   // match
 ```
 
-### Immutable.js Lists {docsify-ignore}
+### Immutable.js List {docsify-ignore}
 
 To perform a pattern match against an immutable `List`, use the same syntax as
 for matches against regular JavaScript arrays:
@@ -367,7 +367,7 @@ match(pattern, value));             // match
 > [true, { A: List([3, 4]) }]       // matches are returned as immutable List!
 ```
 
-### Immutable.js Sets {docsify-ignore}
+### Immutable.js Set {docsify-ignore}
 
 To perform a pattern match against an immutable `Set`, use the same syntax as
 for matches against regular JavaScript arrays:
@@ -394,6 +394,22 @@ with the `Set` datatype, and you also **cannot use any named placeholders**:
 // this will throw an error since the values bound to A and B are ambiguous.
 // both could be either bound to 1 or 2.
 match([3, A, B], Set([1, 2, 3]));
+```
+
+If you want to make use of named placeholders, consider using an `OrderedSet`
+(see below).
+
+### Immutable.js OrderedSet {docsify-ignore}
+
+To perform a pattern match against an immutable `OrderedSet`, the same rules
+and limitations apply as for matches against immutable `List` data structures:
+
+```javascript
+match([1, 2, _], OrderedSet([1, 2, 3]));  // match
+match([1, tail], OrderedSet([1, 2, 3]));  // match
+match([head, 3], OrderedSet([1, 2, 3]));  // match
+
+match([3, 2, _], OrderedSet([1, 2, 3]));  // no match
 ```
 
 ## Map-like Data Types
