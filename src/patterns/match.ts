@@ -1,7 +1,8 @@
 import { curry } from 'ramda';
 
 import { Match, Pattern } from '../types';
-import { _match } from './matchInternal';
+
+import { _match } from './matchInternal/index';
 
 /**
  * Matches `pattern` against `value` and returns the result.

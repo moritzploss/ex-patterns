@@ -1,10 +1,18 @@
-import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder } from '../placeholders';
+import { List, Map, OrderedSet, Seq, Set } from 'immutable';
+
+import { MatchFunction } from '../types';
+import { Match, MatchTuple, Pattern, Placeholder } from '../../types';
+
+import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder } from '../../placeholders';
+import { equals, isObject, isArray, isList, isMap, isSeq, isSet, isFunction, hasKey, isOrderedSet } from '../../util';
+
 import { matchArray } from './array';
+import { matchIndexedSeq } from './indexedSeq';
+import { matchList } from './list';
 import { matchMap } from './map';
-import { matchOrderedSet, matchSet } from './set';
-import { equals, isObject, isArray, isList, isMap, isSeq, isSet, isFunction, hasKey, isOrderedSet } from '../util';
-import { MatchFunction } from './types';
-import { Match, MatchTuple, Pattern, Placeholder } from '../types';
+import { matchObject } from './object';
+import { matchOrderedSet } from './orderedSet';
+import { matchSet } from './set';
 
 const updateMatch = (match: Match, { lookupName }: Placeholder, value: any): MatchTuple => {
   if (!hasKey(match, lookupName)) {
@@ -26,13 +34,12 @@ const matchNamedPlaceholder = (pattern: Pattern, value: any, matches: Match, _ma
   // placeholder is used for as-patterns and has been called with subPattern
   const [isSuccess, newMatches] = updateMatch(matches, pattern, value);
   if (isSuccess) {
-    // if as-pattern capture was successful, continue to match against subPattern
     return _match(pattern.subPattern, value, newMatches);
   }
   return [false, newMatches];
 };
 
-export const _match: MatchFunction = (pattern: Pattern, value: any, matches = {}) => {
+const _match: MatchFunction = (pattern: Pattern, value: any, matches = {}) => {
   if (isPlaceholder(value)) {
     throw Error('Right side of match cannot contain placeholder.');
   }
@@ -50,34 +57,33 @@ export const _match: MatchFunction = (pattern: Pattern, value: any, matches = {}
   }
 
   if (isArray(pattern)) {
-    if (isList(value) || isSeq(value)) {
-      const get = (index: number) => value.get(index);
-      return matchArray(pattern, value, value.size, get, _match, matches);
+    if (isList(value)) {
+      return matchList(pattern, value as List<any>, _match, matches);
+    }
+    if (isSeq(value)) {
+      return matchIndexedSeq(pattern, value as Seq.Indexed<any>, _match, matches);
     }
     if (isOrderedSet(value)) {
-      return matchOrderedSet(pattern, value, _match, matches);
+      return matchOrderedSet(pattern, value as OrderedSet<any>, _match, matches);
     }
     if (isSet(value)) {
-      return matchSet(pattern, value, _match, matches);
+      return matchSet(pattern, value as Set<any>, _match, matches);
     }
     if (isArray(value)) {
-      const get = (index: number) => value[index];
-      return matchArray(pattern, value, value.length, get, _match, matches);
+      return matchArray(pattern, value as any[], _match, matches);
     }
   }
 
   if (isObject(pattern)) {
     if (isMap(value)) {
-      const has = (key: string) => value.has(key);
-      const get = (key: string) => value.get(key);
-      return matchMap(pattern, _match, matches, has, get);
+      return matchMap(pattern, value as Map<any, any>, _match, matches);
     }
     if (isObject(value)) {
-      const has = (key: string) => hasKey(value, key);
-      const get = (key: string) => value[key];
-      return matchMap(pattern, _match, matches, has, get);
+      return matchObject(pattern, value as Record<string, any>, _match, matches);
     }
   }
 
   return [false, matches];
 };
+
+export { _match };

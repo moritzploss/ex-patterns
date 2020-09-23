@@ -1,5 +1,6 @@
-import { ok, stop } from '../util/enum';
-import { Match } from '../types';
+import { Match } from '../../types';
+
+import { ok, stop } from '../../util/enum';
 
 export const isMatchOrBreak = (isMatch: boolean, acc: Match) => (
   isMatch

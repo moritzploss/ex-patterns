@@ -1,7 +1,8 @@
 import { curry } from 'ramda';
 
-import { hasKey, isObject } from '../util';
 import { Placeholder } from '../types';
+
+import { hasKey, isObject } from '../util';
 import { _, generateNamedPlaceholder, reservedStrings } from '../symbols';
 import * as store from './store';
 

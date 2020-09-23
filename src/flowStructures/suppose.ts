@@ -1,11 +1,12 @@
 import { curry } from 'ramda';
 
+import { Match, Pattern } from '../types';
+
 import { end, otherwise } from '../symbols';
 import { isFunction } from '../util';
-import { _match } from '../patterns/matchInternal';
+import { _match } from '../patterns/matchInternal/index';
 import { isThen } from './then';
 import { when } from './when';
-import { Match, Pattern } from '../types';
 
 const thenCallback = (matches: Match, supposeFunc: Function) => (callback: Function): any => {
   if (!isFunction(callback)) {

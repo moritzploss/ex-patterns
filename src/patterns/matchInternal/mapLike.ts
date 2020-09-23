@@ -1,8 +1,9 @@
-import { reduceWhile, ok, stop } from '../util/enum';
-import { Match, MatchTuple, Pattern } from '../types';
-import { MapGet, MapHas, MatchFunction } from './types';
+import { Match, MatchTuple, Pattern } from '../../types';
+import { MapGet, MapHas, MatchFunction } from '../types';
 
-const matchMap = (
+import { reduceWhile, ok, stop } from '../../util/enum';
+
+const matchMapLike = (
   pattern: Pattern,
   match: MatchFunction,
   matches: Match,
@@ -21,4 +22,4 @@ const matchMap = (
   return reduceWhile(reducer, [true, matches] as MatchTuple, Object.entries(pattern));
 };
 
-export { matchMap };
+export { matchMapLike };

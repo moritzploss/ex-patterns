@@ -1,14 +1,14 @@
-import { OrderedSet, Set } from 'immutable';
+import { Set } from 'immutable';
 
-import { reduceWhile } from '../util/enum';
-import { Match, MatchTuple, Pattern, Placeholder } from '../types';
-import { ReservedKeyword } from '../keywords/types';
-import { isReservedKeyword } from '../keywords';
-import { MatchFunction } from './types';
-import { isNamedPlaceholder } from '../placeholders';
-import { isArray } from '../util';
+import { Match, MatchTuple, Pattern, Placeholder } from '../../types';
+import { MatchFunction } from '../types';
+import { ReservedKeyword } from '../../keywords/types';
+
+import { reduceWhile } from '../../util/enum';
+import { isReservedKeyword } from '../../keywords';
+import { isNamedPlaceholder } from '../../placeholders';
+import { isArray } from '../../util';
 import { isMatchOrBreak } from './util';
-import { matchArray } from './array';
 
 const getFromSet = (value: Set<any>) => (elm: any) => {
   if (isNamedPlaceholder(elm)) {
@@ -36,10 +36,4 @@ const matchSet = (pattern: Pattern, set: Set<any>, match: MatchFunction, matches
   return reduceWhile(reducer, [true, matches] as MatchTuple, pattern);
 };
 
-const matchOrderedSet = (pattern: Pattern, set: OrderedSet<any>, match: MatchFunction, matches: Match): MatchTuple => {
-  const indexedSeq = set.toIndexedSeq();
-  const get = (index: number) => indexedSeq.get(index);
-  return matchArray(pattern, indexedSeq, set.size, get, match, matches);
-};
-
-export { matchOrderedSet, matchSet };
+export { matchSet };

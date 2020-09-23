@@ -1,8 +1,10 @@
-import { reduceWhile, ok, stop } from '../util/enum';
-import { isUnnamedPlaceholder, isNamedPlaceholder } from '../placeholders';
-import { Match, MatchTuple, Pattern, Placeholder } from '../types';
-import { Tail, Head, isTail, isHead, resolve, isReservedKeyword } from '../keywords';
-import { ListLike, ListGet, MatchFunction } from './types';
+import { Match, MatchTuple, Pattern, Placeholder } from '../../types';
+import { ListLike, ListGet, MatchFunction } from '../types';
+import { Tail, Head } from '../../keywords/types';
+
+import { reduceWhile, ok, stop } from '../../util/enum';
+import { isUnnamedPlaceholder, isNamedPlaceholder } from '../../placeholders';
+import { isTail, isHead, resolve, isReservedKeyword } from '../../keywords';
 import { isMatchOrBreak } from './util';
 
 const getTail = (pattern: Pattern[], patternLength: number): [boolean, Tail | null] => {
@@ -29,9 +31,9 @@ const throwIfMultipleHeads = (pattern: Pattern[]) => {
   });
 };
 
-const matchNamedHead = (
+const matchNamedHead = <T>(
   pattern: Pattern[],
-  array: ListLike,
+  array: ListLike<T>,
   placeholder: Placeholder,
   lastHeadIndex: number,
   match: MatchFunction,
@@ -48,21 +50,21 @@ const matchNamedHead = (
     : [false, {}];
 };
 
-const matchTail = (
+const matchTail = <T>(
   placeholder: Placeholder,
-  array: ListLike,
+  array: ListLike<T>,
   accumulator: Match,
   i: number,
   match: MatchFunction,
 ) => (
-  isUnnamedPlaceholder(placeholder)
-    ? [stop, [true, accumulator]]
-    : isMatchOrBreak(...match(placeholder, array.slice(i), accumulator))
-);
+    isUnnamedPlaceholder(placeholder)
+      ? [stop, [true, accumulator]]
+      : isMatchOrBreak(...match(placeholder, array.slice(i), accumulator))
+  );
 
-const matchArray = (
+const matchListLike = <T>(
   pattern: Pattern,
-  array: ListLike,
+  array: ListLike<T>,
   arrayLen: number,
   get: ListGet,
   match: MatchFunction,
@@ -111,4 +113,4 @@ const matchArray = (
   return reduceWhile(reducer, [true, matches] as MatchTuple, pattern);
 };
 
-export { matchArray };
+export { matchListLike };

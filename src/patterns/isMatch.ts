@@ -1,7 +1,8 @@
 import { curry } from 'ramda';
 
-import { match } from './match';
 import { Pattern } from '../types';
+
+import { match } from './match';
 
 /**
  * Matches `pattern` against `value` and returns a boolean indicating whether
