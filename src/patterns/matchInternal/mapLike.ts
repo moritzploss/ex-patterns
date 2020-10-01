@@ -12,7 +12,8 @@ const matchMapLike = (
 ) => {
   const reducer = ([isMatch, acc]: MatchTuple, [key, val]: [string, Pattern]) => {
     if (has(key)) {
-      [isMatch, acc] = match(val, get(key), acc); // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      [isMatch, acc] = match(val, get(key), acc);
       if (isMatch) {
         return [ok, [true, acc]];
       }

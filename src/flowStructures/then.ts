@@ -29,7 +29,7 @@ function then<T>(func: T): T {
 
 then.symbol = thenSymbol;
 
-const isThen = (maybeThen: any): boolean => (
+const isThen = (maybeThen: any) => (
   hasKey(maybeThen, 'symbol') && maybeThen.symbol === thenSymbol
 );
 

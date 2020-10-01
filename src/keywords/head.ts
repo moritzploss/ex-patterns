@@ -14,6 +14,8 @@ const head = (placeholder = _): Head => {
   };
 };
 
-const isHead = (maybeHead: any): boolean => isKeyword(maybeHead, 'head', headSymbol);
+const isHead = (maybeHead: any): boolean => (
+  isKeyword(maybeHead, 'head', headSymbol)
+);
 
 export { head, isHead };

@@ -14,6 +14,8 @@ const tail = (placeholder = _): Tail => {
   };
 };
 
-const isTail = (maybeTail: any): boolean => isKeyword(maybeTail, 'tail', tailSymbol);
+const isTail = (maybeTail: any): boolean => (
+  isKeyword(maybeTail, 'tail', tailSymbol)
+);
 
 export { tail, isTail };

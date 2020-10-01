@@ -20,10 +20,7 @@ const updateMatch = (match: Match, { lookupName }: Placeholder, value: any): Mat
     match[lookupName] = value;
     return [true, match];
   }
-  if (equals(match[lookupName], value)) {
-    return [true, match];
-  }
-  return [false, match];
+  return [equals(match[lookupName], value), match];
 };
 
 const matchNamedPlaceholder = (pattern: Pattern, value: any, matches: Match, _match: MatchFunction): MatchTuple => {
