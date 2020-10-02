@@ -25,15 +25,11 @@ arrays, objects and `Immutable.js` collections:
 import { match, _, $, A } from 'ex-patterns';
 
 // match against non-binding placeholder '_'
-const pattern = [_, 2];
-const value   = [1, 2];
-match(pattern, value)
+match([_, 2], [1, 2])
 >> [true, { }]
 
 // match against placeholder 'A'
-const pattern = [A, 2];         
-const value   = [1, 2];
-match(pattern, value)
+match([A, 2], [1, 2])
 >> [true, { A: 1 }]
 
 // match against placeholder 'first' and 'second'
