@@ -243,8 +243,7 @@ match(pattern, value);
 > [true, { B: 2, C: 'k' }]
 ```
 
-You can **create named placeholders** using the `$` function. Placeholders are
-registered globally and can be reused:
+You can **create named placeholders** using the `$` function:
 
 ```javascript
 const pattern = [1, 2, $('three')];
@@ -254,8 +253,11 @@ match(pattern, value);
 > [true, { three: 3 }]
 ```
 
-Note that the `$` function **will throw an error** if you try to register a new
-placeholder with one of these protected names: `head`, `tail`, `_`
+Placeholders are registered globally and can be reused. That also means that
+placeholders are **not garbage collected**, so it's recommended to stick with
+the default if possible. Also note that the `$` function
+**will throw an error** if you try to register a new placeholder with one of
+these protected names: `head`, `tail`, `_`
 
 Continue reading below if you want to learn more about advanced pattern matching
 techniques. Or jump to the [`when`](https://moritzploss.github.io/ex-patterns/#/?id=the-when-function)

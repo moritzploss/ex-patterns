@@ -24,19 +24,14 @@ arrays, objects and `Immutable.js` collections:
 ```javascript
 import { match, _, $, A } from 'ex-patterns';
 
-// match against non-binding placeholder '_'
-match([_, 2], [1, 2])
->> [true, { }]
+> match([_, 2], [1, 2])
+[true, { }]
 
-// match against placeholder 'A'
-match([A, 2], [1, 2])
->> [true, { A: 1 }]
+> match([A, 2], [1, 2])
+[true, { A: 1 }]
 
-// match against placeholder 'first' and 'second'
-const pattern = [$('first'), $('second')];
-const value   = [1, 2];
-match(pattern, value)
->> [true, { first: 1, second: 2 }]
+> match([$('first'), $('second')], [1, 2])
+[true, { first: 1, second: 2 }]
 ```
 
 ### The [`when`](https://moritzploss.github.io/ex-patterns/#/?id=the-when-function) Function
@@ -57,8 +52,8 @@ const sayHi = (user) => when(user)
 
 const user = { name: 'Amelie', hometown: 'Stockholm' };
 
-sayHi(user);
->> 'Hi Amelie!'
+> sayHi(user);
+'Hi Amelie!'
 ```
 
 ### The [`suppose`](https://moritzploss.github.io/ex-patterns/#/?id=the-suppose-function) Function
@@ -99,8 +94,8 @@ const fizzBuzz = (number) => cond
     (true, number)
 (end);
 
-fizzBuzz(5)
->> 'buzz'
+> fizzBuzz(5)
+'buzz'
 ```
 
 ## Want to learn more?
