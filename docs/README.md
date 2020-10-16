@@ -119,7 +119,7 @@ import { match, _ } from 'ex-patterns';
 ```
 
 The `match` function is used to evaluate whether a pattern (left) matches a
-value (right). In it's simplest form, a pattern match is an equality check **by value**,
+value (right). In its simplest form, a pattern match is an equality check **by value**,
 comparing the first and second argument of the `match` function. Since checks
 for value equality in JavaScript aren't trivial, this package uses
 [**Ramda's**](https://ramdajs.com/docs/) `equals` function to do the heavy
