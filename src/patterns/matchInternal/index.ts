@@ -1,10 +1,10 @@
-import { List, Map, OrderedSet, Seq, Set } from 'immutable';
+import * as I from 'immutable';
 
 import { MatchFunction } from '../types';
 import { Match, MatchTuple, Pattern, Placeholder } from '../../types';
 
 import { isUnnamedPlaceholder, isNamedPlaceholder, isPlaceholder } from '../../placeholders';
-import { equals, isObject, isArray, isList, isMap, isSeq, isSet, isFunction, hasKey, isOrderedSet } from '../../util';
+import { equals, isObject, isArray, isList, isMap, isSeq, isSet, isFunction, hasKey, isOrderedSet, isJsMap } from '../../util';
 
 import { matchArray } from './array';
 import { matchIndexedSeq } from './indexedSeq';
@@ -55,16 +55,16 @@ const _match: MatchFunction = (pattern: Pattern, value: any, matches = {}) => {
 
   if (isArray(pattern)) {
     if (isList(value)) {
-      return matchList(pattern, value as List<any>, _match, matches);
+      return matchList(pattern, value as I.List<any>, _match, matches);
     }
     if (isSeq(value)) {
-      return matchIndexedSeq(pattern, value as Seq.Indexed<any>, _match, matches);
+      return matchIndexedSeq(pattern, value as I.Seq.Indexed<any>, _match, matches);
     }
     if (isOrderedSet(value)) {
-      return matchOrderedSet(pattern, value as OrderedSet<any>, _match, matches);
+      return matchOrderedSet(pattern, value as I.OrderedSet<any>, _match, matches);
     }
     if (isSet(value)) {
-      return matchSet(pattern, value as Set<any>, _match, matches);
+      return matchSet(pattern, value as I.Set<any>, _match, matches);
     }
     if (isArray(value)) {
       return matchArray(pattern, value as any[], _match, matches);
@@ -73,10 +73,13 @@ const _match: MatchFunction = (pattern: Pattern, value: any, matches = {}) => {
 
   if (isObject(pattern)) {
     if (isMap(value)) {
-      return matchMap(pattern, value as Map<any, any>, _match, matches);
+      return matchMap(pattern, value as I.Map<any, any>, _match, matches);
     }
     if (isObject(value)) {
       return matchObject(pattern, value as Record<string, any>, _match, matches);
+    }
+    if (isJsMap(value)) {
+      return matchMap(pattern, value as Map<any, any>, _match, matches);
     }
   }
 

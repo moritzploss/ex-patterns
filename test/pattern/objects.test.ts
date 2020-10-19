@@ -6,7 +6,6 @@
 /* eslint-disable arrow-parens */
 
 import { expect } from 'chai';
-import { Map, is } from 'immutable';
 
 import { match, _, A, B, C } from '../../src';
 

@@ -1,13 +1,11 @@
-import { Map } from 'immutable';
-
 import { Match, MatchTuple, Pattern } from '../../types';
-import { MatchFunction } from '../types';
+import { MapLike, MatchFunction } from '../types';
 
 import { matchMapLike } from './mapLike';
 
 export const matchMap = (
   pattern: Pattern,
-  map: Map<any, any>,
+  map: MapLike<any, any>,
   match: MatchFunction,
   matches: Match,
 ): MatchTuple => {
