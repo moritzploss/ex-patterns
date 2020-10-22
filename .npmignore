@@ -3,3 +3,4 @@ coverage/
 *.tgz
 docs/
 src/
+test/
