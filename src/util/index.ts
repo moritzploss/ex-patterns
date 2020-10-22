@@ -1,27 +1,27 @@
 import * as I from 'immutable';
-import * as R from 'ramda';
+import { type } from 'ramda';
 
-export const { equals } = R;
+export { equals } from 'ramda';
+
+export const { isList } = I.List;
+export const { isMap } = I.Map;
+export const { isOrderedSet } = I.OrderedSet;
+export const { isSet } = I.Set;
+export const { isSeq } = I.Seq;
+
+export const { isArray } = Array;
+export const isFunction = (any: any) => typeof any === 'function';
+export const isObject = (any: any) => type(any) === 'Object';
 
 export const hasKey = (object: Object, key: string): boolean => (
   Object.prototype.hasOwnProperty.call(object, key)
 );
 
-export const isArray = (maybeArray: any) => Array.isArray(maybeArray);
-export const isFunction = (maybeFunction: any) => typeof maybeFunction === 'function';
-export const isObject = (maybeObject: any) => R.type(maybeObject) === 'Object';
-
-export const isJsMap = (maybeMap: any) => {
+export const isJsMap = (any: any) => {
   try {
-    Map.prototype.has.call(maybeMap);
+    Map.prototype.has.call(any);
     return true;
   } catch (e) {
     return false;
   }
 };
-
-export const isList = (maybeList: any) => I.List.isList(maybeList);
-export const isMap = (maybeMap: any) => I.Map.isMap(maybeMap);
-export const isOrderedSet = (maybeOrderedSet: any) => I.OrderedSet.isOrderedSet(maybeOrderedSet);
-export const isSet = (maybeSet: any) => I.Set.isSet(maybeSet);
-export const isSeq = (maybeSeq: any) => I.Seq.isSeq(maybeSeq);

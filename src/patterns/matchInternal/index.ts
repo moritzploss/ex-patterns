@@ -15,15 +15,20 @@ import { matchOrderedSet } from './orderedSet';
 import { matchSet } from './set';
 
 const updateMatch = (match: Match, { lookupName }: Placeholder, value: any): MatchTuple => {
-  if (!hasKey(match, lookupName)) {
-    // eslint-disable-next-line no-param-reassign
-    match[lookupName] = value;
-    return [true, match];
+  if (hasKey(match, lookupName)) {
+    return [equals(match[lookupName], value), match];
   }
-  return [equals(match[lookupName], value), match];
+  // eslint-disable-next-line no-param-reassign
+  match[lookupName] = value;
+  return [true, match];
 };
 
-const matchNamedPlaceholder = (pattern: Pattern, value: any, matches: Match, _match: MatchFunction): MatchTuple => {
+const matchNamedPlaceholder = (
+  pattern: Pattern,
+  value: any,
+  matches: Match,
+  _match: MatchFunction,
+): MatchTuple => {
   // placeholder is used as is
   if (isFunction(pattern)) {
     return updateMatch(matches, pattern, value);
